@@ -3,6 +3,11 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+#Manual change
+/Properties/*
+App.*
+InspectionReport.* 
+
 # User-specific files
 *.rsuser
 *.suo
