@@ -87,6 +87,9 @@
                             <CheckBox Content="с кишечной метаплазией" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Grid.Column="3" Margin="0,5,0,0" Click="CheckBox_Checked_4"/>
                             <CheckBox Content="с кишечной метаплазией и очаговой&#xA; дисплазией легкой степени" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,5,0,0" Click="CheckBox_Checked_4"/>
                             <CheckBox Content="другое" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Grid.Column="3" Margin="0,5,0,0" Click="CheckBox_Checked_4" Visibility="Collapsed"/>
+                            <CheckBox Content="другое" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Grid.Column="3" Margin="0,5,0,0" Click="CheckBox_Checked_4" Visibility="Collapsed"/>
+                            <CheckBox Content="другое" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Grid.Column="3" Margin="0,5,0,0" Click="CheckBox_Checked_4" Visibility="Collapsed"/>
+                            <CheckBox Content="другое" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Grid.Column="3" Margin="0,5,0,0" Click="CheckBox_Checked_4" Visibility="Collapsed"/>
                         </StackPanel>
                     </GroupBox>
                     <GroupBox x:Name="char5" Header="Лечение НР (опционально)" HorizontalAlignment="Left" Height="95" Margin="24,230,0,0" Grid.Row="1" VerticalAlignment="Top" Width="350" Grid.ColumnSpan="4">
@@ -96,6 +99,7 @@
                             <CheckBox Content="(состояние после эндоскопического лечения рубцового стеноза)" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Grid.ColumnSpan="4" Margin="0,5,0,0" Click="CheckBox_Checked_5" Visibility="Collapsed"/>
                             <CheckBox Content="(состояние после дистальной резекции желудка по Бильрот-II)" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Grid.Column="3" Margin="0,5,0,0" Click="CheckBox_Checked_5" Visibility="Collapsed"/>
                             <CheckBox Content="(состояние после дистальной резекции желудка по Бильрот-I)" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Grid.Column="3" Margin="0,5,0,0" Click="CheckBox_Checked_5" Visibility="Collapsed"/>
+                            <CheckBox Content="другое" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Grid.Column="3" Margin="0,5,0,0" Click="CheckBox_Checked_5" Visibility="Collapsed"/>
                         </StackPanel>
                     </GroupBox>
                     <GroupBox x:Name="char6" Grid.Column="3" Header="" HorizontalAlignment="Left" Height="80" Margin="196,230,0,0" Grid.Row="1" VerticalAlignment="Top" Width="350">
@@ -109,7 +113,7 @@
             <ListBox x:Name="diseaseStart" HorizontalAlignment="Left" Height="120" Margin="21,102,0,0" VerticalAlignment="Top" Width="215">
                 <TextBlock Text="Хронический гастрит и гастропатии" MouseLeftButtonUp="rad1_Click" Width="205"/>
                 <TextBlock Text="Язвенная болезнь" MouseLeftButtonUp="rad2_Click" Width="205"/>
-                <TextBlock Text="Симптоматическая язва " Width="205" MouseLeftButtonUp="rad3_Click"/>
+                <TextBlock Text="Симптоматическая язва" Width="205" MouseLeftButtonUp="rad3_Click"/>
                 <TextBlock Text="Болезнь оперированного желудка" Width="205" MouseLeftButtonUp="rad4_Click"/>
                 <TextBlock Text="Эндоскопические операции" Width="205" MouseLeftButtonUp="rad5_Click"/>
                 <TextBlock Text="Новообразования желудка" Width="205" MouseLeftButtonUp="rad6_Click"/>

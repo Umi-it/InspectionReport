@@ -18,20 +18,10 @@ namespace InspectionReport
 {
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
-    /// </summary>
+    /// </summary> 
     public partial class MainWindow : Window
     {
-        enum enCategory
-        {
-            complaints,
-            anamesis,
-            inspection,
-            diagnosis,
-            examination,
-            therapy,
-            observation
-        };
-        private enCategory category;
+        private int category;
         private int area;
         private int disease;
         private String[] choiceDisease;
@@ -40,9 +30,15 @@ namespace InspectionReport
         public MainWindow()
         {
             InitializeComponent();
-            category = enCategory.complaints;
+            category = 0;
             disease = 0;
             stateApp = new String[7][][][];
+            stateApp[0] = new String[5][][];
+            stateApp[3] = new String[6][][];
+            stateApp[3][0] = new String[7][];
+            stateApp[3][1] = new String[2][];
+            stateApp[4] = new String[6][][];
+            stateApp[5] = new String[6][][];
             choiceDisease = new String[7] { "", "", "", "", "", "", "" };
         }
 
@@ -50,6 +46,12 @@ namespace InspectionReport
         {
             textBlock.Text = "";
             stateApp = new String[7][][][];
+            stateApp[0] = new String[5][][];
+            stateApp[3] = new String[6][][];
+            stateApp[3][0] = new String[7][];
+            stateApp[3][1] = new String[2][];
+            stateApp[4] = new String[6][][];
+            stateApp[5] = new String[6][][];
             choiceDisease = new String[7] { "", "", "", "", "", "", "" };
             foreach (GroupBox group in gridEnd.Children)
             {
@@ -64,7 +66,8 @@ namespace InspectionReport
         {
             diseaseStart.Visibility = Visibility.Hidden;
             diseaseEnd.Visibility = Visibility.Hidden;
-            category = enCategory.complaints;
+            category = 0;
+            area = 0;
             categoryLabel.Content = "Жалобы";
             labelText.Content = "Жалобы:";
             btn6.Visibility = Visibility.Hidden;
@@ -82,7 +85,7 @@ namespace InspectionReport
             diseaseStart.Visibility = Visibility.Hidden;
             diseaseEnd.Visibility = Visibility.Hidden;
             diagnosis.Background = new SolidColorBrush(Color.FromRgb(190, 190, 190));
-            category = enCategory.diagnosis;
+            category = 3;
             categoryLabel.Content = "Диагноз";
             labelText.Content = "Диагноз:";
             btn6.Visibility = Visibility.Visible;
@@ -100,7 +103,7 @@ namespace InspectionReport
         {
             diseaseStart.Visibility = Visibility.Hidden;
             diseaseEnd.Visibility = Visibility.Hidden;
-            category = enCategory.examination;
+            category = 4;
             categoryLabel.Content = "Обследование";
             labelText.Content = "Обследование:";
             btn6.Visibility = Visibility.Visible;
@@ -118,7 +121,7 @@ namespace InspectionReport
         {
             diseaseStart.Visibility = Visibility.Hidden;
             diseaseEnd.Visibility = Visibility.Hidden;
-            category = enCategory.therapy;
+            category = 5;
             categoryLabel.Content = "Терапия";
             labelText.Content = "Терапия:";
             btn6.Visibility = Visibility.Visible;
@@ -135,11 +138,21 @@ namespace InspectionReport
         private void btn1_Click(object sender, RoutedEventArgs e)
         {
             btn1.Background = new SolidColorBrush(Color.FromRgb(190, 190, 190));
+            area = 0;
             switch (category)
             {
-                case enCategory.diagnosis:
+                case 3:
                     diseaseStart.Visibility = Visibility.Visible;
                     diseaseEnd.Visibility = Visibility.Visible;
+                    foreach (TextBlock item in diseaseStart.Items)
+                        item.Visibility = Visibility.Visible;
+                    ((TextBlock)diseaseStart.Items[0]).Text = "Хронический гастрит и гастропатии";
+                    ((TextBlock)diseaseStart.Items[1]).Text = "Язвенная болезнь";
+                    ((TextBlock)diseaseStart.Items[2]).Text = "Симптоматическая язва";
+                    ((TextBlock)diseaseStart.Items[3]).Text = "Болезнь оперированного желудка";
+                    ((TextBlock)diseaseStart.Items[4]).Text = "Эндоскопические операции";
+                    ((TextBlock)diseaseStart.Items[5]).Text = "Новообразования желудка";
+                    ((TextBlock)diseaseStart.Items[6]).Text = "Диспепсия";
                     break;
                 default:
                     break;
@@ -149,13 +162,14 @@ namespace InspectionReport
         private void btn2_Click(object sender, RoutedEventArgs e)
         {
             btn2.Background = new SolidColorBrush(Color.FromRgb(190, 190, 190));
+            area = 1;
             switch (category)
             {
-                case enCategory.diagnosis:
+                case 3:
                     diseaseStart.Visibility = Visibility.Visible;
                     diseaseEnd.Visibility = Visibility.Visible;
                     foreach (TextBlock item in diseaseStart.Items)
-                        item.Visibility = Visibility.Hidden;
+                        item.Visibility = Visibility.Collapsed;
                     ((TextBlock)diseaseStart.Items[0]).Text = "Гастроэзофагеальная рефлюксная болезнь";
                     ((TextBlock)diseaseStart.Items[0]).Visibility = Visibility.Visible;
                     ((TextBlock)diseaseStart.Items[1]).Text = "Другое";
@@ -196,47 +210,78 @@ namespace InspectionReport
 
         private void rad1_Click(object sender, MouseButtonEventArgs e)
         {
-            ChangeGroup(char1, "Этиология", 90, 3);
-            ((CheckBox)((StackPanel)char1.Content).Children[0]).Content = "ассоциированный с H.pylori";
-            ((CheckBox)((StackPanel)char1.Content).Children[1]).Content = "аутоиммунный";
-            ((CheckBox)((StackPanel)char1.Content).Children[2]).Content = "смешанный";
-            ChangeGroup(char2, "Тип", 65, 2);
-            ((CheckBox)((StackPanel)char2.Content).Children[0]).Content = "неатрофический";
-            ((CheckBox)((StackPanel)char2.Content).Children[1]).Content = "атрофический";
-            ChangeGroup(char3, "Распространенность", 90, 3, 120);
-            ((CheckBox)((StackPanel)char3.Content).Children[0]).Content = "антральный гастрит";
-            ((CheckBox)((StackPanel)char3.Content).Children[1]).Content = "пангастрит";
-            ((CheckBox)((StackPanel)char3.Content).Children[2]).Content = "фундальный гастрит";
-            ChangeGroup(char4, "Доп. характеристики (опционально)", 80, 2, 120);
-            ((CheckBox)((StackPanel)char4.Content).Children[0]).Content = "с кишечной метаплазией";
-            ((CheckBox)((StackPanel)char4.Content).Children[1]).Content = "с кишечной метаплазией и очаговой дисплазией легкой\nстепени";
-            ChangeGroup(char5, "Лечение НР (опционально)", 95, 2, 230);
-            ((CheckBox)((StackPanel)char5.Content).Children[0]).Content = "(состояние после эрадикационной терапии, контроль\nH.pylori – отрицательно)";
-            ((CheckBox)((StackPanel)char5.Content).Children[1]).Content = "(состояние после эрадикационной терапии, контроль\nH.pylori – положительно)";
-            ChangeGroup(char6, "", 80, 2, 230);
-            ((CheckBox)((StackPanel)char6.Content).Children[0]).Content = "НПВП-ассоциированная гастропатия";
-            ((CheckBox)((StackPanel)char6.Content).Children[1]).Content = "Рефлюкс-гастропатия на фоне хронического\nдуодено-гастрального рефлюкса";
+            switch (area)
+            {
+                case 0:
+                    ChangeGroup(char1, "Этиология", 90, 3);
+                    ((CheckBox)((StackPanel)char1.Content).Children[0]).Content = "ассоциированный с H.pylori";
+                    ((CheckBox)((StackPanel)char1.Content).Children[1]).Content = "аутоиммунный";
+                    ((CheckBox)((StackPanel)char1.Content).Children[2]).Content = "смешанный";
+                    ChangeGroup(char2, "Тип", 65, 2);
+                    ((CheckBox)((StackPanel)char2.Content).Children[0]).Content = "неатрофический";
+                    ((CheckBox)((StackPanel)char2.Content).Children[1]).Content = "атрофический";
+                    ChangeGroup(char3, "Распространенность", 90, 3, 120);
+                    ((CheckBox)((StackPanel)char3.Content).Children[0]).Content = "антральный гастрит";
+                    ((CheckBox)((StackPanel)char3.Content).Children[1]).Content = "пангастрит";
+                    ((CheckBox)((StackPanel)char3.Content).Children[2]).Content = "фундальный гастрит";
+                    ChangeGroup(char4, "Доп. характеристики (опционально)", 80, 2, 120);
+                    ((CheckBox)((StackPanel)char4.Content).Children[0]).Content = "с кишечной метаплазией";
+                    ((CheckBox)((StackPanel)char4.Content).Children[1]).Content = "с кишечной метаплазией и очаговой дисплазией легкой\nстепени";
+                    ChangeGroup(char5, "Лечение НР (опционально)", 95, 2, 230);
+                    ((CheckBox)((StackPanel)char5.Content).Children[0]).Content = "(состояние после эрадикационной терапии, контроль\nH.pylori – отрицательно)";
+                    ((CheckBox)((StackPanel)char5.Content).Children[1]).Content = "(состояние после эрадикационной терапии, контроль\nH.pylori – положительно)";
+                    ChangeGroup(char6, "", 80, 2, 230);
+                    ((CheckBox)((StackPanel)char6.Content).Children[0]).Content = "НПВП-ассоциированная гастропатия";
+                    ((CheckBox)((StackPanel)char6.Content).Children[1]).Content = "Рефлюкс-гастропатия на фоне хронического\nдуодено-гастрального рефлюкса";
+                    break;
+                case 1:
+                    ChangeGroup(char1, "Форма (опционально)", 65, 2);
+                    ((CheckBox)((StackPanel)char1.Content).Children[0]).Content = "неэрозивная форма";
+                    ((CheckBox)((StackPanel)char1.Content).Children[1]).Content = "эрозивная форма ";
+                    ChangeGroup(char2, "Степень эзофагита (опционально)", 125, 4);
+                    ((CheckBox)((StackPanel)char2.Content).Children[0]).Content = "Рефлюкс-эзофагит, ст. А";
+                    ((CheckBox)((StackPanel)char2.Content).Children[1]).Content = "Рефлюкс-эзофагит, ст. В";
+                    ((CheckBox)((StackPanel)char2.Content).Children[2]).Content = "Рефлюкс-эзофагит, ст. С";
+                    ((CheckBox)((StackPanel)char2.Content).Children[3]).Content = "Рефлюкс-эзофагит, ст. D";
+                    ChangeGroup(char3, "Внепищеводные проявления", 130, 5, 140);
+                    ((CheckBox)((StackPanel)char3.Content).Children[0]).Content = "(рефлюкс-индуцированый кашель)";
+                    ((CheckBox)((StackPanel)char3.Content).Children[1]).Content = "(рефлюкс-ларингит)";
+                    ((CheckBox)((StackPanel)char3.Content).Children[2]).Content = "(рефлюкс-фарингит)";
+                    ((CheckBox)((StackPanel)char3.Content).Children[3]).Content = "(рецидивирующий отит)";
+                    ((CheckBox)((StackPanel)char3.Content).Children[4]).Content = "(хронический рецидивирующий синусит)";
+                    ChangeGroup(char4, "Внепищеводные проявления", 150, 6, 140);
+                    ((CheckBox)((StackPanel)char4.Content).Children[0]).Content = "(глоссит)";
+                    ((CheckBox)((StackPanel)char4.Content).Children[1]).Content = "(пародонтит)";
+                    ((CheckBox)((StackPanel)char4.Content).Children[2]).Content = "(эрозии эмали зубов)";
+                    ((CheckBox)((StackPanel)char4.Content).Children[3]).Content = "(бронхиальная астма)";
+                    ((CheckBox)((StackPanel)char4.Content).Children[4]).Content = "(рецидивирующая пневмония)";
+                    ((CheckBox)((StackPanel)char4.Content).Children[5]).Content = "другое";
+                    char5.Visibility = Visibility.Hidden;
+                    char6.Visibility = Visibility.Hidden;
+                    break;
+                default:
+                    break;
+            }
             if (disease != 0)
             {
                 foreach (GroupBox group in gridEnd.Children)
                 {
                     foreach (CheckBox item in ((StackPanel)group.Content).Children)
                     {
-                        if (stateApp[(int)category][area][disease][0] != null && stateApp[(int)category][area][disease][0].Contains(item.Content.ToString()))
+                        if (stateApp[category][area][0] != null && stateApp[category][area][0].Contains(item.Content.ToString()))
                             item.IsChecked = true;
                         else
                             item.IsChecked = false;
                     }
                 }
-                stateApp[(int)category][area][disease] = choiceDisease;
                 textBlock.Text = "";
-                for (int i = 0; i < stateApp.Length; i++)
-                    if (stateApp[i] != null)
-                        textBlock.Text = textBlock.Text + writeResult(stateApp[(int)category][area][disease][i], i);
-                if (stateApp[0] == null)
+                for (int i = 0; i < stateApp[category][area].Length; i++)
+                    if (stateApp[category][area][i] != null)
+                        textBlock.Text = textBlock.Text + writeResult(stateApp[category][area][i], i);
+                if (stateApp[category][area][0] == null)
                     choiceDisease = new String[7] { "", "", "", "", "", "", "" };
                 else
-                    choiceDisease = stateApp[0];
+                    choiceDisease = stateApp[category][area][0];
             }
             disease = 0;
         }
@@ -271,21 +316,20 @@ namespace InspectionReport
                 {
                     foreach (CheckBox item in ((StackPanel)group.Content).Children)
                     {
-                        if (stateApp[1] != null && stateApp[1].Contains(item.Content.ToString()))
+                        if (stateApp[category][area][1] != null && stateApp[category][area][1].Contains(item.Content.ToString()))
                             item.IsChecked = true;
                         else
                             item.IsChecked = false;
                     }
                 }
-                stateApp[disease] = choiceDisease;
                 textBlock.Text = "";
-                for (int i = 0; i < stateApp.Length; i++)
-                    if (stateApp[i] != null)
-                        textBlock.Text = textBlock.Text + writeResult(stateApp[i], i);
-                if (stateApp[1] == null)
+                for (int i = 0; i < stateApp[category][area].Length; i++)
+                    if (stateApp[category][area][i] != null)
+                        textBlock.Text = textBlock.Text + writeResult(stateApp[category][area][i], i);
+                if (stateApp[category][area][1] == null)
                     choiceDisease = new String[7] {"", "", "", "", "", "", ""};
                 else
-                    choiceDisease = stateApp[1];
+                    choiceDisease = stateApp[category][area][1];
             }
             disease = 1;
         }
@@ -323,21 +367,21 @@ namespace InspectionReport
                 {
                     foreach (CheckBox item in ((StackPanel)group.Content).Children)
                     {
-                        if (stateApp[2] != null && stateApp[2].Contains(item.Content.ToString()))
+                        if (stateApp[category][area][2] != null && stateApp[category][area][2].Contains(item.Content.ToString()))
                             item.IsChecked = true;
                         else
                             item.IsChecked = false;
                     }
                 }
-                stateApp[disease] = choiceDisease;
+                stateApp[category][area][disease] = choiceDisease;
                 textBlock.Text = "";
-                for (int i = 0; i < stateApp.Length; i++)
-                    if (stateApp[i] != null)
-                        textBlock.Text = textBlock.Text + writeResult(stateApp[i], i);
-                if (stateApp[2] == null)
+                for (int i = 0; i < stateApp[category][area].Length; i++)
+                    if (stateApp[category][area][i] != null)
+                        textBlock.Text = textBlock.Text + writeResult(stateApp[category][area][i], i);
+                if (stateApp[category][area][2] == null)
                     choiceDisease = new String[7] { "", "", "", "", "", "", "" };
                 else
-                    choiceDisease = stateApp[2];
+                    choiceDisease = stateApp[category][area][2];
             }
             disease = 2;
         }
@@ -367,21 +411,21 @@ namespace InspectionReport
                 {
                     foreach (CheckBox item in ((StackPanel)group.Content).Children)
                     {
-                        if (stateApp[3] != null && stateApp[3].Contains(item.Content.ToString()))
+                        if (stateApp[category][area][3] != null && stateApp[category][area][3].Contains(item.Content.ToString()))
                             item.IsChecked = true;
                         else
                             item.IsChecked = false;
                     }
                 }
-                stateApp[disease] = choiceDisease;
+                stateApp[category][area][disease] = choiceDisease;
                 textBlock.Text = "";
-                for (int i = 0; i < stateApp.Length; i++)
-                    if (stateApp[i] != null)
-                        textBlock.Text = textBlock.Text + writeResult(stateApp[i], i);
-                if (stateApp[3] == null)
+                for (int i = 0; i < stateApp[category][area].Length; i++)
+                    if (stateApp[category][area][i] != null)
+                        textBlock.Text = textBlock.Text + writeResult(stateApp[category][area][i], i);
+                if (stateApp[category][area][3] == null)
                     choiceDisease = new String[7] { "", "", "", "", "", "", "" };
                 else
-                    choiceDisease = stateApp[3];
+                    choiceDisease = stateApp[category][area][3];
             }
             disease = 3;
         }
@@ -404,21 +448,21 @@ namespace InspectionReport
                 {
                     foreach (CheckBox item in ((StackPanel)group.Content).Children)
                     {
-                        if (stateApp[4] != null && stateApp[4].Contains(item.Content.ToString()))
+                        if (stateApp[category][area][4] != null && stateApp[category][area][4].Contains(item.Content.ToString()))
                             item.IsChecked = true;
                         else
                             item.IsChecked = false;
                     }
                 }
-                stateApp[disease] = choiceDisease;
+                stateApp[category][area][disease] = choiceDisease;
                 textBlock.Text = "";
-                for (int i = 0; i < stateApp.Length; i++)
-                    if (stateApp[i] != null)
-                        textBlock.Text = textBlock.Text + writeResult(stateApp[i], i);
+                for (int i = 0; i < stateApp[category][area].Length; i++)
+                    if (stateApp[category][area][i] != null)
+                        textBlock.Text = textBlock.Text + writeResult(stateApp[category][area][i], i);
                 if (stateApp[4] == null)
                     choiceDisease = new String[7] { "", "", "", "", "", "", "" };
                 else
-                    choiceDisease = stateApp[4];
+                    choiceDisease = stateApp[category][area][4];
             }
             disease = 4;
         }
@@ -443,21 +487,21 @@ namespace InspectionReport
                 {
                     foreach (CheckBox item in ((StackPanel)group.Content).Children)
                     {
-                        if (stateApp[5] != null && stateApp[5].Contains(item.Content.ToString()))
+                        if (stateApp[category][area][5] != null && stateApp[category][area][5].Contains(item.Content.ToString()))
                             item.IsChecked = true;
                         else
                             item.IsChecked = false;
                     }
                 }
-                stateApp[disease] = choiceDisease;
+                stateApp[category][area][disease] = choiceDisease;
                 textBlock.Text = "";
-                for (int i = 0; i < stateApp.Length; i++)
-                    if (stateApp[i] != null)
-                        textBlock.Text = textBlock.Text + writeResult(stateApp[i], i);
-                if (stateApp[5] == null)
+                for (int i = 0; i < stateApp[category][area].Length; i++)
+                    if (stateApp[category][area][i] != null)
+                        textBlock.Text = textBlock.Text + writeResult(stateApp[category][area][i], i);
+                if (stateApp[category][area][5] == null)
                     choiceDisease = new String[7] { "", "", "", "", "", "", "" };
                 else
-                    choiceDisease = stateApp[5];
+                    choiceDisease = stateApp[category][area][5];
             }
             disease = 5;
         }
@@ -481,21 +525,21 @@ namespace InspectionReport
                 {
                     foreach (CheckBox item in ((StackPanel)group.Content).Children)
                     {
-                        if (stateApp[6] != null && stateApp[6].Contains(item.Content.ToString()))
+                        if (stateApp[category][area][6] != null && stateApp[category][area][6].Contains(item.Content.ToString()))
                             item.IsChecked = true;
                         else
                             item.IsChecked = false;
                     }
                 }
-                stateApp[disease] = choiceDisease;
+                stateApp[category][area][disease] = choiceDisease;
                 textBlock.Text = "";
-                for (int i = 0; i < stateApp.Length; i++)
-                    if (stateApp[i] != null)
-                        textBlock.Text = textBlock.Text + writeResult(stateApp[i], i);
-                if (stateApp[6] == null)
+                for (int i = 0; i < stateApp[category][area].Length; i++)
+                    if (stateApp[category][area][i] != null)
+                        textBlock.Text = textBlock.Text + writeResult(stateApp[category][area][i], i);
+                if (stateApp[category][area][6] == null)
                     choiceDisease = new String[7] { "", "", "", "", "", "", "" };
                 else
-                    choiceDisease = stateApp[6];
+                    choiceDisease = stateApp[category][area][6];
             }
             disease = 6;
         }
@@ -508,6 +552,7 @@ namespace InspectionReport
             else
                 choiceDisease[1] = ((CheckBox)sender).Content.ToString();
             writeResult();
+            stateApp[category][area][disease] = choiceDisease;
         }
 
         private void CheckBox_Checked_2(object sender, RoutedEventArgs e)
@@ -518,6 +563,7 @@ namespace InspectionReport
             else
                 choiceDisease[2] = ((CheckBox)sender).Content.ToString();
             writeResult();
+            stateApp[category][area][disease] = choiceDisease;
         }
 
         private void CheckBox_Checked_3(object sender, RoutedEventArgs e)
@@ -528,6 +574,7 @@ namespace InspectionReport
             else
                 choiceDisease[3] = ((CheckBox)sender).Content.ToString();
             writeResult();
+            stateApp[category][area][disease] = choiceDisease;
         }
 
         private void CheckBox_Checked_4(object sender, RoutedEventArgs e)
@@ -538,6 +585,7 @@ namespace InspectionReport
             else
                 choiceDisease[4] = ((CheckBox)sender).Content.ToString();
             writeResult();
+            stateApp[category][area][disease] = choiceDisease;
         }
 
         private void CheckBox_Checked_5(object sender, RoutedEventArgs e)
@@ -548,6 +596,7 @@ namespace InspectionReport
             else
                 choiceDisease[5] = ((CheckBox)sender).Content.ToString();
             writeResult();
+            stateApp[category][area][disease] = choiceDisease;
         }
 
         private void CheckBox_Checked_6(object sender, RoutedEventArgs e)
@@ -558,6 +607,7 @@ namespace InspectionReport
             else
                 choiceDisease[6] = ((CheckBox)sender).Content.ToString();
             writeResult();
+            stateApp[category][area][disease] = choiceDisease;
         }
 
         private void checkBoxToRadio(object sender, GroupBox group)
@@ -576,31 +626,31 @@ namespace InspectionReport
             switch (disease)
             {
                 case 0:
-                    stateApp[][0] = choiceDisease;
+                    stateApp[category][area][0] = choiceDisease;
                     break;
                 case 1:
-                    stateApp[][1] = choiceDisease;
+                    stateApp[category][area][1] = choiceDisease;
                     break;
                 case 2:
-                    stateApp[][2] = choiceDisease;
+                    stateApp[category][area][2] = choiceDisease;
                     break;
                 case 3:
-                    stateApp[][3] = choiceDisease;
+                    stateApp[category][area][3] = choiceDisease;
                     break;
                 case 4:
-                    stateApp[][4] = choiceDisease;
+                    stateApp[category][area][4] = choiceDisease;
                     break;
                 case 5:
-                    stateApp[][5] = choiceDisease;
+                    stateApp[category][area][5] = choiceDisease;
                     break;
                 case 6:
-                    stateApp[][6] = choiceDisease;
+                    stateApp[category][area][6] = choiceDisease;
                     break;
             }
             textBlock.Text = "";
-            for (int i = 0; i < stateApp.Length; i++)
-                if (stateApp[i] != null)
-                    textBlock.Text = textBlock.Text + writeResult(stateApp[i], i);
+            for (int i = 0; i < stateApp[category][area].Length; i++)
+                if (stateApp[category][area][i] != null)
+                    textBlock.Text = textBlock.Text + writeResult(stateApp[category][area][i], i);
         }
 
         private String writeResult(String[] choiceDisease, int index)
