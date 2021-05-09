@@ -11,15 +11,15 @@
         <Button x:Name="button" Content="Новый осмотр" HorizontalAlignment="Left" Margin="472,22,0,0" VerticalAlignment="Top" Width="91" Height="68"/>
         <Label Content="Возраст:" HorizontalAlignment="Left" Margin="35,51,0,0" VerticalAlignment="Top"/>
         <Label Content="ФИО:" HorizontalAlignment="Left" Margin="51,22,0,0" VerticalAlignment="Top" Width="39"/>
-        <DatePicker HorizontalAlignment="Left" Margin="95,82,0,0" VerticalAlignment="Top" Width="167"/>
-        <TextBox HorizontalAlignment="Left" Height="23" Margin="95,23,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="167"/>
-        <TextBox HorizontalAlignment="Left" Height="23" Margin="95,54,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="167"/>
+        <DatePicker x:Name="date" HorizontalAlignment="Left" Margin="95,82,0,0" VerticalAlignment="Top" Width="167"/>
+        <TextBox x:Name="fio" HorizontalAlignment="Left" Height="23" Margin="95,23,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="167"/>
+        <TextBox x:Name="year" HorizontalAlignment="Left" Height="23" Margin="95,54,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="167"/>
         <Label Content="Дата:" HorizontalAlignment="Left" Margin="52,78,0,0" VerticalAlignment="Top"/>
         <Button x:Name="button_Copy" Content="Шаблоны" HorizontalAlignment="Left" Margin="568,22,0,0" VerticalAlignment="Top" Width="91" Height="68"/>
-        <Button x:Name="button_Copy1" Content="Сохранить" HorizontalAlignment="Left" Margin="662,22,0,0" VerticalAlignment="Top" Width="89" Height="68"/>
+        <Button x:Name="save" Content="Сохранить" HorizontalAlignment="Left" Margin="662,22,0,0" VerticalAlignment="Top" Width="89" Height="68" Click="save_Click"/>
         <Button x:Name="button_Copy2" Content="Просмотр" HorizontalAlignment="Left" Margin="755,22,0,0" VerticalAlignment="Top" Width="90" Height="68"/>
         <Button x:Name="button_Copy3" Content="Печать" HorizontalAlignment="Left" Margin="850,22,0,0" VerticalAlignment="Top" Width="91" Height="68"/>
-        <Button x:Name="button_Copy4" Content="Настройки" HorizontalAlignment="Left" Margin="945,22,0,0" VerticalAlignment="Top" Width="91" Height="68"/>
+        <Button x:Name="options" Content="Настройки" HorizontalAlignment="Left" Margin="945,22,0,0" VerticalAlignment="Top" Width="91" Height="68" Click="options_Click"/>
         <StackPanel x:Name="type" HorizontalAlignment="Left" Height="49" Margin="35,115,0,0" VerticalAlignment="Top" Width="800" Orientation="Horizontal">
             <Button x:Name="complaints" Content="Жалобы" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="110" Height="50" Margin="0" Click="complaints_Click"/>
             <Button Content="Анамнез" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="110" Height="50" Margin="5,0,0,0"/>

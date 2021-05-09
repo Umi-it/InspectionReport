@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +10,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using WinForms = System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -26,10 +29,12 @@ namespace InspectionReport
         private int disease;
         private String[] choiceDisease;
         private String[][][][] stateApp;
+        public string filePath { get; set; }
 
         public MainWindow()
         {
             InitializeComponent();
+            filePath = Directory.GetCurrentDirectory();
             category = 0;
             disease = 0;
             stateApp = new String[7][][][];
@@ -312,7 +317,7 @@ namespace InspectionReport
                 case 0:
                     ChangeGroup(char1, "Форма (опционально)", 65, 2);
                     ((CheckBox)((StackPanel)char1.Content).Children[0]).Content = "неэрозивная форма";
-                    ((CheckBox)((StackPanel)char1.Content).Children[1]).Content = "эрозивная форма ";
+                    ((CheckBox)((StackPanel)char1.Content).Children[1]).Content = "эрозивная форма";
                     ChangeGroup(char2, "Степень эзофагита (опционально)", 125, 4);
                     ((CheckBox)((StackPanel)char2.Content).Children[0]).Content = "рефлюкс-эзофагит, ст. А";
                     ((CheckBox)((StackPanel)char2.Content).Children[1]).Content = "рефлюкс-эзофагит, ст. В";
@@ -1077,6 +1082,37 @@ namespace InspectionReport
                 str = str + ". ";
             str = str.Replace("\n", " ");
             return str;
+        }
+
+        private void save_Click(object sender, RoutedEventArgs e)
+        {
+            var helper = new WordHelper("Pattern.docx", "Pattern2.docx");
+            var items = new Dictionary<string, string>
+            {
+                { "<DIAGNOSIS>", textBlock.Text },
+                { "<FIO>", fio.Text },
+                { "<DATE>", date.SelectedDate.Value.ToString("dd.MM.yyyy") },
+                { "<YEAR>", year.Text }
+            };
+
+            helper.Process(items, filePath);
+        }
+
+        private void options_Click(object sender, RoutedEventArgs e)
+        {
+            FileDialog();      
+        }
+
+        public bool FileDialog()
+        {
+            WinForms.FolderBrowserDialog fileDialog = new WinForms.FolderBrowserDialog();
+            fileDialog.SelectedPath = Directory.GetCurrentDirectory();
+            if (fileDialog.ShowDialog() == WinForms.DialogResult.OK)
+            {
+                filePath = fileDialog.SelectedPath;
+                return true;
+            }
+            return false;
         }
     }
 }
