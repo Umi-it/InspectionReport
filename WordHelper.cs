@@ -31,10 +31,10 @@ namespace InspectionReport
             Word.Application app = null;
           try
             {
-                app = new Word.Application();
                 List<Object> listFile = new List<Object>() { _fileInfo1, _fileInfo2 };
 
                 foreach(FileInfo _fileInfo in listFile) {
+                    app = new Word.Application();
                     Object file = _fileInfo.FullName;
                     Object missing = Type.Missing;
                     app.Documents.Open(file);
@@ -63,19 +63,12 @@ namespace InspectionReport
                     Object newFileName = Path.Combine(filePath, DateTime.Now.ToString("yyyyMMdd_") + _fileInfo.Name);
                     app.ActiveDocument.SaveAs(newFileName);
                     app.ActiveDocument.Close();
+                    app.Quit();
                 }
                 
                 return true;
             }
             catch(Exception ex) { Console.WriteLine(ex.Message); }
-            finally
-            {
-                if (app != null)
-                {
-                    app.Quit();
-                }
-            }
-
             return false;
         }
     }

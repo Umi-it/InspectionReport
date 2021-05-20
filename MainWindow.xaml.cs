@@ -80,7 +80,6 @@ namespace InspectionReport
             diseaseStart.Visibility = Visibility.Hidden;
             diseaseEnd.Visibility = Visibility.Hidden;
             category = 0;
-            area = 0;
             categoryLabel.Content = "Жалобы";
             labelText.Content = "Жалобы:";
             btn6.Visibility = Visibility.Hidden;
@@ -257,20 +256,36 @@ namespace InspectionReport
 
         private void ChangeGroup(GroupBox group, String header, int height, int options)
         {
-            if (area == 3 && disease == 1)
+            if ((area == 3 && disease == 0) || (area == 2 && disease == 1))
             {
-                for(int i = 5, t = 0; i < 10; i++, t = t + 23)
+                if (area == 3 && disease == 0)
                 {
-                    Thickness margin = ((CheckBox)((StackPanel)char1.Content).Children[i]).Margin;
-                    margin.Top = -130 + t;
-                    margin.Left = 200;
-                    ((CheckBox)((StackPanel)char1.Content).Children[i]).Margin = margin;
+                    char1.Width = 350;
+                    for (int i = 5, t = 0; i < 10; i++, t = t + 23)
+                    {
+                        Thickness margin = ((CheckBox)((StackPanel)char1.Content).Children[i]).Margin;
+                        margin.Top = -130 + t;
+                        margin.Left = 200;
+                        ((CheckBox)((StackPanel)char1.Content).Children[i]).Margin = margin;
+                    }
+                }
+                if (area == 2 && disease == 1)
+                {
+                    char1.Width = 750;
+                    for (int i = 7, t = 0; i < 14; i++, t = t + 25 + 5)
+                    {
+                        Thickness margin = ((CheckBox)((StackPanel)char1.Content).Children[i]).Margin;
+                        margin.Top = -190 + t;
+                        margin.Left = 400;
+                        ((CheckBox)((StackPanel)char1.Content).Children[i]).Margin = margin;
+                    }
                 }
             }
             else
             {
                 for (int i = 5; i < 10; i++)
                 {
+                    char1.Width = 350;
                     Thickness margin = ((CheckBox)((StackPanel)char1.Content).Children[i]).Margin;
                     margin.Top = 5;
                     margin.Left = 0;
@@ -311,31 +326,31 @@ namespace InspectionReport
         private void rad1()
         {
             diseaseStart.SelectedItem = diseaseStart.Items[0];
-            disease = 1;
+            disease = 0;
             switch (area)
             {
                 case 0:
-                    ChangeGroup(char1, "Форма (опционально)", 65, 2);
-                    ((CheckBox)((StackPanel)char1.Content).Children[0]).Content = "неэрозивная форма";
-                    ((CheckBox)((StackPanel)char1.Content).Children[1]).Content = "эрозивная форма";
-                    ChangeGroup(char2, "Степень эзофагита (опционально)", 125, 4);
-                    ((CheckBox)((StackPanel)char2.Content).Children[0]).Content = "рефлюкс-эзофагит, ст. А";
-                    ((CheckBox)((StackPanel)char2.Content).Children[1]).Content = "рефлюкс-эзофагит, ст. В";
-                    ((CheckBox)((StackPanel)char2.Content).Children[2]).Content = "рефлюкс-эзофагит, ст. С";
-                    ((CheckBox)((StackPanel)char2.Content).Children[3]).Content = "рефлюкс-эзофагит, ст. D";
-                    ChangeGroup(char3, "Внепищеводные проявления", 130, 5, 140);
-                    ((CheckBox)((StackPanel)char3.Content).Children[0]).Content = "(рефлюкс-индуцированый кашель)";
-                    ((CheckBox)((StackPanel)char3.Content).Children[1]).Content = "(рефлюкс-ларингит)";
-                    ((CheckBox)((StackPanel)char3.Content).Children[2]).Content = "(рефлюкс-фарингит)";
-                    ((CheckBox)((StackPanel)char3.Content).Children[3]).Content = "(рецидивирующий отит)";
-                    ((CheckBox)((StackPanel)char3.Content).Children[4]).Content = "(хронический рецидивирующий синусит)";
-                    ChangeGroup(char4, "Внепищеводные проявления", 150, 6, 140);
-                    ((CheckBox)((StackPanel)char4.Content).Children[0]).Content = "(глоссит)";
-                    ((CheckBox)((StackPanel)char4.Content).Children[1]).Content = "(пародонтит)";
-                    ((CheckBox)((StackPanel)char4.Content).Children[2]).Content = "(эрозии эмали зубов)";
-                    ((CheckBox)((StackPanel)char4.Content).Children[3]).Content = "(бронхиальная астма)";
-                    ((CheckBox)((StackPanel)char4.Content).Children[4]).Content = "(рецидивирующая пневмония)";
-                    ((CheckBox)((StackPanel)char4.Content).Children[5]).Content = "другое";
+                    ChangeGroup(char1, "Внепищеводные проявления", 260, 11);
+                    ((CheckBox)((StackPanel)char1.Content).Children[0]).Content = "(рефлюкс-индуцированый кашель)";
+                    ((CheckBox)((StackPanel)char1.Content).Children[1]).Content = "(рефлюкс-ларингит)";
+                    ((CheckBox)((StackPanel)char1.Content).Children[2]).Content = "(рефлюкс-фарингит)";
+                    ((CheckBox)((StackPanel)char1.Content).Children[3]).Content = "(рецидивирующий отит)";
+                    ((CheckBox)((StackPanel)char1.Content).Children[4]).Content = "(хронический рецидивирующий синусит)";
+                    ((CheckBox)((StackPanel)char1.Content).Children[5]).Content = "(глоссит)";
+                    ((CheckBox)((StackPanel)char1.Content).Children[6]).Content = "(пародонтит)";
+                    ((CheckBox)((StackPanel)char1.Content).Children[7]).Content = "(эрозии эмали зубов)";
+                    ((CheckBox)((StackPanel)char1.Content).Children[8]).Content = "(бронхиальная астма)";
+                    ((CheckBox)((StackPanel)char1.Content).Children[9]).Content = "(рецидивирующая пневмония)";
+                    ((CheckBox)((StackPanel)char1.Content).Children[10]).Content = "другое";
+                    ChangeGroup(char2, "Форма (опционально)", 65, 2);
+                    ((CheckBox)((StackPanel)char2.Content).Children[0]).Content = "неэрозивная форма";
+                    ((CheckBox)((StackPanel)char2.Content).Children[1]).Content = "эрозивная форма";
+                    char3.Visibility = Visibility.Hidden;
+                    ChangeGroup(char4, "Степень эзофагита (опционально)", 125, 4, 75);
+                    ((CheckBox)((StackPanel)char4.Content).Children[0]).Content = "рефлюкс-эзофагит, ст. А";
+                    ((CheckBox)((StackPanel)char4.Content).Children[1]).Content = "рефлюкс-эзофагит, ст. В";
+                    ((CheckBox)((StackPanel)char4.Content).Children[2]).Content = "рефлюкс-эзофагит, ст. С";
+                    ((CheckBox)((StackPanel)char4.Content).Children[3]).Content = "рефлюкс-эзофагит, ст. D";
                     char5.Visibility = Visibility.Hidden;
                     char6.Visibility = Visibility.Hidden;
                     break;
@@ -419,18 +434,18 @@ namespace InspectionReport
                     char6.Visibility = Visibility.Hidden;
                     break;
                 case 5:
-                    ChangeGroup(char1, "", 145, 5);
+                    ChangeGroup(char1, "", 240, 10);
                     ((CheckBox)((StackPanel)char1.Content).Children[0]).Content = "Синдром межреберной невралгии? Дорсопатия";
                     ((CheckBox)((StackPanel)char1.Content).Children[1]).Content = "Патология передней брюшной стенки?";
                     ((CheckBox)((StackPanel)char1.Content).Children[2]).Content = "Обследование";
                     ((CheckBox)((StackPanel)char1.Content).Children[3]).Content = "Гематохезия";
                     ((CheckBox)((StackPanel)char1.Content).Children[4]).Content = "Синдром ускоренного СОЭ";
-                    ChangeGroup(char2, "Дивертикулярная болезнь толстой кишки", 145, 5);
-                    ((CheckBox)((StackPanel)char2.Content).Children[0]).Content = "Органическое заболевание толстой кишки?";
-                    ((CheckBox)((StackPanel)char2.Content).Children[1]).Content = "Органическое заболевание желудка?";
-                    ((CheckBox)((StackPanel)char2.Content).Children[2]).Content = "Железодефицитная анемия, легкой степени тяжести";
-                    ((CheckBox)((StackPanel)char2.Content).Children[3]).Content = "В12дефицитная анемия, легкой степени тяжести";
-                    ((CheckBox)((StackPanel)char2.Content).Children[4]).Content = "Анемия неясного генеза";
+                    ((CheckBox)((StackPanel)char1.Content).Children[5]).Content = "Органическое заболевание толстой кишки?";
+                    ((CheckBox)((StackPanel)char1.Content).Children[6]).Content = "Органическое заболевание желудка?";
+                    ((CheckBox)((StackPanel)char1.Content).Children[7]).Content = "Железодефицитная анемия, легкой степени тяжести";
+                    ((CheckBox)((StackPanel)char1.Content).Children[8]).Content = "В12дефицитная анемия, легкой степени тяжести";
+                    ((CheckBox)((StackPanel)char1.Content).Children[9]).Content = "Анемия неясного генеза";
+                    char2.Visibility = Visibility.Hidden;
                     char3.Visibility = Visibility.Hidden;
                     char4.Visibility = Visibility.Hidden;
                     char5.Visibility = Visibility.Hidden;
@@ -439,32 +454,29 @@ namespace InspectionReport
                 default:
                     break;
             }
-            if (disease != 0)
+            foreach (GroupBox group in gridEnd.Children)
             {
-                foreach (GroupBox group in gridEnd.Children)
+                foreach (CheckBox item in ((StackPanel)group.Content).Children)
                 {
-                    foreach (CheckBox item in ((StackPanel)group.Content).Children)
-                    {
-                        if (stateApp[category][area][0] != null && stateApp[category][area][0].Contains(item.Content.ToString()))
-                            item.IsChecked = true;
-                        else
-                            item.IsChecked = false;
-                    }
+                    if (stateApp[category][area][0] != null && stateApp[category][area][0].Contains(item.Content.ToString()))
+                        item.IsChecked = true;
+                    else
+                        item.IsChecked = false;
                 }
-                textBlock.Text = "";
-                for (int i = 0; i < stateApp[category][area].Length; i++)
-                    if (stateApp[category][area][i] != null)
-                        textBlock.Text = textBlock.Text + writeResult(stateApp[category][area][i], i);
-                if (stateApp[category][area][0] == null)
-                    choiceDisease = new String[7] { "", "", "", "", "", "", "" };
-                else
-                    choiceDisease = stateApp[category][area][0];
             }
-            disease = 0;
+            textBlock.Text = "";
+            for (int i = 0; i < stateApp[category][area].Length; i++)
+                if (stateApp[category][area][i] != null)
+                    textBlock.Text = textBlock.Text + writeResult(stateApp[category][area][i], i);
+            if (stateApp[category][area][0] == null)
+                choiceDisease = new String[7] { "", "", "", "", "", "", "" };
+            else
+                choiceDisease = stateApp[category][area][0];
         }
 
         private void rad2_Click(object sender, MouseButtonEventArgs e)
         {
+            disease = 1;
             switch (area)
             {
                 case 0:
@@ -475,7 +487,7 @@ namespace InspectionReport
                     ((CheckBox)((StackPanel)char2.Content).Children[0]).Content = "Рубцовый стеноз пищевода";
                     ((CheckBox)((StackPanel)char2.Content).Children[1]).Content = "Язва пищевода";
                     ((CheckBox)((StackPanel)char2.Content).Children[2]).Content = "Язва сегмента метаплазии пищевода";
-                    ((CheckBox)((StackPanel)char2.Content).Children[3]).Content = "Аксиальная грыжа пищеводного отверстия диафрагмы ";
+                    ((CheckBox)((StackPanel)char2.Content).Children[3]).Content = "Аксиальная грыжа пищеводного отверстия диафрагмы";
                     ((CheckBox)((StackPanel)char2.Content).Children[4]).Content = "Параэзофагеальная грыжа пищеводного отверстия диафрагмы";
                     ((CheckBox)((StackPanel)char2.Content).Children[5]).Content = "Гиперсенситивный пищевод";
                     ((CheckBox)((StackPanel)char2.Content).Children[6]).Content = "Функциональная изжога";
@@ -522,7 +534,7 @@ namespace InspectionReport
                     char6.Visibility = Visibility.Hidden;
                     break;
                 case 2:
-                    ChangeGroup(char1, "", 205, 7);
+                    ChangeGroup(char1, "", 220, 14);
                     ((CheckBox)((StackPanel)char1.Content).Children[0]).Content = "эндоскопического удаления аденомы толстой кишки";
                     ((CheckBox)((StackPanel)char1.Content).Children[1]).Content = "эндоскопического удаления зубчатого полипа/аденомы\nтолстой кишки";
                     ((CheckBox)((StackPanel)char1.Content).Children[2]).Content = "эндоскопического удаления гиперпластического полипа\nтолстой кишки";
@@ -530,14 +542,14 @@ namespace InspectionReport
                     ((CheckBox)((StackPanel)char1.Content).Children[4]).Content = "эндоскопического удаления раннего рака толстой кишки";
                     ((CheckBox)((StackPanel)char1.Content).Children[5]).Content = "эндоскопического удаления аденомы толстой кишки";
                     ((CheckBox)((StackPanel)char1.Content).Children[6]).Content = "передней резекции прямой кишки по поводу рака\nпрямой кишки";
-                    ChangeGroup(char2, "", 200, 7);
-                    ((CheckBox)((StackPanel)char2.Content).Children[0]).Content = "резекции сигмовидной кишки по поводу рака\nсигмовидной кишки";
-                    ((CheckBox)((StackPanel)char2.Content).Children[1]).Content = "сигмоидэктомии по поводу рака сигмовидной кишки";
-                    ((CheckBox)((StackPanel)char2.Content).Children[2]).Content = "правосторонней гемиколэктомии по поводу рака\nвосходящей ободочной кишки";
-                    ((CheckBox)((StackPanel)char2.Content).Children[3]).Content = "левоосторонней гемиколэктомии по поводу рака\nнисходящей ободочной кишки";
-                    ((CheckBox)((StackPanel)char2.Content).Children[4]).Content = "резекции толстой кишки по поводу рака толстой кишки";
-                    ((CheckBox)((StackPanel)char2.Content).Children[5]).Content = "операции Гартмана по поводу рака прямой кишки";
-                    ((CheckBox)((StackPanel)char2.Content).Children[6]).Content = "Колостома";
+                    ((CheckBox)((StackPanel)char1.Content).Children[7]).Content = "резекции сигмовидной кишки по поводу рака\nсигмовидной кишки";
+                    ((CheckBox)((StackPanel)char1.Content).Children[8]).Content = "сигмоидэктомии по поводу рака сигмовидной кишки";
+                    ((CheckBox)((StackPanel)char1.Content).Children[9]).Content = "правосторонней гемиколэктомии по поводу рака\nвосходящей ободочной кишки";
+                    ((CheckBox)((StackPanel)char1.Content).Children[10]).Content = "левоосторонней гемиколэктомии по поводу рака\nнисходящей ободочной кишки";
+                    ((CheckBox)((StackPanel)char1.Content).Children[11]).Content = "резекции толстой кишки по поводу рака толстой кишки";
+                    ((CheckBox)((StackPanel)char1.Content).Children[12]).Content = "операции Гартмана по поводу рака прямой кишки";
+                    ((CheckBox)((StackPanel)char1.Content).Children[13]).Content = "Колостома";
+                    char2.Visibility = Visibility.Hidden;
                     char3.Visibility = Visibility.Hidden;
                     char4.Visibility = Visibility.Hidden;
                     char5.Visibility = Visibility.Hidden;
@@ -576,32 +588,29 @@ namespace InspectionReport
                 default:
                     break;
             }
-            if (disease != 1)
+            foreach (GroupBox group in gridEnd.Children)
             {
-                foreach (GroupBox group in gridEnd.Children)
+                foreach (CheckBox item in ((StackPanel)group.Content).Children)
                 {
-                    foreach (CheckBox item in ((StackPanel)group.Content).Children)
-                    {
-                        if (stateApp[category][area][1] != null && stateApp[category][area][1].Contains(item.Content.ToString()))
-                            item.IsChecked = true;
-                        else
-                            item.IsChecked = false;
-                    }
+                    if (stateApp[category][area][1] != null && stateApp[category][area][1].Contains(item.Content.ToString()))
+                        item.IsChecked = true;
+                    else
+                        item.IsChecked = false;
                 }
-                textBlock.Text = "";
-                for (int i = 0; i < stateApp[category][area].Length; i++)
-                    if (stateApp[category][area][i] != null)
-                        textBlock.Text = textBlock.Text + writeResult(stateApp[category][area][i], i);
-                if (stateApp[category][area][1] == null)
-                    choiceDisease = new String[7] {"", "", "", "", "", "", ""};
-                else
-                    choiceDisease = stateApp[category][area][1];
             }
-            disease = 1;
+            textBlock.Text = "";
+            for (int i = 0; i < stateApp[category][area].Length; i++)
+                if (stateApp[category][area][i] != null)
+                    textBlock.Text = textBlock.Text + writeResult(stateApp[category][area][i], i);
+            if (stateApp[category][area][1] == null)
+                choiceDisease = new String[7] {"", "", "", "", "", "", ""};
+            else
+                choiceDisease = stateApp[category][area][1];
         }
 
         private void rad3_Click(object sender, MouseButtonEventArgs e)
         {
+            disease = 2;
             ChangeGroup(char1, "Количество", 65, 2);
             ((CheckBox)((StackPanel)char1.Content).Children[0]).Content = "симптоматическая язва";
             ((CheckBox)((StackPanel)char1.Content).Children[1]).Content = "симптоматические язвы";
@@ -627,33 +636,30 @@ namespace InspectionReport
             ((CheckBox)((StackPanel)char5.Content).Children[3]).Content = "(состояние после дистальной резекции желудка по\nБильрот-II)";
             ((CheckBox)((StackPanel)char5.Content).Children[4]).Content = "(состояние после дистальной резекции желудка по\nБильрот-I)";
             char6.Visibility = Visibility.Hidden;
-            if (disease != 2)
+            foreach (GroupBox group in gridEnd.Children)
             {
-                foreach (GroupBox group in gridEnd.Children)
+                foreach (CheckBox item in ((StackPanel)group.Content).Children)
                 {
-                    foreach (CheckBox item in ((StackPanel)group.Content).Children)
-                    {
-                        if (stateApp[category][area][2] != null && stateApp[category][area][2].Contains(item.Content.ToString()))
-                            item.IsChecked = true;
-                        else
-                            item.IsChecked = false;
-                    }
+                    if (stateApp[category][area][2] != null && stateApp[category][area][2].Contains(item.Content.ToString()))
+                        item.IsChecked = true;
+                    else
+                        item.IsChecked = false;
                 }
-                stateApp[category][area][disease] = choiceDisease;
-                textBlock.Text = "";
-                for (int i = 0; i < stateApp[category][area].Length; i++)
-                    if (stateApp[category][area][i] != null)
-                        textBlock.Text = textBlock.Text + writeResult(stateApp[category][area][i], i);
-                if (stateApp[category][area][2] == null)
-                    choiceDisease = new String[7] { "", "", "", "", "", "", "" };
-                else
-                    choiceDisease = stateApp[category][area][2];
             }
-            disease = 2;
+            stateApp[category][area][disease] = choiceDisease;
+            textBlock.Text = "";
+            for (int i = 0; i < stateApp[category][area].Length; i++)
+                if (stateApp[category][area][i] != null)
+                    textBlock.Text = textBlock.Text + writeResult(stateApp[category][area][i], i);
+            if (stateApp[category][area][2] == null)
+                choiceDisease = new String[7] { "", "", "", "", "", "", "" };
+            else
+                choiceDisease = stateApp[category][area][2];
         }
 
         private void rad4_Click(object sender, MouseButtonEventArgs e)
         {
+            disease = 3;
             ChangeGroup(char1, "Тип операции", 210, 5);
             ((CheckBox)((StackPanel)char1.Content).Children[0]).Content = "состояние после дистальной субтотальной резекции\nжелудка по Бильрот-II по поводу рака желудка";
             ((CheckBox)((StackPanel)char1.Content).Children[1]).Content = "состояние после дистальной субтотальной резекции\nжелудка по Бильрот-I по поводу рака желудка";
@@ -671,33 +677,30 @@ namespace InspectionReport
             char4.Visibility = Visibility.Hidden;
             char5.Visibility = Visibility.Hidden;
             char6.Visibility = Visibility.Hidden;
-            if (disease != 3)
+            foreach (GroupBox group in gridEnd.Children)
             {
-                foreach (GroupBox group in gridEnd.Children)
+                foreach (CheckBox item in ((StackPanel)group.Content).Children)
                 {
-                    foreach (CheckBox item in ((StackPanel)group.Content).Children)
-                    {
-                        if (stateApp[category][area][3] != null && stateApp[category][area][3].Contains(item.Content.ToString()))
-                            item.IsChecked = true;
-                        else
-                            item.IsChecked = false;
-                    }
+                    if (stateApp[category][area][3] != null && stateApp[category][area][3].Contains(item.Content.ToString()))
+                        item.IsChecked = true;
+                    else
+                        item.IsChecked = false;
                 }
-                stateApp[category][area][disease] = choiceDisease;
-                textBlock.Text = "";
-                for (int i = 0; i < stateApp[category][area].Length; i++)
-                    if (stateApp[category][area][i] != null)
-                        textBlock.Text = textBlock.Text + writeResult(stateApp[category][area][i], i);
-                if (stateApp[category][area][3] == null)
-                    choiceDisease = new String[7] { "", "", "", "", "", "", "" };
-                else
-                    choiceDisease = stateApp[category][area][3];
             }
-            disease = 3;
+            stateApp[category][area][disease] = choiceDisease;
+            textBlock.Text = "";
+            for (int i = 0; i < stateApp[category][area].Length; i++)
+                if (stateApp[category][area][i] != null)
+                    textBlock.Text = textBlock.Text + writeResult(stateApp[category][area][i], i);
+            if (stateApp[category][area][3] == null)
+                choiceDisease = new String[7] { "", "", "", "", "", "", "" };
+            else
+                choiceDisease = stateApp[category][area][3];
         }
 
         private void rad5_Click(object sender, MouseButtonEventArgs e)
         {
+            disease = 4;
             ChangeGroup(char1, "Эндоскопические операции", 170, 4);
             ((CheckBox)((StackPanel)char1.Content).Children[0]).Content = "Состояние после эндоскопического удаления\nгиперпластического полипа желудка";
             ((CheckBox)((StackPanel)char1.Content).Children[1]).Content = "Состояние после эндоскопического удаления аденомы\nжелудка";
@@ -708,33 +711,30 @@ namespace InspectionReport
             char4.Visibility = Visibility.Hidden;
             char5.Visibility = Visibility.Hidden;
             char6.Visibility = Visibility.Hidden;
-            if (disease != 4)
+            foreach (GroupBox group in gridEnd.Children)
             {
-                foreach (GroupBox group in gridEnd.Children)
+                foreach (CheckBox item in ((StackPanel)group.Content).Children)
                 {
-                    foreach (CheckBox item in ((StackPanel)group.Content).Children)
-                    {
-                        if (stateApp[category][area][4] != null && stateApp[category][area][4].Contains(item.Content.ToString()))
-                            item.IsChecked = true;
-                        else
-                            item.IsChecked = false;
-                    }
+                    if (stateApp[category][area][4] != null && stateApp[category][area][4].Contains(item.Content.ToString()))
+                        item.IsChecked = true;
+                    else
+                        item.IsChecked = false;
                 }
-                stateApp[category][area][disease] = choiceDisease;
-                textBlock.Text = "";
-                for (int i = 0; i < stateApp[category][area].Length; i++)
-                    if (stateApp[category][area][i] != null)
-                        textBlock.Text = textBlock.Text + writeResult(stateApp[category][area][i], i);
-                if (stateApp[4] == null)
-                    choiceDisease = new String[7] { "", "", "", "", "", "", "" };
-                else
-                    choiceDisease = stateApp[category][area][4];
             }
-            disease = 4;
+            stateApp[category][area][disease] = choiceDisease;
+            textBlock.Text = "";
+            for (int i = 0; i < stateApp[category][area].Length; i++)
+                if (stateApp[category][area][i] != null)
+                    textBlock.Text = textBlock.Text + writeResult(stateApp[category][area][i], i);
+            if (stateApp[category][area][4] == null)
+                choiceDisease = new String[7] { "", "", "", "", "", "", "" };
+            else
+                choiceDisease = stateApp[category][area][4];
         }
 
         private void rad6_Click(object sender, MouseButtonEventArgs e)
         {
+            disease = 5;
             ChangeGroup(char1, "Новообразования желудка", 150, 6);
             ((CheckBox)((StackPanel)char1.Content).Children[0]).Content = "Гиперпластический полип желудка";
             ((CheckBox)((StackPanel)char1.Content).Children[1]).Content = "Полипы фундальных желез тела желудка";
@@ -747,33 +747,30 @@ namespace InspectionReport
             char4.Visibility = Visibility.Hidden;
             char5.Visibility = Visibility.Hidden;
             char6.Visibility = Visibility.Hidden;
-            if (disease != 5)
+            foreach (GroupBox group in gridEnd.Children)
             {
-                foreach (GroupBox group in gridEnd.Children)
+                foreach (CheckBox item in ((StackPanel)group.Content).Children)
                 {
-                    foreach (CheckBox item in ((StackPanel)group.Content).Children)
-                    {
-                        if (stateApp[category][area][5] != null && stateApp[category][area][5].Contains(item.Content.ToString()))
-                            item.IsChecked = true;
-                        else
-                            item.IsChecked = false;
-                    }
+                    if (stateApp[category][area][5] != null && stateApp[category][area][5].Contains(item.Content.ToString()))
+                        item.IsChecked = true;
+                    else
+                        item.IsChecked = false;
                 }
-                stateApp[category][area][disease] = choiceDisease;
-                textBlock.Text = "";
-                for (int i = 0; i < stateApp[category][area].Length; i++)
-                    if (stateApp[category][area][i] != null)
-                        textBlock.Text = textBlock.Text + writeResult(stateApp[category][area][i], i);
-                if (stateApp[category][area][5] == null)
-                    choiceDisease = new String[7] { "", "", "", "", "", "", "" };
-                else
-                    choiceDisease = stateApp[category][area][5];
             }
-            disease = 5;
+            stateApp[category][area][disease] = choiceDisease;
+            textBlock.Text = "";
+            for (int i = 0; i < stateApp[category][area].Length; i++)
+                if (stateApp[category][area][i] != null)
+                    textBlock.Text = textBlock.Text + writeResult(stateApp[category][area][i], i);
+            if (stateApp[category][area][5] == null)
+                choiceDisease = new String[7] { "", "", "", "", "", "", "" };
+            else
+                choiceDisease = stateApp[category][area][5];
         }
 
         private void rad7_Click(object sender, MouseButtonEventArgs e)
         {
+            disease = 6;
             ChangeGroup(char1, "Диспепсия", 200, 5);
             ((CheckBox)((StackPanel)char1.Content).Children[0]).Content = "Функциональная диспепсия: постпрандиальный\nдистресс-синдром";
             ((CheckBox)((StackPanel)char1.Content).Children[1]).Content = "Функциональная диспепсия: синдром эпигастральной\nболи";
@@ -785,29 +782,25 @@ namespace InspectionReport
             char4.Visibility = Visibility.Hidden;
             char5.Visibility = Visibility.Hidden;
             char6.Visibility = Visibility.Hidden;
-            if (disease != 6)
+            foreach (GroupBox group in gridEnd.Children)
             {
-                foreach (GroupBox group in gridEnd.Children)
+                foreach (CheckBox item in ((StackPanel)group.Content).Children)
                 {
-                    foreach (CheckBox item in ((StackPanel)group.Content).Children)
-                    {
-                        if (stateApp[category][area][6] != null && stateApp[category][area][6].Contains(item.Content.ToString()))
-                            item.IsChecked = true;
-                        else
-                            item.IsChecked = false;
-                    }
+                    if (stateApp[category][area][6] != null && stateApp[category][area][6].Contains(item.Content.ToString()))
+                        item.IsChecked = true;
+                    else
+                        item.IsChecked = false;
                 }
-                stateApp[category][area][disease] = choiceDisease;
-                textBlock.Text = "";
-                for (int i = 0; i < stateApp[category][area].Length; i++)
-                    if (stateApp[category][area][i] != null)
-                        textBlock.Text = textBlock.Text + writeResult(stateApp[category][area][i], i);
-                if (stateApp[category][area][6] == null)
-                    choiceDisease = new String[7] { "", "", "", "", "", "", "" };
-                else
-                    choiceDisease = stateApp[category][area][6];
             }
-            disease = 6;
+            stateApp[category][area][disease] = choiceDisease;
+            textBlock.Text = "";
+            for (int i = 0; i < stateApp[category][area].Length; i++)
+                if (stateApp[category][area][i] != null)
+                    textBlock.Text = textBlock.Text + writeResult(stateApp[category][area][i], i);
+            if (stateApp[category][area][6] == null)
+                choiceDisease = new String[7] { "", "", "", "", "", "", "" };
+            else
+                choiceDisease = stateApp[category][area][6];
         }
 
         private void CheckBox_Checked_1(object sender, RoutedEventArgs e)
@@ -928,11 +921,10 @@ namespace InspectionReport
                     if (index == 0)
                     {
                         choiceDisease[0] = "Гастроэзофагеальная рефлюксная болезнь";
-                        if ((choiceDisease[3] != "" && choiceDisease[4] == "") || (choiceDisease[4] != "" && choiceDisease[3] == ""))
+                        if (choiceDisease[1] != "")
                         {
-                            str = choiceDisease[0] + (choiceDisease[1] != "" ? ", " + choiceDisease[1]: "") +
-                                (choiceDisease[2] != "" ? ", " + choiceDisease[2]: "") + " с вероятными внепищеводными проявлениями "
-                                + (choiceDisease[3] != ""? choiceDisease[3]: "") + (choiceDisease[4] != ""? choiceDisease[4]: "");
+                            str = choiceDisease[0] + " с вероятными внепищеводными проявлениями " + choiceDisease[1] +
+                                (choiceDisease[2] != "" ? ", " + choiceDisease[2]: "") + (choiceDisease[4] != ""? ", " + choiceDisease[4]: "");
                         }
                     }
                     if (index == 1)
@@ -942,7 +934,7 @@ namespace InspectionReport
                         {
                             str = (choiceDisease[0] != "" ? choiceDisease[0] + ". " : "") + (choiceDisease[1] != "" ? choiceDisease[1] + ". " : "") +
                                 (choiceDisease[2] != "" ? choiceDisease[2] + ". " : "") + (choiceDisease[3] != "" ? choiceDisease[3] + ". " : "") +
-                                (choiceDisease[4] != "" ? choiceDisease[4]: "") + (choiceDisease[5] != "" ? choiceDisease[5] + ". " : "");
+                                (choiceDisease[4] != "" ? choiceDisease[4] + ". " : "") + (choiceDisease[5] != "" ? choiceDisease[5] + ". " : "");
                             str = str.Substring(0, str.Length - 2);
                         }
                     }
@@ -1025,15 +1017,15 @@ namespace InspectionReport
                         if (choiceDisease[1] != "" || choiceDisease[2] != "" || choiceDisease[3] != "")
                         {
                             str = (choiceDisease[1] != "" ? choiceDisease[1] + ". " : "");
-                            if (choiceDisease[2] != "Дивертикулез толстой кишки" && choiceDisease[2] != "Синдром избыточного бактериального роста в кишке")
-                                str = str + " " + "Дивертикулярная болезнь толстой кишки: " + choiceDisease[2] + ". ";
+                            if (choiceDisease[2] != "" && choiceDisease[2] != "Дивертикулез толстой кишки" && choiceDisease[2] != "Синдром избыточного бактериального роста в кишке")
+                                str = str + "Дивертикулярная болезнь толстой кишки: " + choiceDisease[2] + ". ";
                             else
-                                str = str + " " + (choiceDisease[2] != "" ? choiceDisease[2] + ". " : "");
+                                str = str + (choiceDisease[2] != "" ? choiceDisease[2] + ". " : "");
                             if (choiceDisease[3].Contains("Болезнь Крона"))
-                                str = str + " " + choiceDisease[3] + " с поражением прямой кишки, сигмовидной кишки, нисходящей ободочной" +
+                                str = str + choiceDisease[3] + " с поражением прямой кишки, сигмовидной кишки, нисходящей ободочной" +
                                     " кишки, поперечно-ободочной кишки, тощей кишки, тяжелая атака. ";
                             else 
-                                str = str + " " + (choiceDisease[3] != "" ? choiceDisease[3] + ". " : "");
+                                str = str + (choiceDisease[3] != "" ? choiceDisease[3] + ". " : "");
                             str = str.Substring(0, str.Length - 2);
                         }
                     }
@@ -1064,8 +1056,11 @@ namespace InspectionReport
                     {
                         if (choiceDisease[1] != "" || choiceDisease[2] != "" || choiceDisease[3] != "" || choiceDisease[4] != "")
                         {
-                            str = (choiceDisease[1] != "" ? choiceDisease[1] + ". ": "") + (choiceDisease[2] != "" ? choiceDisease[2] + ". " : "")
-                                + (choiceDisease[3] != "" ? choiceDisease[3] + ". " : "") + (choiceDisease[4] != "" ? choiceDisease[4] + ". " : "");
+                            str = (choiceDisease[1] != "" ? choiceDisease[1] + ". " : "") + (choiceDisease[2] != "" ? choiceDisease[2] + ". " : "");
+                            if (choiceDisease[3].Substring(0,12) == "с признаками")
+                                str = str + "Токсическое поражение печени " + (choiceDisease[3] != "" ? choiceDisease[3] + ". " : "") + (choiceDisease[4] != "" ? choiceDisease[4] + ". " : "");
+                            else
+                                str = str + (choiceDisease[3] != "" ? choiceDisease[3] + ". " : "") + (choiceDisease[4] != "" ? choiceDisease[4] + ". " : "");
                             str = str.Replace("Фун-е", "Функциональное");
                             str = str.Substring(0, str.Length - 2);
                         }
@@ -1089,30 +1084,23 @@ namespace InspectionReport
             var helper = new WordHelper("Pattern.docx", "Pattern2.docx");
             var items = new Dictionary<string, string>
             {
-                { "<DIAGNOSIS>", textBlock.Text },
-                { "<FIO>", fio.Text },
-                { "<DATE>", date.SelectedDate.Value.ToString("dd.MM.yyyy") },
-                { "<YEAR>", year.Text }
+                { "<DIAGNOSIS>", textBlock.Text != null ? textBlock.Text : ""},
+                { "<FIO>", fio.Text != null ? fio.Text : "" },
+                { "<DATE>", date.SelectedDate != null ? date.SelectedDate.Value.ToString("dd.MM.yyyy") : ""},
+                { "<YEAR>", year.Text  != null ? year.Text : ""}
             };
-
             helper.Process(items, filePath);
+            MessageBox.Show("Сохранено");
         }
 
         private void options_Click(object sender, RoutedEventArgs e)
         {
-            FileDialog();      
-        }
+            Options optionsWindow = new Options();
 
-        public bool FileDialog()
-        {
-            WinForms.FolderBrowserDialog fileDialog = new WinForms.FolderBrowserDialog();
-            fileDialog.SelectedPath = Directory.GetCurrentDirectory();
-            if (fileDialog.ShowDialog() == WinForms.DialogResult.OK)
+            if (optionsWindow.ShowDialog() == true)
             {
-                filePath = fileDialog.SelectedPath;
-                return true;
-            }
-            return false;
+                filePath = optionsWindow.opt1.Text;
+            }    
         }
     }
 }
