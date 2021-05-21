@@ -24,13 +24,13 @@ namespace InspectionReport
         public Options()
         {
             InitializeComponent();
-            opt1.Text = Directory.GetCurrentDirectory();
+            opt1.Text = Properties.Settings.Default.FilePath;
         }
 
         public bool FileDialog()
         {
             WinForms.FolderBrowserDialog fileDialog = new WinForms.FolderBrowserDialog();
-            fileDialog.SelectedPath = Directory.GetCurrentDirectory();
+            fileDialog.SelectedPath = Properties.Settings.Default.FilePath;
             if (fileDialog.ShowDialog() == WinForms.DialogResult.OK)
             {
                 opt1.Text = fileDialog.SelectedPath;

@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InspectionReport"
         mc:Ignorable="d"
-       Title="InspectionReport" Height="800" Width="1100">
+       Title="Inspection Report" Height="900" Width="1100" WindowStartupLocation="CenterScreen">
     <Grid>
-        <Rectangle HorizontalAlignment="Left" Height="584" Margin="16,175,0,0" Stroke="Black" VerticalAlignment="Top" Width="1054" d:IsLocked="True"/>
+        <Rectangle HorizontalAlignment="Left" Height="684" Margin="16,175,0,0" Stroke="Black" VerticalAlignment="Top" Width="1054" d:IsLocked="True"/>
         <Button x:Name="button" Content="Новый осмотр" HorizontalAlignment="Left" Margin="472,22,0,0" VerticalAlignment="Top" Width="91" Height="68"/>
         <Label Content="Возраст:" HorizontalAlignment="Left" Margin="35,51,0,0" VerticalAlignment="Top"/>
         <Label Content="ФИО:" HorizontalAlignment="Left" Margin="51,22,0,0" VerticalAlignment="Top" Width="39"/>
@@ -18,7 +18,7 @@
         <Button x:Name="button_Copy" Content="Шаблоны" HorizontalAlignment="Left" Margin="568,22,0,0" VerticalAlignment="Top" Width="91" Height="68"/>
         <Button x:Name="save" Content="Сохранить" HorizontalAlignment="Left" Margin="662,22,0,0" VerticalAlignment="Top" Width="89" Height="68" Click="save_Click"/>
         <Button x:Name="button_Copy2" Content="Просмотр" HorizontalAlignment="Left" Margin="755,22,0,0" VerticalAlignment="Top" Width="90" Height="68"/>
-        <Button x:Name="button_Copy3" Content="Печать" HorizontalAlignment="Left" Margin="850,22,0,0" VerticalAlignment="Top" Width="91" Height="68"/>
+        <Button x:Name="printBut" Content="Печать" HorizontalAlignment="Left" Margin="850,22,0,0" VerticalAlignment="Top" Width="91" Height="68" Click="printBut_Click"/>
         <Button x:Name="options" Content="Настройки" HorizontalAlignment="Left" Margin="945,22,0,0" VerticalAlignment="Top" Width="91" Height="68" Click="options_Click"/>
         <StackPanel x:Name="type" HorizontalAlignment="Left" Height="49" Margin="35,115,0,0" VerticalAlignment="Top" Width="800" Orientation="Horizontal">
             <Button x:Name="complaints" Content="Жалобы" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="110" Height="50" Margin="0" Click="complaints_Click"/>
@@ -29,11 +29,11 @@
             <Button x:Name="therapy" Content="Терапия" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Height="50" Margin="5,0,0,0" Click="therapy_Click"/>
             <Button Content="Наблюдение" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Height="50" Margin="5,0,0,-1" Padding="0,0,1,1"/>
         </StackPanel>
-        <Grid Height="584" Margin="16,175,22,0" VerticalAlignment="Top">
-            <TextBox x:Name="textBlock" Height="105" Margin="19,460,100,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="935" HorizontalAlignment="Center"/>
+        <Grid Margin="16,175,22,0">
+            <TextBox x:Name="textBlock" Margin="19,460,100,30" TextWrapping="Wrap" Text="" FontSize="14" Height="205" Width="930" HorizontalAlignment="Left" VerticalAlignment="Top"/>
             <Label x:Name="labelText" Content="Жалобы:" HorizontalAlignment="Left" Margin="21,429,0,0" VerticalAlignment="Top"/>
-            <Button x:Name="clear" Content="Очистить" HorizontalAlignment="Left" Margin="959,542,0,0" VerticalAlignment="Top" Width="75" Click="clear_Click"/>
-            <Rectangle HorizontalAlignment="Left" Margin="10,65,0,0" Stroke="Black" Width="1034" Height="509" VerticalAlignment="Top" d:IsLocked="True"/>
+            <Button x:Name="clear" Content="Очистить" HorizontalAlignment="Left" Margin="959,642,0,0" VerticalAlignment="Top" Width="75" Click="clear_Click"/>
+            <Rectangle HorizontalAlignment="Left" Margin="10,65,0,0" Stroke="Black" Width="1034" Height="609" VerticalAlignment="Top" d:IsLocked="True"/>
             <Button x:Name="btn1" Content="Симптомы&#xD;&#xA;патологии&#xD;&#xA;пищевода" HorizontalAlignment="Left" Margin="14,39,0,0" VerticalAlignment="Top" Width="110" Height="50" FontSize="11" Click="btn1_Click"/>
             <Button x:Name="btn2" Content="Диспепсия" HorizontalAlignment="Left" Margin="129,39,0,0" VerticalAlignment="Top" Width="110" Height="50" Click="btn2_Click"/>
             <Button x:Name="btn3" Content="Абдоминальная&#xD;&#xA;боль" HorizontalAlignment="Left" Margin="244,39,0,0" VerticalAlignment="Top" Width="110" Height="50" HorizontalContentAlignment="Center" Click="btn3_Click"/>

@@ -5,21 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InspectionReport"
         mc:Ignorable="d"
-        Title="Options" Height="450" Width="800">
+        Title="Options" Height="400" Width="650" WindowStartupLocation="CenterScreen">
     <Grid>
-        <Label Content="Сохранить в:" HorizontalAlignment="Left" Margin="125,127,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="save_dir" Content="Изменить" HorizontalAlignment="Left" Margin="625,132,0,0" VerticalAlignment="Top" Width="75" Click="save_dir_Click"/>
-        <Label Content="Шаблон протокола:" HorizontalAlignment="Left" Margin="125,168,0,0" VerticalAlignment="Top"/>
-        <GroupBox Header="" HorizontalAlignment="Left" Height="131" Margin="249,165,0,0" VerticalAlignment="Top" Width="145">
+        <Label Content="Сохранить в:" HorizontalAlignment="Left" Margin="40,79,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="save_dir" Content="Изменить" HorizontalAlignment="Left" Margin="540,82,0,0" VerticalAlignment="Top" Width="75" Click="save_dir_Click"/>
+        <Label Content="Шаблон протокола:" HorizontalAlignment="Left" Margin="40,120,0,0" VerticalAlignment="Top"/>
+        <GroupBox Header="" HorizontalAlignment="Left" Height="131" Margin="164,117,0,0" VerticalAlignment="Top" Width="145">
             <StackPanel HorizontalAlignment="Left" Height="111" VerticalAlignment="Top" Width="135" Margin="0,0,-2,-2">
-                <RadioButton Content="yyyyMMdd Pattern"/>
+                <RadioButton Content="yyyyMMdd Pattern" IsChecked="True"/>
                 <RadioButton Content="Example"/>
                 <RadioButton Content="Example2"/>
             </StackPanel>
         </GroupBox>
-        <Button Content="Закрыть" HorizontalAlignment="Left" Margin="410,355,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
-        <Button Content="Сохранить" HorizontalAlignment="Left" Margin="315,355,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_1"/>
-        <TextBox x:Name="opt1" HorizontalAlignment="Left" Height="23" Margin="210,130,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="410"/>
+        <Button Content="Закрыть" HorizontalAlignment="Left" Margin="340,290,0,0" VerticalAlignment="Top" Width="100" Click="Button_Click" Height="40"/>
+        <Button Content="Сохранить" HorizontalAlignment="Left" Margin="219,290,0,0" VerticalAlignment="Top" Width="90" Click="Button_Click_1" Height="40"/>
+        <TextBox x:Name="opt1" HorizontalAlignment="Left" Height="23" Margin="125,82,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="410"/>
 
     </Grid>
 </Window>

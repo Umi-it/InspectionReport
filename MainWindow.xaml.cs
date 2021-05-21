@@ -16,6 +16,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Drawing.Printing;
+using Word = Microsoft.Office.Interop.Word;
+using System.Windows.Xps.Packaging;
 
 namespace InspectionReport
 {
@@ -34,7 +37,7 @@ namespace InspectionReport
         public MainWindow()
         {
             InitializeComponent();
-            filePath = Directory.GetCurrentDirectory();
+            filePath = Properties.Settings.Default.FilePath;
             category = 0;
             disease = 0;
             stateApp = new String[7][][][];
@@ -1081,7 +1084,7 @@ namespace InspectionReport
 
         private void save_Click(object sender, RoutedEventArgs e)
         {
-            var helper = new WordHelper("Pattern.docx", "Pattern2.docx");
+            var helper = new WordDocument("Pattern.docx", "Pattern2.docx");
             var items = new Dictionary<string, string>
             {
                 { "<DIAGNOSIS>", textBlock.Text != null ? textBlock.Text : ""},
@@ -1100,7 +1103,22 @@ namespace InspectionReport
             if (optionsWindow.ShowDialog() == true)
             {
                 filePath = optionsWindow.opt1.Text;
+                Properties.Settings.Default.FilePath = filePath;
+                Properties.Settings.Default.Save();
             }    
+        }
+
+        private void printBut_Click(object sender, RoutedEventArgs e)
+        {
+            var helper = new WordDocument("Pattern.docx", "Pattern2.docx");
+            var items = new Dictionary<string, string>
+            {
+                { "<DIAGNOSIS>", textBlock.Text != null ? textBlock.Text : ""},
+                { "<FIO>", fio.Text != null ? fio.Text : "" },
+                { "<DATE>", date.SelectedDate != null ? date.SelectedDate.Value.ToString("dd.MM.yyyy") : ""},
+                { "<YEAR>", year.Text  != null ? year.Text : ""}
+            };
+            helper.SaveTemp(items, filePath);
         }
     }
 }
