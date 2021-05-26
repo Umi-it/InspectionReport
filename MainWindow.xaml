@@ -34,13 +34,15 @@
             <Label x:Name="labelText" Content="Жалобы:" HorizontalAlignment="Left" Margin="21,429,0,0" VerticalAlignment="Top"/>
             <Button x:Name="clear" Content="Очистить" HorizontalAlignment="Left" Margin="959,642,0,0" VerticalAlignment="Top" Width="75" Click="clear_Click"/>
             <Rectangle HorizontalAlignment="Left" Margin="10,65,0,0" Stroke="Black" Width="1034" Height="609" VerticalAlignment="Top" d:IsLocked="True"/>
-            <Button x:Name="btn1" Content="Симптомы&#xD;&#xA;патологии&#xD;&#xA;пищевода" HorizontalAlignment="Left" Margin="14,39,0,0" VerticalAlignment="Top" Width="110" Height="50" FontSize="11" Click="btn1_Click"/>
-            <Button x:Name="btn2" Content="Диспепсия" HorizontalAlignment="Left" Margin="129,39,0,0" VerticalAlignment="Top" Width="110" Height="50" Click="btn2_Click"/>
-            <Button x:Name="btn3" Content="Абдоминальная&#xD;&#xA;боль" HorizontalAlignment="Left" Margin="244,39,0,0" VerticalAlignment="Top" Width="110" Height="50" HorizontalContentAlignment="Center" Click="btn3_Click"/>
-            <Button x:Name="btn4" Content="Нарушение&#xD;&#xA;стула" HorizontalAlignment="Left" Margin="359,38,0,0" VerticalAlignment="Top" Width="110" Height="50" Click="btn4_Click"/>
-            <Button x:Name="btn5" Content="Общие&#xD;&#xA;симптомы" HorizontalAlignment="Left" Margin="474,38,0,0" VerticalAlignment="Top" Width="110" Height="50"/>
+            <StackPanel x:Name="groupButtons" HorizontalAlignment="Left" Height="50" Margin="19,39,0,0" VerticalAlignment="Top" Width="695" Orientation="Horizontal">
+                <Button x:Name="btn1" Content="Симптомы&#xA;патологии&#xA;пищевода" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Height="50" FontSize="11" Click="btn1_Click" HorizontalContentAlignment="Center"/>
+                <Button x:Name="btn2" Content="Диспепсия" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Height="50" Click="btn2_Click" Margin="7,0,0,0" HorizontalContentAlignment="Center"/>
+                <Button x:Name="btn3" Content="Абдоминальная&#xD;&#xA;боль" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Height="50" HorizontalContentAlignment="Center" Click="btn3_Click" Margin="7,0,0,0"/>
+                <Button x:Name="btn4" Content="Нарушение&#xD;&#xA;стула" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Height="50" Click="btn4_Click" Margin="7,0,0,0" HorizontalContentAlignment="Center"/>
+                <Button x:Name="btn5" Content="Общие&#xD;&#xA;симптомы" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Height="50" Click="btn5_Click" Margin="7,0,0,0" HorizontalContentAlignment="Center"/>
+                <Button x:Name="btn6" Content="Другая&#xD;&#xA;патология" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Height="50" Click="btn6_Click" Margin="7,0,0,0" Visibility="Hidden"/>
+            </StackPanel>
             <Label x:Name="categoryLabel" Content="Жалобы" HorizontalAlignment="Left" Margin="10,2,0,0" VerticalAlignment="Top" Width="199" FontSize="20" FontWeight="Bold"/>
-            <Button x:Name="btn6" Content="Другая&#xD;&#xA;патология" HorizontalAlignment="Left" Margin="589,38,0,0" VerticalAlignment="Top" Width="110" Height="50" Visibility="Hidden" Click="btn6_Click"/>
             <GroupBox x:Name="diseaseEnd" Header="" HorizontalAlignment="Left" Height="358" Margin="244,94,0,0" VerticalAlignment="Top" Width="790">
                 <Grid x:Name="gridEnd" HorizontalAlignment="Left" VerticalAlignment="Top" Width="780" Margin="0,0,-2,0">
                     <Grid.RowDefinitions>
@@ -48,12 +50,13 @@
                         <RowDefinition Height="69*"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="129*"/>
-                        <ColumnDefinition Width="15*"/>
-                        <ColumnDefinition Width="30*"/>
-                        <ColumnDefinition Width="481*"/>
+                        <ColumnDefinition Width="51*"/>
+                        <ColumnDefinition Width="6*"/>
+                        <ColumnDefinition Width="12*"/>
+                        <ColumnDefinition Width="19*"/>
+                        <ColumnDefinition Width="172*"/>
                     </Grid.ColumnDefinitions>
-                    <GroupBox x:Name="char1" Header="Этиология" HorizontalAlignment="Left" Height="90" Margin="24,5,0,0" Grid.Row="1" VerticalAlignment="Top" Width="350" Grid.ColumnSpan="4">
+                    <GroupBox x:Name="char1" Header="Этиология" HorizontalAlignment="Left" Height="90" Margin="24,5,0,0" Grid.Row="1" VerticalAlignment="Top" Width="350" Grid.ColumnSpan="5" Visibility="Hidden">
                         <StackPanel Margin="2,0,-2,0" HorizontalAlignment="Left" VerticalAlignment="Top">
                             <CheckBox Content="ассоциированный с H.pylori" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.ColumnSpan="3" Grid.Row="1" Margin="0,5,0,0" Click="CheckBox_Checked_1"/>
                             <CheckBox Content="аутоиммунный" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Margin="0,5,0,0" Click="CheckBox_Checked_1"/>
@@ -71,7 +74,7 @@
                             <CheckBox Content="смешанный" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Margin="0,5,0,0" Click="CheckBox_Checked_1" Visibility="Collapsed"/>
                         </StackPanel>
                     </GroupBox>
-                    <GroupBox x:Name="char2" Grid.Column="3" Header="Тип" HorizontalAlignment="Left" Height="65" Margin="196,5,0,0" Grid.Row="1" VerticalAlignment="Top" Width="350">
+                    <GroupBox x:Name="char2" Grid.Column="4" Header="Тип" HorizontalAlignment="Left" Height="65" Margin="139,5,0,0" Grid.Row="1" VerticalAlignment="Top" Width="350" Visibility="Hidden">
                         <StackPanel HorizontalAlignment="Left" Margin="0,0,-2,0" VerticalAlignment="Top" Width="340">
                             <CheckBox Content="неатрофический" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1" Margin="3,5,0,0" Click="CheckBox_Checked_2"/>
                             <CheckBox Content="атрофический" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1" Margin="3,5,0,0" Click="CheckBox_Checked_2"/>
@@ -84,7 +87,7 @@
                             <CheckBox Content="ассоциированная с …" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1" Margin="3,5,0,0" Click="CheckBox_Checked_2" Visibility="Collapsed"/>
                         </StackPanel>
                     </GroupBox>
-                    <GroupBox x:Name="char3" Header="Распространенность" HorizontalAlignment="Left" Height="90" Margin="24,120,0,0" Grid.Row="1" VerticalAlignment="Top" Width="350" Grid.ColumnSpan="4">
+                    <GroupBox x:Name="char3" Header="Распространенность" HorizontalAlignment="Left" Height="90" Margin="24,120,0,0" Grid.Row="1" VerticalAlignment="Top" Width="350" Grid.ColumnSpan="5" Visibility="Hidden">
                         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Width="340" Margin="0,0,-2,0">
                             <CheckBox Content="антральный гастрит" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,5,0,0" Click="CheckBox_Checked_3"/>
                             <CheckBox Content="пангастрит" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Margin="0,5,0,0" Click="CheckBox_Checked_3"/>
@@ -97,7 +100,7 @@
                             <CheckBox Content="фундальный гастрит" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,5,0,0" Visibility="Collapsed" Click="CheckBox_Checked_3"/>
                         </StackPanel>
                     </GroupBox>
-                    <GroupBox x:Name="char4" Grid.Column="3" Header="Доп. характеристики (опционально)" HorizontalAlignment="Left" Height="80" Margin="196,120,0,0" Grid.Row="1" VerticalAlignment="Top" Width="350">
+                    <GroupBox x:Name="char4" Grid.Column="4" Header="Доп. характеристики (опционально)" HorizontalAlignment="Left" Height="80" Margin="139,120,0,0" Grid.Row="1" VerticalAlignment="Top" Width="350" Visibility="Hidden">
                         <StackPanel HorizontalAlignment="Left" Margin="0,0,-2,0" VerticalAlignment="Top" Width="340">
                             <CheckBox Content="с кишечной метаплазией" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Grid.Column="3" Margin="0,5,0,0" Click="CheckBox_Checked_4"/>
                             <CheckBox Content="с кишечной метаплазией и очаговой&#xA; дисплазией легкой степени" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,5,0,0" Click="CheckBox_Checked_4"/>
@@ -107,7 +110,7 @@
                             <CheckBox Content="другое" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Grid.Column="3" Margin="0,5,0,0" Click="CheckBox_Checked_4" Visibility="Collapsed"/>
                         </StackPanel>
                     </GroupBox>
-                    <GroupBox x:Name="char5" Header="Лечение НР (опционально)" HorizontalAlignment="Left" Height="95" Margin="24,230,0,0" Grid.Row="1" VerticalAlignment="Top" Width="350" Grid.ColumnSpan="4">
+                    <GroupBox x:Name="char5" Header="Лечение НР (опционально)" HorizontalAlignment="Left" Height="95" Margin="24,230,0,0" Grid.Row="1" VerticalAlignment="Top" Width="350" Grid.ColumnSpan="5" Visibility="Hidden">
                         <StackPanel HorizontalAlignment="Left" Margin="0,0,-2,-1" VerticalAlignment="Top" Width="340">
                             <CheckBox Content="(состояние после эрадикационной терапии,&#xA;контроль H.pylori – отрицательно)" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,5,0,0" Click="CheckBox_Checked_5"/>
                             <CheckBox Content="(состояние после эрадикационной терапии,&#xA; контроль H.pylori – положительно)" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Grid.ColumnSpan="4" Margin="0,5,0,0" Click="CheckBox_Checked_5"/>
@@ -117,7 +120,7 @@
                             <CheckBox Content="другое" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Grid.Column="3" Margin="0,5,0,0" Click="CheckBox_Checked_5" Visibility="Collapsed"/>
                         </StackPanel>
                     </GroupBox>
-                    <GroupBox x:Name="char6" Grid.Column="3" Header="" HorizontalAlignment="Left" Height="80" Margin="196,230,0,0" Grid.Row="1" VerticalAlignment="Top" Width="350">
+                    <GroupBox x:Name="char6" Grid.Column="4" Header="" HorizontalAlignment="Left" Height="80" Margin="139,230,0,0" Grid.Row="1" VerticalAlignment="Top" Width="350" Visibility="Hidden">
                         <StackPanel HorizontalAlignment="Left" Margin="0,0,-2,0" VerticalAlignment="Top" Width="340">
                             <CheckBox Content="НПВП-ассоциированная гастропатия" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,5,0,0" Click="CheckBox_Checked_6"/>
                             <CheckBox Content="Рефлюкс-гастропатия на фоне хронического&#xA;дуодено-гастрального рефлюкса" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Grid.Column="3" Margin="0,5,0,0" Click="CheckBox_Checked_6"/>
@@ -133,6 +136,84 @@
                 <TextBlock Text="Эндоскопические операции" Width="205" MouseLeftButtonUp="rad5_Click"/>
                 <TextBlock Text="Новообразования желудка" Width="205" MouseLeftButtonUp="rad6_Click"/>
                 <TextBlock Text="Диспепсия" Width="205" MouseLeftButtonUp="rad7_Click"/>
+            </ListBox>
+            <ListBox x:Name="examList" HorizontalAlignment="Left" Margin="21,99,0,0" VerticalAlignment="Top" Width="495" Height="330" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.CanContentScroll="True" SelectionMode="Multiple" SelectionChanged="examList_SelectionChanged" Visibility="Hidden">
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+            </ListBox>
+            <ListBox x:Name="examList2" HorizontalAlignment="Left" Margin="539,99,0,0" VerticalAlignment="Top" Width="495" Height="330" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" SelectionMode="Multiple" SelectionChanged="examList2_SelectionChanged" Visibility="Hidden">
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
+                <TextBlock/>
             </ListBox>
         </Grid>
     </Grid>

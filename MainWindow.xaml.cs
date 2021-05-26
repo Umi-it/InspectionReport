@@ -16,9 +16,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Drawing.Printing;
-using Word = Microsoft.Office.Interop.Word;
-using System.Windows.Xps.Packaging;
 
 namespace InspectionReport
 {
@@ -31,6 +28,7 @@ namespace InspectionReport
         private int area;
         private int disease;
         private String[] choiceDisease;
+        private List<string> chDiseaseList;
         private String[][][][] stateApp;
         public string filePath { get; set; }
 
@@ -47,11 +45,13 @@ namespace InspectionReport
             stateApp[3][1] = new String[7][];
             stateApp[3][2] = new String[2][];
             stateApp[3][3] = new String[2][];
-            stateApp[3][4] = new String[7][];
+            stateApp[3][4] = new String[2][];
             stateApp[3][5] = new String[1][];
-            stateApp[4] = new String[6][][];
+            stateApp[4] = new String[1][][];
+            stateApp[4][0] = new String[1][];
             stateApp[5] = new String[6][][];
             choiceDisease = new String[7] { "", "", "", "", "", "", "" };
+            chDiseaseList = new List<String>();
         }
 
         private void clear_Click(object sender, RoutedEventArgs e)
@@ -66,9 +66,11 @@ namespace InspectionReport
             stateApp[3][3] = new String[2][];
             stateApp[3][4] = new String[7][];
             stateApp[3][5] = new String[1][];
-            stateApp[4] = new String[6][][];
+            stateApp[4] = new String[1][][];
+            stateApp[4][0] = new String[1][];
             stateApp[5] = new String[6][][];
             choiceDisease = new String[7] { "", "", "", "", "", "", "" };
+            chDiseaseList = new List<string>();
             foreach (GroupBox group in gridEnd.Children)
             {
                 foreach (CheckBox item in ((StackPanel)group.Content).Children)
@@ -80,6 +82,12 @@ namespace InspectionReport
 
         private void complaints_Click(object sender, RoutedEventArgs e)
         {
+            complaints.Background = new SolidColorBrush(Color.FromRgb(190, 190, 190));
+            foreach (Button item in type.Children)
+            {
+                if (!item.Equals(complaints))
+                    item.Background = new SolidColorBrush(Color.FromRgb(238, 238, 238));
+            }
             diseaseStart.Visibility = Visibility.Hidden;
             diseaseEnd.Visibility = Visibility.Hidden;
             category = 0;
@@ -97,12 +105,21 @@ namespace InspectionReport
 
         private void diagnosis_Click(object sender, RoutedEventArgs e)
         {
+            diagnosis.Background = new SolidColorBrush(Color.FromRgb(190, 190, 190));
+            foreach (Button item in type.Children)
+            {
+                if (!item.Equals(diagnosis))
+                    item.Background = new SolidColorBrush(Color.FromRgb(238, 238, 238));
+            }
             diseaseStart.Visibility = Visibility.Hidden;
             diseaseEnd.Visibility = Visibility.Hidden;
-            diagnosis.Background = new SolidColorBrush(Color.FromRgb(190, 190, 190));
             category = 3;
             categoryLabel.Content = "Диагноз";
             labelText.Content = "Диагноз:";
+            groupButtons.Visibility = Visibility.Visible;
+            examList.Visibility = Visibility.Hidden;
+            examList2.Visibility = Visibility.Hidden;
+            btn5.Visibility = Visibility.Visible;
             btn6.Visibility = Visibility.Visible;
             btn1.Content = "Патология\nпищевода";
             btn1.FontSize = 12;
@@ -116,24 +133,31 @@ namespace InspectionReport
 
         private void exam_Click(object sender, RoutedEventArgs e)
         {
+            exam.Background = new SolidColorBrush(Color.FromRgb(190, 190, 190));
+            foreach (Button item in type.Children)
+            {
+                if (!item.Equals(exam))
+                    item.Background = new SolidColorBrush(Color.FromRgb(238, 238, 238));
+            }
             diseaseStart.Visibility = Visibility.Hidden;
             diseaseEnd.Visibility = Visibility.Hidden;
             category = 4;
             categoryLabel.Content = "Обследование";
             labelText.Content = "Обследование:";
-            btn6.Visibility = Visibility.Visible;
-            btn1.Content = "Анализы\nкрови";
-            btn1.FontSize = 12;
-            btn2.Content = "Анализы\nмочи";
-            btn3.Content = "Анализы\nкала";
-            btn4.Content = "Лучевые\nметоды";
-            btn4.FontSize = 12;
-            btn5.Content = "Эндоскопические\nметоды";
-            btn6.Content = "Другое";
+            groupButtons.Visibility = Visibility.Hidden;
+            examList.Visibility = Visibility.Visible;
+            examList2.Visibility = Visibility.Visible;
+            examView();
         }
 
         private void therapy_Click(object sender, RoutedEventArgs e)
         {
+            therapy.Background = new SolidColorBrush(Color.FromRgb(190, 190, 190));
+            foreach (Button item in type.Children)
+            {
+                if (!item.Equals(therapy))
+                    item.Background = new SolidColorBrush(Color.FromRgb(238, 238, 238));
+            }
             diseaseStart.Visibility = Visibility.Hidden;
             diseaseEnd.Visibility = Visibility.Hidden;
             category = 5;
@@ -153,6 +177,11 @@ namespace InspectionReport
         private void btn1_Click(object sender, RoutedEventArgs e)
         {
             btn1.Background = new SolidColorBrush(Color.FromRgb(190, 190, 190));
+            foreach (Button item in groupButtons.Children)
+            {
+                if (!item.Equals(btn1))
+                    item.Background = new SolidColorBrush(Color.FromRgb(238, 238, 238));
+            }
             area = 0;
             rad1();
             switch (category)
@@ -175,6 +204,11 @@ namespace InspectionReport
         private void btn2_Click(object sender, RoutedEventArgs e)
         {
             btn2.Background = new SolidColorBrush(Color.FromRgb(190, 190, 190));
+            foreach (Button item in groupButtons.Children)
+            {
+                if (!item.Equals(btn2))
+                    item.Background = new SolidColorBrush(Color.FromRgb(238, 238, 238));
+            }
             area = 1;
             rad1();
             switch (category)
@@ -200,6 +234,11 @@ namespace InspectionReport
         private void btn3_Click(object sender, RoutedEventArgs e)
         {
             btn3.Background = new SolidColorBrush(Color.FromRgb(190, 190, 190));
+            foreach (Button item in groupButtons.Children)
+            {
+                if (!item.Equals(btn3))
+                    item.Background = new SolidColorBrush(Color.FromRgb(238, 238, 238));
+            }
             area = 2;
             rad1();
             switch (category)
@@ -222,7 +261,39 @@ namespace InspectionReport
         private void btn4_Click(object sender, RoutedEventArgs e)
         {
             btn4.Background = new SolidColorBrush(Color.FromRgb(190, 190, 190));
+            foreach (Button item in groupButtons.Children)
+            {
+                if (!item.Equals(btn4))
+                    item.Background = new SolidColorBrush(Color.FromRgb(238, 238, 238));
+            }
             area = 3;
+            rad1();
+            switch (category)
+            {
+                case 3:
+                    diseaseStart.Visibility = Visibility.Visible;
+                    diseaseEnd.Visibility = Visibility.Visible;
+                    foreach (TextBlock item in diseaseStart.Items)
+                        item.Visibility = Visibility.Collapsed;
+                    ((TextBlock)diseaseStart.Items[0]).Text = "Хронический панкреатит";
+                    ((TextBlock)diseaseStart.Items[0]).Visibility = Visibility.Visible;
+                    ((TextBlock)diseaseStart.Items[1]).Text = "Другое";
+                    ((TextBlock)diseaseStart.Items[1]).Visibility = Visibility.Visible;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void btn5_Click(object sender, RoutedEventArgs e)
+        {
+            btn5.Background = new SolidColorBrush(Color.FromRgb(190, 190, 190));
+            foreach (Button item in groupButtons.Children)
+            {
+                if (!item.Equals(btn5))
+                    item.Background = new SolidColorBrush(Color.FromRgb(238, 238, 238));
+            }
+            area = 4;
             rad1();
             switch (category)
             {
@@ -244,6 +315,11 @@ namespace InspectionReport
         private void btn6_Click(object sender, RoutedEventArgs e)
         {
             btn6.Background = new SolidColorBrush(Color.FromRgb(190, 190, 190));
+            foreach (Button item in groupButtons.Children)
+            {
+                if (!item.Equals(btn6))
+                    item.Background = new SolidColorBrush(Color.FromRgb(238, 238, 238));
+            }
             area = 5;
             rad1();
             switch (category)
@@ -330,133 +406,141 @@ namespace InspectionReport
         {
             diseaseStart.SelectedItem = diseaseStart.Items[0];
             disease = 0;
-            switch (area)
+            switch (category)
             {
-                case 0:
-                    ChangeGroup(char1, "Внепищеводные проявления", 260, 11);
-                    ((CheckBox)((StackPanel)char1.Content).Children[0]).Content = "(рефлюкс-индуцированый кашель)";
-                    ((CheckBox)((StackPanel)char1.Content).Children[1]).Content = "(рефлюкс-ларингит)";
-                    ((CheckBox)((StackPanel)char1.Content).Children[2]).Content = "(рефлюкс-фарингит)";
-                    ((CheckBox)((StackPanel)char1.Content).Children[3]).Content = "(рецидивирующий отит)";
-                    ((CheckBox)((StackPanel)char1.Content).Children[4]).Content = "(хронический рецидивирующий синусит)";
-                    ((CheckBox)((StackPanel)char1.Content).Children[5]).Content = "(глоссит)";
-                    ((CheckBox)((StackPanel)char1.Content).Children[6]).Content = "(пародонтит)";
-                    ((CheckBox)((StackPanel)char1.Content).Children[7]).Content = "(эрозии эмали зубов)";
-                    ((CheckBox)((StackPanel)char1.Content).Children[8]).Content = "(бронхиальная астма)";
-                    ((CheckBox)((StackPanel)char1.Content).Children[9]).Content = "(рецидивирующая пневмония)";
-                    ((CheckBox)((StackPanel)char1.Content).Children[10]).Content = "другое";
-                    ChangeGroup(char2, "Форма (опционально)", 65, 2);
-                    ((CheckBox)((StackPanel)char2.Content).Children[0]).Content = "неэрозивная форма";
-                    ((CheckBox)((StackPanel)char2.Content).Children[1]).Content = "эрозивная форма";
-                    char3.Visibility = Visibility.Hidden;
-                    ChangeGroup(char4, "Степень эзофагита (опционально)", 125, 4, 75);
-                    ((CheckBox)((StackPanel)char4.Content).Children[0]).Content = "рефлюкс-эзофагит, ст. А";
-                    ((CheckBox)((StackPanel)char4.Content).Children[1]).Content = "рефлюкс-эзофагит, ст. В";
-                    ((CheckBox)((StackPanel)char4.Content).Children[2]).Content = "рефлюкс-эзофагит, ст. С";
-                    ((CheckBox)((StackPanel)char4.Content).Children[3]).Content = "рефлюкс-эзофагит, ст. D";
-                    char5.Visibility = Visibility.Hidden;
-                    char6.Visibility = Visibility.Hidden;
-                    break;
-                case 1:
-                    ChangeGroup(char1, "Этиология", 90, 3);
-                    ((CheckBox)((StackPanel)char1.Content).Children[0]).Content = "ассоциированный с H.pylori";
-                    ((CheckBox)((StackPanel)char1.Content).Children[1]).Content = "аутоиммунный";
-                    ((CheckBox)((StackPanel)char1.Content).Children[2]).Content = "смешанный";
-                    ChangeGroup(char2, "Тип", 65, 2);
-                    ((CheckBox)((StackPanel)char2.Content).Children[0]).Content = "неатрофический";
-                    ((CheckBox)((StackPanel)char2.Content).Children[1]).Content = "атрофический";
-                    ChangeGroup(char3, "Распространенность", 90, 3, 120);
-                    ((CheckBox)((StackPanel)char3.Content).Children[0]).Content = "антральный гастрит";
-                    ((CheckBox)((StackPanel)char3.Content).Children[1]).Content = "пангастрит";
-                    ((CheckBox)((StackPanel)char3.Content).Children[2]).Content = "фундальный гастрит";
-                    ChangeGroup(char4, "Доп. характеристики (опционально)", 80, 2, 120);
-                    ((CheckBox)((StackPanel)char4.Content).Children[0]).Content = "с кишечной метаплазией";
-                    ((CheckBox)((StackPanel)char4.Content).Children[1]).Content = "с кишечной метаплазией и очаговой дисплазией легкой\nстепени";
-                    ChangeGroup(char5, "Лечение НР (опционально)", 95, 2, 230);
-                    ((CheckBox)((StackPanel)char5.Content).Children[0]).Content = "(состояние после эрадикационной терапии, контроль\nH.pylori – отрицательно)";
-                    ((CheckBox)((StackPanel)char5.Content).Children[1]).Content = "(состояние после эрадикационной терапии, контроль\nH.pylori – положительно)";
-                    ChangeGroup(char6, "", 80, 2, 230);
-                    ((CheckBox)((StackPanel)char6.Content).Children[0]).Content = "НПВП-ассоциированная гастропатия";
-                    ((CheckBox)((StackPanel)char6.Content).Children[1]).Content = "Рефлюкс-гастропатия на фоне хронического\nдуодено-гастрального рефлюкса";
-                    break;
-                case 2:
-                    ChangeGroup(char1, "", 195, 8);
-                    ((CheckBox)((StackPanel)char1.Content).Children[0]).Content = "Синдром раздраженного кишечника с диареей";
-                    ((CheckBox)((StackPanel)char1.Content).Children[1]).Content = "Синдром раздраженного кишечника с запором";
-                    ((CheckBox)((StackPanel)char1.Content).Children[2]).Content = "Синдром раздраженного кишечника без диареи";
-                    ((CheckBox)((StackPanel)char1.Content).Children[3]).Content = "Синдром раздраженного кишечника, смешанный тип";
-                    ((CheckBox)((StackPanel)char1.Content).Children[4]).Content = "Функциональное вздутие живота";
-                    ((CheckBox)((StackPanel)char1.Content).Children[5]).Content = "Хронический запор";
-                    ((CheckBox)((StackPanel)char1.Content).Children[6]).Content = "Функциональная диарея";
-                    ((CheckBox)((StackPanel)char1.Content).Children[7]).Content = "Антибиотико-ассоциированная диарея";
-                    ChangeGroup(char2, "Дивертикулярная болезнь толстой кишки", 145, 5);
-                    ((CheckBox)((StackPanel)char2.Content).Children[0]).Content = "Дивертикулез толстой кишки";
-                    ((CheckBox)((StackPanel)char2.Content).Children[1]).Content = "неосложненная симптоматическая дивертикулярная\nболезнь";
-                    ((CheckBox)((StackPanel)char2.Content).Children[2]).Content = "дивертикулит";
-                    ((CheckBox)((StackPanel)char2.Content).Children[3]).Content = "сегментарный колит, ассоциированный с дивертикулитом";
-                    ((CheckBox)((StackPanel)char2.Content).Children[4]).Content = "Синдром избыточного бактериального роста в кишке";
-                    ChangeGroup(char3, "", 80, 2, 210);
-                    ((CheckBox)((StackPanel)char3.Content).Children[0]).Content = "Язвенный колит";
-                    ((CheckBox)((StackPanel)char3.Content).Children[1]).Content = "Болезнь Крона (нестриктурирующий непенетрирующий\nфенотип)";
-                    char4.Visibility = Visibility.Hidden;
-                    char5.Visibility = Visibility.Hidden;
-                    char6.Visibility = Visibility.Hidden;
-                    break;
                 case 3:
-                    ChangeGroup(char1, "Этиология(опционально)", 160, 10);
-                    ((CheckBox)((StackPanel)char1.Content).Children[0]).Content = "токсический";
-                    ((CheckBox)((StackPanel)char1.Content).Children[1]).Content = "дисметаболический";
-                    ((CheckBox)((StackPanel)char1.Content).Children[2]).Content = "лекарственный";
-                    ((CheckBox)((StackPanel)char1.Content).Children[3]).Content = "постнекротический (следствие\nтяжелого острого панкреатита)";
-                    ((CheckBox)((StackPanel)char1.Content).Children[4]).Content = "(следствие рецидивирующего\nострогопанкреатита)";
-                    ((CheckBox)((StackPanel)char1.Content).Children[5]).Content = "обструктивный";
-                    ((CheckBox)((StackPanel)char1.Content).Children[6]).Content = "аутоиммунный";
-                    ((CheckBox)((StackPanel)char1.Content).Children[7]).Content = "идеопатический";
-                    ((CheckBox)((StackPanel)char1.Content).Children[8]).Content = "алкогольный";
-                    ((CheckBox)((StackPanel)char1.Content).Children[9]).Content = "билиарнозависимый";
-                    ChangeGroup(char2, "Морфологический тип", 130, 6);
-                    ((CheckBox)((StackPanel)char2.Content).Children[0]).Content = "паренхиматозный";
-                    ((CheckBox)((StackPanel)char2.Content).Children[1]).Content = "калицифицирующий";
-                    ((CheckBox)((StackPanel)char2.Content).Children[2]).Content = "кистозный";
-                    ((CheckBox)((StackPanel)char2.Content).Children[3]).Content = "псевдотумарозный";
-                    ((CheckBox)((StackPanel)char2.Content).Children[4]).Content = "интерстиционально-отечный";
-                    ((CheckBox)((StackPanel)char2.Content).Children[5]).Content = "фиброзно-склеротический";
-                    ChangeGroup(char3, "Недостаточность ПЖ (опционально)", 90, 3, 170);
-                    ((CheckBox)((StackPanel)char3.Content).Children[0]).Content = "без экзокринной недостаточностью";
-                    ((CheckBox)((StackPanel)char3.Content).Children[1]).Content = "с экзокринной недостаточностью";
-                    ((CheckBox)((StackPanel)char3.Content).Children[2]).Content = "с экзокринной и эндокринной недостаточностью";
-                    ChangeGroup(char4, "Форма(опционально)", 130, 5, 150);
-                    ((CheckBox)((StackPanel)char4.Content).Children[0]).Content = "рецидивирующая болевая форма";
-                    ((CheckBox)((StackPanel)char4.Content).Children[1]).Content = "персистирующая болевая форма";
-                    ((CheckBox)((StackPanel)char4.Content).Children[2]).Content = "диспептическая форма";
-                    ((CheckBox)((StackPanel)char4.Content).Children[3]).Content = "латентная форма";
-                    ((CheckBox)((StackPanel)char4.Content).Children[4]).Content = "сочетанная форма";
-                    ChangeGroup(char5, "Стадия", 65, 2, 265);
-                    ((CheckBox)((StackPanel)char5.Content).Children[0]).Content = "стадия ремиссии";
-                    ((CheckBox)((StackPanel)char5.Content).Children[1]).Content = "стадия обострения";
-                    char6.Visibility = Visibility.Hidden;
-                    break;
-                case 5:
-                    ChangeGroup(char1, "", 240, 10);
-                    ((CheckBox)((StackPanel)char1.Content).Children[0]).Content = "Синдром межреберной невралгии? Дорсопатия";
-                    ((CheckBox)((StackPanel)char1.Content).Children[1]).Content = "Патология передней брюшной стенки?";
-                    ((CheckBox)((StackPanel)char1.Content).Children[2]).Content = "Обследование";
-                    ((CheckBox)((StackPanel)char1.Content).Children[3]).Content = "Гематохезия";
-                    ((CheckBox)((StackPanel)char1.Content).Children[4]).Content = "Синдром ускоренного СОЭ";
-                    ((CheckBox)((StackPanel)char1.Content).Children[5]).Content = "Органическое заболевание толстой кишки?";
-                    ((CheckBox)((StackPanel)char1.Content).Children[6]).Content = "Органическое заболевание желудка?";
-                    ((CheckBox)((StackPanel)char1.Content).Children[7]).Content = "Железодефицитная анемия, легкой степени тяжести";
-                    ((CheckBox)((StackPanel)char1.Content).Children[8]).Content = "В12дефицитная анемия, легкой степени тяжести";
-                    ((CheckBox)((StackPanel)char1.Content).Children[9]).Content = "Анемия неясного генеза";
-                    char2.Visibility = Visibility.Hidden;
-                    char3.Visibility = Visibility.Hidden;
-                    char4.Visibility = Visibility.Hidden;
-                    char5.Visibility = Visibility.Hidden;
-                    char6.Visibility = Visibility.Hidden;
+                    switch (area)
+                    {
+                        case 0:
+                            ChangeGroup(char1, "Внепищеводные проявления", 260, 11);
+                            ((CheckBox)((StackPanel)char1.Content).Children[0]).Content = "(рефлюкс-индуцированый кашель)";
+                            ((CheckBox)((StackPanel)char1.Content).Children[1]).Content = "(рефлюкс-ларингит)";
+                            ((CheckBox)((StackPanel)char1.Content).Children[2]).Content = "(рефлюкс-фарингит)";
+                            ((CheckBox)((StackPanel)char1.Content).Children[3]).Content = "(рецидивирующий отит)";
+                            ((CheckBox)((StackPanel)char1.Content).Children[4]).Content = "(хронический рецидивирующий синусит)";
+                            ((CheckBox)((StackPanel)char1.Content).Children[5]).Content = "(глоссит)";
+                            ((CheckBox)((StackPanel)char1.Content).Children[6]).Content = "(пародонтит)";
+                            ((CheckBox)((StackPanel)char1.Content).Children[7]).Content = "(эрозии эмали зубов)";
+                            ((CheckBox)((StackPanel)char1.Content).Children[8]).Content = "(бронхиальная астма)";
+                            ((CheckBox)((StackPanel)char1.Content).Children[9]).Content = "(рецидивирующая пневмония)";
+                            ((CheckBox)((StackPanel)char1.Content).Children[10]).Content = "другое";
+                            ChangeGroup(char2, "Форма (опционально)", 65, 2);
+                            ((CheckBox)((StackPanel)char2.Content).Children[0]).Content = "неэрозивная форма";
+                            ((CheckBox)((StackPanel)char2.Content).Children[1]).Content = "эрозивная форма";
+                            char3.Visibility = Visibility.Hidden;
+                            ChangeGroup(char4, "Степень эзофагита (опционально)", 125, 4, 75);
+                            ((CheckBox)((StackPanel)char4.Content).Children[0]).Content = "рефлюкс-эзофагит, ст. А";
+                            ((CheckBox)((StackPanel)char4.Content).Children[1]).Content = "рефлюкс-эзофагит, ст. В";
+                            ((CheckBox)((StackPanel)char4.Content).Children[2]).Content = "рефлюкс-эзофагит, ст. С";
+                            ((CheckBox)((StackPanel)char4.Content).Children[3]).Content = "рефлюкс-эзофагит, ст. D";
+                            char5.Visibility = Visibility.Hidden;
+                            char6.Visibility = Visibility.Hidden;
+                            break;
+                        case 1:
+                            ChangeGroup(char1, "Этиология", 90, 3);
+                            ((CheckBox)((StackPanel)char1.Content).Children[0]).Content = "ассоциированный с H.pylori";
+                            ((CheckBox)((StackPanel)char1.Content).Children[1]).Content = "аутоиммунный";
+                            ((CheckBox)((StackPanel)char1.Content).Children[2]).Content = "смешанный";
+                            ChangeGroup(char2, "Тип", 65, 2);
+                            ((CheckBox)((StackPanel)char2.Content).Children[0]).Content = "неатрофический";
+                            ((CheckBox)((StackPanel)char2.Content).Children[1]).Content = "атрофический";
+                            ChangeGroup(char3, "Распространенность", 90, 3, 120);
+                            ((CheckBox)((StackPanel)char3.Content).Children[0]).Content = "антральный гастрит";
+                            ((CheckBox)((StackPanel)char3.Content).Children[1]).Content = "пангастрит";
+                            ((CheckBox)((StackPanel)char3.Content).Children[2]).Content = "фундальный гастрит";
+                            ChangeGroup(char4, "Доп. характеристики (опционально)", 80, 2, 120);
+                            ((CheckBox)((StackPanel)char4.Content).Children[0]).Content = "с кишечной метаплазией";
+                            ((CheckBox)((StackPanel)char4.Content).Children[1]).Content = "с кишечной метаплазией и очаговой дисплазией легкой\nстепени";
+                            ChangeGroup(char5, "Лечение НР (опционально)", 95, 2, 230);
+                            ((CheckBox)((StackPanel)char5.Content).Children[0]).Content = "(состояние после эрадикационной терапии, контроль\nH.pylori – отрицательно)";
+                            ((CheckBox)((StackPanel)char5.Content).Children[1]).Content = "(состояние после эрадикационной терапии, контроль\nH.pylori – положительно)";
+                            ChangeGroup(char6, "", 80, 2, 230);
+                            ((CheckBox)((StackPanel)char6.Content).Children[0]).Content = "НПВП-ассоциированная гастропатия";
+                            ((CheckBox)((StackPanel)char6.Content).Children[1]).Content = "Рефлюкс-гастропатия на фоне хронического\nдуодено-гастрального рефлюкса";
+                            break;
+                        case 2:
+                            ChangeGroup(char1, "", 195, 8);
+                            ((CheckBox)((StackPanel)char1.Content).Children[0]).Content = "Синдром раздраженного кишечника с диареей";
+                            ((CheckBox)((StackPanel)char1.Content).Children[1]).Content = "Синдром раздраженного кишечника с запором";
+                            ((CheckBox)((StackPanel)char1.Content).Children[2]).Content = "Синдром раздраженного кишечника без диареи";
+                            ((CheckBox)((StackPanel)char1.Content).Children[3]).Content = "Синдром раздраженного кишечника, смешанный тип";
+                            ((CheckBox)((StackPanel)char1.Content).Children[4]).Content = "Функциональное вздутие живота";
+                            ((CheckBox)((StackPanel)char1.Content).Children[5]).Content = "Хронический запор";
+                            ((CheckBox)((StackPanel)char1.Content).Children[6]).Content = "Функциональная диарея";
+                            ((CheckBox)((StackPanel)char1.Content).Children[7]).Content = "Антибиотико-ассоциированная диарея";
+                            ChangeGroup(char2, "Дивертикулярная болезнь толстой кишки", 145, 5);
+                            ((CheckBox)((StackPanel)char2.Content).Children[0]).Content = "Дивертикулез толстой кишки";
+                            ((CheckBox)((StackPanel)char2.Content).Children[1]).Content = "неосложненная симптоматическая дивертикулярная\nболезнь";
+                            ((CheckBox)((StackPanel)char2.Content).Children[2]).Content = "дивертикулит";
+                            ((CheckBox)((StackPanel)char2.Content).Children[3]).Content = "сегментарный колит, ассоциированный с дивертикулитом";
+                            ((CheckBox)((StackPanel)char2.Content).Children[4]).Content = "Синдром избыточного бактериального роста в кишке";
+                            ChangeGroup(char3, "", 80, 2, 210);
+                            ((CheckBox)((StackPanel)char3.Content).Children[0]).Content = "Язвенный колит";
+                            ((CheckBox)((StackPanel)char3.Content).Children[1]).Content = "Болезнь Крона (нестриктурирующий непенетрирующий\nфенотип)";
+                            char4.Visibility = Visibility.Hidden;
+                            char5.Visibility = Visibility.Hidden;
+                            char6.Visibility = Visibility.Hidden;
+                            break;
+                        case 3:
+                            ChangeGroup(char1, "Этиология(опционально)", 160, 10);
+                            ((CheckBox)((StackPanel)char1.Content).Children[0]).Content = "токсический";
+                            ((CheckBox)((StackPanel)char1.Content).Children[1]).Content = "дисметаболический";
+                            ((CheckBox)((StackPanel)char1.Content).Children[2]).Content = "лекарственный";
+                            ((CheckBox)((StackPanel)char1.Content).Children[3]).Content = "постнекротический (следствие\nтяжелого острого панкреатита)";
+                            ((CheckBox)((StackPanel)char1.Content).Children[4]).Content = "(следствие рецидивирующего\nострогопанкреатита)";
+                            ((CheckBox)((StackPanel)char1.Content).Children[5]).Content = "обструктивный";
+                            ((CheckBox)((StackPanel)char1.Content).Children[6]).Content = "аутоиммунный";
+                            ((CheckBox)((StackPanel)char1.Content).Children[7]).Content = "идеопатический";
+                            ((CheckBox)((StackPanel)char1.Content).Children[8]).Content = "алкогольный";
+                            ((CheckBox)((StackPanel)char1.Content).Children[9]).Content = "билиарнозависимый";
+                            ChangeGroup(char2, "Морфологический тип", 130, 6);
+                            ((CheckBox)((StackPanel)char2.Content).Children[0]).Content = "паренхиматозный";
+                            ((CheckBox)((StackPanel)char2.Content).Children[1]).Content = "калицифицирующий";
+                            ((CheckBox)((StackPanel)char2.Content).Children[2]).Content = "кистозный";
+                            ((CheckBox)((StackPanel)char2.Content).Children[3]).Content = "псевдотумарозный";
+                            ((CheckBox)((StackPanel)char2.Content).Children[4]).Content = "интерстиционально-отечный";
+                            ((CheckBox)((StackPanel)char2.Content).Children[5]).Content = "фиброзно-склеротический";
+                            ChangeGroup(char3, "Недостаточность ПЖ (опционально)", 90, 3, 170);
+                            ((CheckBox)((StackPanel)char3.Content).Children[0]).Content = "без экзокринной недостаточностью";
+                            ((CheckBox)((StackPanel)char3.Content).Children[1]).Content = "с экзокринной недостаточностью";
+                            ((CheckBox)((StackPanel)char3.Content).Children[2]).Content = "с экзокринной и эндокринной недостаточностью";
+                            ChangeGroup(char4, "Форма(опционально)", 130, 5, 150);
+                            ((CheckBox)((StackPanel)char4.Content).Children[0]).Content = "рецидивирующая болевая форма";
+                            ((CheckBox)((StackPanel)char4.Content).Children[1]).Content = "персистирующая болевая форма";
+                            ((CheckBox)((StackPanel)char4.Content).Children[2]).Content = "диспептическая форма";
+                            ((CheckBox)((StackPanel)char4.Content).Children[3]).Content = "латентная форма";
+                            ((CheckBox)((StackPanel)char4.Content).Children[4]).Content = "сочетанная форма";
+                            ChangeGroup(char5, "Стадия", 65, 2, 265);
+                            ((CheckBox)((StackPanel)char5.Content).Children[0]).Content = "стадия ремиссии";
+                            ((CheckBox)((StackPanel)char5.Content).Children[1]).Content = "стадия обострения";
+                            char6.Visibility = Visibility.Hidden;
+                            break;
+                        case 5:
+                            ChangeGroup(char1, "", 240, 10);
+                            ((CheckBox)((StackPanel)char1.Content).Children[0]).Content = "Синдром межреберной невралгии? Дорсопатия";
+                            ((CheckBox)((StackPanel)char1.Content).Children[1]).Content = "Патология передней брюшной стенки?";
+                            ((CheckBox)((StackPanel)char1.Content).Children[2]).Content = "Обследование";
+                            ((CheckBox)((StackPanel)char1.Content).Children[3]).Content = "Гематохезия";
+                            ((CheckBox)((StackPanel)char1.Content).Children[4]).Content = "Синдром ускоренного СОЭ";
+                            ((CheckBox)((StackPanel)char1.Content).Children[5]).Content = "Органическое заболевание толстой кишки?";
+                            ((CheckBox)((StackPanel)char1.Content).Children[6]).Content = "Органическое заболевание желудка?";
+                            ((CheckBox)((StackPanel)char1.Content).Children[7]).Content = "Железодефицитная анемия, легкой степени тяжести";
+                            ((CheckBox)((StackPanel)char1.Content).Children[8]).Content = "В12дефицитная анемия, легкой степени тяжести";
+                            ((CheckBox)((StackPanel)char1.Content).Children[9]).Content = "Анемия неясного генеза";
+                            char2.Visibility = Visibility.Hidden;
+                            char3.Visibility = Visibility.Hidden;
+                            char4.Visibility = Visibility.Hidden;
+                            char5.Visibility = Visibility.Hidden;
+                            char6.Visibility = Visibility.Hidden;
+                            break;
+                        default:
+                            break;
+                    }
                     break;
                 default:
                     break;
             }
+            
             foreach (GroupBox group in gridEnd.Children)
             {
                 foreach (CheckBox item in ((StackPanel)group.Content).Children)
@@ -1082,12 +1166,188 @@ namespace InspectionReport
             return str;
         }
 
+        private String writeResult(String[] choiceDisease, int area, int index)
+        {
+            String str = "";
+            switch (area)
+            {
+                case 0:
+                    if (index == 0)
+                    {
+                        choiceDisease[0] = "Гастроэзофагеальная рефлюксная болезнь";
+                        if (choiceDisease[1] != "")
+                        {
+                            str = choiceDisease[0] + " с вероятными внепищеводными проявлениями " + choiceDisease[1] +
+                                (choiceDisease[2] != "" ? ", " + choiceDisease[2] : "") + (choiceDisease[4] != "" ? ", " + choiceDisease[4] : "");
+                        }
+                    }
+                    if (index == 1)
+                    {
+                        if (choiceDisease[0] != "" || choiceDisease[1] != "" || choiceDisease[2] != "" || choiceDisease[3] != "" ||
+                            choiceDisease[4] != "" || choiceDisease[5] != "")
+                        {
+                            str = (choiceDisease[0] != "" ? choiceDisease[0] + ". " : "") + (choiceDisease[1] != "" ? choiceDisease[1] + ". " : "") +
+                                (choiceDisease[2] != "" ? choiceDisease[2] + ". " : "") + (choiceDisease[3] != "" ? choiceDisease[3] + ". " : "") +
+                                (choiceDisease[4] != "" ? choiceDisease[4] + ". " : "") + (choiceDisease[5] != "" ? choiceDisease[5] + ". " : "");
+                            str = str.Substring(0, str.Length - 2);
+                        }
+                    }
+                    break;
+                case 1:
+                    if (index == 0)
+                    {
+                        choiceDisease[0] = "Хронический";
+                        if (choiceDisease[1] != "" && choiceDisease[2] != "" && choiceDisease[3] != "")
+                        {
+                            if (choiceDisease[1] == "ассоциированный с H.pylori")
+                            {
+                                str = $"{choiceDisease[0]} {choiceDisease[2]} {choiceDisease[3]}";
+                                if (choiceDisease[4] != "")
+                                    str = $"{str} {choiceDisease[4]}";
+                                str = $"{str}, {choiceDisease[1]}";
+                                if (choiceDisease[5] != "")
+                                    str = $"{str} {choiceDisease[5]}";
+                            }
+                            else
+                            {
+                                str = $"{choiceDisease[0]} {choiceDisease[1]} {choiceDisease[2]} {choiceDisease[3]}";
+                                if (choiceDisease[4] != "")
+                                    str = $"{str} {choiceDisease[4]}";
+                                if (choiceDisease[5] != "")
+                                    str = $"{str} {choiceDisease[5]}";
+                            }
+                        }
+                        if (choiceDisease[6] != "")
+                        {
+                            if (str != "")
+                                str = $"{str}. {choiceDisease[6]}";
+                            else
+                                str = choiceDisease[6];
+                        }
+                    }
+                    if (index == 1)
+                    {
+                        choiceDisease[0] = "Язвенная болезнь";
+                        if (choiceDisease[1] != "" && choiceDisease[4] != "")
+                            str = choiceDisease[0] + " " + choiceDisease[1] + (choiceDisease[2] != "" ? ", " + choiceDisease[2] : "")
+                            + (choiceDisease[3] != "" ? " " + choiceDisease[3] : "") + " " + choiceDisease[4];
+                        else
+                            str = "";
+                    }
+                    if (index == 2)
+                    {
+                        if (choiceDisease[1] != "" && choiceDisease[2] != "" && choiceDisease[3] != "")
+                        {
+                            if (choiceDisease[1] == "симптоматические язвы")
+                            {
+                                choiceDisease[2] = choiceDisease[2].Replace("ая", "ые");
+                                choiceDisease[4] = choiceDisease[4].Replace("ая", "ые");
+                            }
+                            str = choiceDisease[2].Substring(0, 1).ToUpper() + choiceDisease[2].Substring(1) + " " + choiceDisease[1] + " " + choiceDisease[3] + (choiceDisease[4] != "" ? ", " + choiceDisease[4] : "")
+                                    + (choiceDisease[5] != "" ? " " + choiceDisease[5] : "");
+                        }
+                        else
+                            str = "";
+                    }
+                    if (index == 3)
+                    {
+                        choiceDisease[0] = "Болезнь оперированного желудка";
+                        if (choiceDisease[1] != "")
+                            str = choiceDisease[0] + " " + choiceDisease[1] + (choiceDisease[2] != "" ? ", " + choiceDisease[2] : "");
+                        else
+                            str = "";
+                    }
+                    if (index == 4 || index == 5 || index == 6)
+                    {
+                        if (choiceDisease[1] != "")
+                            str = choiceDisease[1];
+                        else
+                            str = "";
+                    }
+                    break;
+                case 2:
+                    if (index == 0)
+                    {
+                        if (choiceDisease[1] != "" || choiceDisease[2] != "" || choiceDisease[3] != "")
+                        {
+                            str = (choiceDisease[1] != "" ? choiceDisease[1] + ". " : "");
+                            if (choiceDisease[2] != "" && choiceDisease[2] != "Дивертикулез толстой кишки" && choiceDisease[2] != "Синдром избыточного бактериального роста в кишке")
+                                str = str + "Дивертикулярная болезнь толстой кишки: " + choiceDisease[2] + ". ";
+                            else
+                                str = str + (choiceDisease[2] != "" ? choiceDisease[2] + ". " : "");
+                            if (choiceDisease[3].Contains("Болезнь Крона"))
+                                str = str + choiceDisease[3] + " с поражением прямой кишки, сигмовидной кишки, нисходящей ободочной" +
+                                    " кишки, поперечно-ободочной кишки, тощей кишки, тяжелая атака. ";
+                            else
+                                str = str + (choiceDisease[3] != "" ? choiceDisease[3] + ". " : "");
+                            str = str.Substring(0, str.Length - 2);
+                        }
+                    }
+                    if (index == 1)
+                    {
+                        choiceDisease[0] = "Состояние после";
+                        if ((choiceDisease[1] != "" && choiceDisease[2] == "") || (choiceDisease[2] != "" && choiceDisease[1] == ""))
+                        {
+                            if (choiceDisease[2].Equals("Колостома"))
+                                str = choiceDisease[2];
+                            else
+                                str = choiceDisease[0] + " " + (choiceDisease[1] != "" ? choiceDisease[1] : "") + (choiceDisease[2] != "" ? choiceDisease[2] : "");
+                        }
+                    }
+                    break;
+                case 3:
+                    if (index == 0)
+                    {
+                        if (choiceDisease[2] != "" && choiceDisease[5] != "")
+                        {
+                            choiceDisease[0] = "Хронический";
+                            str = choiceDisease[0] + " " + (choiceDisease[1] != "" ? choiceDisease[1] + " " : "")
+                                + choiceDisease[2] + " панкреатит" + (choiceDisease[3] != "" ? ", " + choiceDisease[3] : "")
+                                + (choiceDisease[4] != "" ? ", " + choiceDisease[4] : "") + ", " + choiceDisease[5];
+                        }
+                    }
+                    if (index == 1)
+                    {
+                        if (choiceDisease[1] != "" || choiceDisease[2] != "" || choiceDisease[3] != "" || choiceDisease[4] != "")
+                        {
+                            str = (choiceDisease[1] != "" ? choiceDisease[1] + ". " : "") + (choiceDisease[2] != "" ? choiceDisease[2] + ". " : "");
+                            if (choiceDisease[3].Substring(0, 12) == "с признаками")
+                                str = str + "Токсическое поражение печени " + (choiceDisease[3] != "" ? choiceDisease[3] + ". " : "") + (choiceDisease[4] != "" ? choiceDisease[4] + ". " : "");
+                            else
+                                str = str + (choiceDisease[3] != "" ? choiceDisease[3] + ". " : "") + (choiceDisease[4] != "" ? choiceDisease[4] + ". " : "");
+                            str = str.Replace("Фун-е", "Функциональное");
+                            str = str.Substring(0, str.Length - 2);
+                        }
+                    }
+                    break;
+                case 5:
+                    if ((choiceDisease[1] != "" && choiceDisease[2] == "") || (choiceDisease[2] != "" && choiceDisease[1] == ""))
+                        str = (choiceDisease[1] != "" ? choiceDisease[1] : "") + (choiceDisease[2] != "" ? choiceDisease[2] : "");
+                    break;
+                default:
+                    break;
+            }
+            if (str != "" && !str.Contains("?"))
+                str = str + ". ";
+            str = str.Replace("\n", " ");
+            return str;
+        }
+
         private void save_Click(object sender, RoutedEventArgs e)
         {
             var helper = new WordDocument("Pattern.docx", "Pattern2.docx");
+            string exam = "";
+            string diag = "";
+            foreach (string item in stateApp[4][0][0])
+                exam += "- " + item + "\n";
+            for (int i = 0; i < stateApp[3].Length; i++)
+                for (int j = 0; j < stateApp[3][i].Length; j++)
+                    if (stateApp[3][i][j] != null)
+                        diag += writeResult(stateApp[3][i][j], i, j);
             var items = new Dictionary<string, string>
             {
-                { "<DIAGNOSIS>", textBlock.Text != null ? textBlock.Text : ""},
+                { "<EXAM>", stateApp[4][0][0] != null ? exam : ""},
+                { "<DIAGNOSIS>", stateApp[3][0][0] != null ? diag : ""},
                 { "<FIO>", fio.Text != null ? fio.Text : "" },
                 { "<DATE>", date.SelectedDate != null ? date.SelectedDate.Value.ToString("dd.MM.yyyy") : ""},
                 { "<YEAR>", year.Text  != null ? year.Text : ""}
@@ -1111,14 +1371,180 @@ namespace InspectionReport
         private void printBut_Click(object sender, RoutedEventArgs e)
         {
             var helper = new WordDocument("Pattern.docx", "Pattern2.docx");
+            string exam = "";
+            string diag = "";
+            foreach (string item in stateApp[4][0][0])
+                exam += "- " + item + "\n";
+            for (int i = 0; i < stateApp[3].Length; i++)
+                for (int j = 0; j < stateApp[3][i].Length; j++)
+                    if (stateApp[3][i][j] != null)
+                        diag += writeResult(stateApp[3][i][j], i, j);
             var items = new Dictionary<string, string>
             {
-                { "<DIAGNOSIS>", textBlock.Text != null ? textBlock.Text : ""},
+                { "<EXAM>", stateApp[4][0][0] != null ? exam : ""},
+                { "<DIAGNOSIS>", stateApp[3][0][0] != null ? diag : ""},
                 { "<FIO>", fio.Text != null ? fio.Text : "" },
                 { "<DATE>", date.SelectedDate != null ? date.SelectedDate.Value.ToString("dd.MM.yyyy") : ""},
                 { "<YEAR>", year.Text  != null ? year.Text : ""}
             };
             helper.SaveTemp(items, filePath);
+        }
+
+        private void examView()
+        {
+            String str = "";
+            foreach (string item in chDiseaseList)
+            {
+                str += item + ". ";
+            }
+            str = str.Replace("\n", " ");
+            textBlock.Text = str;
+            List<String> strList = new List<String>
+                            {
+                                "Общий анализ крови",
+                                "Биохимический анализ крови (общий белок, АСТ, АЛТ, щелочная фосфотаза, ГГТП, билирубин общий, билирубин" +
+                                " прямой, амилаза панкреатическая, липаза, СРБ, креатинин, мочевина, глюкоза,\nобщий холестерин, " +
+                                "триглицериды, липопротеины высокой плотности (ЛПВП), липопротеины низкой плотности (ЛПНП), липопротеины" +
+                                " низкой плотности (ЛПОНП), коэффициент атерогенности)",
+                                "Анализ крови на электролиты (Na+, К+, Сl-, Ca++)",
+                                "Анализ крови на ПТИ",
+                                "Коагулограмма",
+                                "МНО",
+                                "Анализ крови на ферритин, трансферрин, сывороточное железо, общую желесосвязывающую способность сыворотки, витамин В12",
+                                "Анализ крови на генетический полиморфизм по синдрому Жильбера (мутация гена UGT1)",
+                                "Анализ крови на ANA, SMA, анти-LKM1, анти-LC, анти-LKM3 атипическиеANCA,SLA/LP АМА-М2",
+                                "Анализ крови на α1-антитрипсин, церулоплазмин",
+                                "Анализ крови на СА-19-9, раковоэмбриональный антиген (РЭА), альфа-фетопротеин (АФП)",
+                                "Анализ крови на ТТГ, свободный Т4, антитела к ТПО",
+                                "Анализ крови на лютеинезирующий гормон (ЛГ), фолликулостимулирующий гормон (ФСГ)",
+                                "Анализ крови на пепсиноген-I, пепсиноген-II, пепсиноген-I/ пепсиноген-II, гастрин-17",
+                                "Анализ крови на антитела к париетальным клеткам желудка",
+                                "Анализ крови на антитела к внутреннему фактору Кастла",
+                                "Анализ крови на антитела к H.pylori (IgG)",
+                                "Анализ крови на антитела к лямблиям, токсокарам, аскаридам (IgG)"
+                            };
+            List<String> strList2 = new List<String>
+                            {
+                                "Анализ крови на ПЦР ДНК гепатита В (качественный метод)",
+                                "Анализ крови на ПЦР РНК гепатита С (качественный метод)",
+                                "Анализ крови на ПЦР ДНК гепатита В (количественный метод)",
+                                "Анализ крови на ПЦР РНК гепатита С (количественный метод)",
+                                "Анализ крови на антитела к гепатиту «С»",
+                                "Анализ крови на HbS-АГ",
+                                "Анализ крови на антитела к дезаминированным пептидам альфа-глиадина, IgG",
+                                "Анализ крови на генетическое типирование HLA DQ2/DQ8 при целиакии",
+                                "Анализ крови на антитела к тканевой трансглутаминазе, IgA",
+                                "Анализ крови на антитела к эндомизию, IgA (AЭА)",
+                                "Анализ крови на иммуноглобулин А (IgA)",
+                                "Общий анализ мочи",
+                                "Анализ мочи на диастазу",
+                                "Суточный анализ мочи на 5-оксииндолуксусную кислоту",
+                                "Анализ кала на антиген H.pylori",
+                                "Анализ кала на антиген H.pylori через 14 дней после отмены ингибиторов протонной помпы, через 1 месяц после отмены" +
+                                " антибактериальных препаратов или препаратов висмута",
+                                "Копрограмма",
+                                "Анализ кала на яйца гельминтов и цисты простейших",
+                                "Анализ кала на скрытую кровь (иммунохимический метод)",
+                                "Анализ кала на фекальный кальпротектин",
+                                "Анализ кала на токсин А и токсин В Cl.difficile",
+                                "Анализ кала на эластазу-1",
+                                "УЗИ органов брюшной полости",
+                                "УЗИ малого таза",
+                                "УЗДГ сосудов брюшной полости",
+                                "КТ органов брюшной полости с внутривенным контрастированием",
+                                "КТ органов грудной клетки с внутривенным контрастированием",
+                                "Рентгенография органов грудной клетки",
+                                "МРТ органов брюшной полости с внутривенным контрастированием",
+                                "Магнитно-резонансная холангиопанкреатография (МРПХГ)",
+                                "Эндосонография",
+                                "Рентгеноскопия пищевода с контрастированием ",
+                                "Ирригоскопия",
+                                "КТ-колография («виртуальная колоноскопия»)",
+                                "ЭКГ",
+                                "Суточная рН-импедансометрия пищевода",
+                                "Манометрия пищевода",
+                                "С13уреазный дыхательный тест ",
+                                "ЭГДС",
+                                "ЭГДС с биопсией слизистой оболочки желудка для стадирования гастрита (по OLGA/OLGIM) и диагностики H. pylori",
+                                "ЭГДС с биопсией слизистой оболочки постбульбарного отдела и луковицы двенадцатиперстной кишки",
+                                "ЭГДС с биопсией слизистой оболочки дистального и проксимального отделов пищевода для диагностики эозинофильного эзофагита",
+                                "ЭГДС с диагностикой H. pylori",
+                                "Колоноскопия",
+                                "Илеоколоноскопия",
+                                "Колоноскопия с биопсией слизистой оболочки правых и левых отделов толстой кишки для исключения микроскопического колита",
+                                "Видеокапсульная эндоскопия",
+                                "Консультация психотерапевта",
+                                "Консультация невролога",
+                                "Консультация хирурга",
+                                "Консультация сосудистого хирурга",
+                                "Консультация проктолога",
+                                "Консультация эндокринолога",
+                                "Консультация инфекциониста",
+                                "Консультация уролога"
+                            };
+            for (int i = 0; i < strList.Count; i++)
+            {
+                ((TextBlock)examList.Items[i]).Text = strList[i];
+            }
+            for (int i = 0; i < strList2.Count; i++)
+            {
+                ((TextBlock)examList2.Items[i]).Text = strList2[i];
+            }
+            return;
+        }
+
+        private void examList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            textBlock.Text = "";
+            string str = "";
+            List<string> listStr = new List<string>();
+            foreach (TextBlock item in examList.SelectedItems)
+            {
+                listStr.Add(item.Text);
+                if (!chDiseaseList.Contains(item.Text))
+                    chDiseaseList.Add(item.Text);
+            }
+            foreach (TextBlock item in examList2.SelectedItems)
+                listStr.Add(item.Text);
+            for (int i = 0; i < chDiseaseList.Count; i++)
+            {
+                if (!listStr.Contains(chDiseaseList[i]))
+                    chDiseaseList.RemoveAt(i);
+            }
+            foreach (string item in chDiseaseList)
+            {
+                str += item + ". ";
+            }
+            stateApp[4][0][0] = chDiseaseList.ToArray();
+            str = str.Replace("\n", " ");
+            textBlock.Text = str;
+        }
+
+        private void examList2_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            textBlock.Text = "";
+            string str = "";
+            List<string> listStr = new List<string>();
+            foreach (TextBlock item in examList2.SelectedItems)
+            {
+                listStr.Add(item.Text);
+                if (!chDiseaseList.Contains(item.Text))
+                    chDiseaseList.Add(item.Text);
+            }
+            foreach (TextBlock item in examList.SelectedItems)
+                listStr.Add(item.Text);
+            for (int i = 0; i < chDiseaseList.Count; i++)
+            {
+                if (!listStr.Contains(chDiseaseList[i]))
+                    chDiseaseList.RemoveAt(i);
+            }
+            foreach (string item in chDiseaseList)
+            {
+                str += item + ". ";
+            }
+            stateApp[4][0][0] = chDiseaseList.ToArray();
+            str = str.Replace("\n", " ");
+            textBlock.Text = str;
         }
     }
 }
