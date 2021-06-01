@@ -30,35 +30,36 @@ namespace InspectionReport
         private String[] choiceDisease;
         private List<string> chDiseaseList;
         private String[][][][] stateApp;
-        public string filePath { get; set; }
+        public string FilePath { get; set; }
 
         public MainWindow()
         {
             InitializeComponent();
-            filePath = Properties.Settings.Default.FilePath;
+            FilePath = Properties.Settings.Default.FilePath;
             category = 0;
             disease = 0;
             stateApp = new String[7][][][];
-            stateApp[0] = new String[5][][];
-            stateApp[3] = new String[6][][];
-            stateApp[3][0] = new String[2][];
-            stateApp[3][1] = new String[7][];
-            stateApp[3][2] = new String[2][];
-            stateApp[3][3] = new String[2][];
-            stateApp[3][4] = new String[2][];
-            stateApp[3][5] = new String[1][];
-            stateApp[4] = new String[1][][];
-            stateApp[4][0] = new String[1][];
-            stateApp[5] = new String[6][][];
-            choiceDisease = new String[7] { "", "", "", "", "", "", "" };
-            chDiseaseList = new List<String>();
-        }
-
-        private void clear_Click(object sender, RoutedEventArgs e)
-        {
-            textBlock.Text = "";
-            stateApp = new String[7][][][];
-            stateApp[0] = new String[5][][];
+            stateApp[0] = new String[1][][];
+            stateApp[0][0] = new String[1][];
+            stateApp[0][0][0] = new String[1] { "" };
+            stateApp[1] = new String[2][][];
+            stateApp[1][0] = new String[1][];
+            stateApp[1][0][0] = new String[1];
+            stateApp[1][0][0][0] = "Динамика развития симптомов:\nОбследование:\nОбращение за медицинской помощью: ранее не обращался\n" +
+                        "Применяемая терапия: отсутствует";
+            stateApp[1][1] = new String[1][];
+            stateApp[1][1][0] = new String[1];
+            stateApp[1][1][0][0] = "Перенесённые заболевания:\nАллергические реакции: нет\nПостоянно принимаемые препараты: нет\n" +
+                "Перенесенные хирургические операции: нет\nГемотрансуфзии: не было\nНаследственность по онкопатологии и патологии ЖКТ:" +
+                " нет\nПрофессиональные вредности: не отмечает\nХронические интоксикации: нет";
+            stateApp[2] = new String[1][][];
+            stateApp[2][0] = new String[1][];
+            stateApp[2][0][0] = new String[1];
+            stateApp[2][0][0][0] = "Общее состояние: удовлетворительное\nКожные покровы: обычной окраски\nВидимые слизистые оболочки:" +
+                " обычной окраски и влажности\nПериферические лимфоузлы: без изменений\nЩитовидная железа: норма\nОтеки: нет\nАД:" +
+                " ____ мм.рт.ст\nЧСС: ____в минуту\nЧДД: ____ в минуту\nДыхательная система: дыхание свободное, хрипов нет\n" +
+                "Сердечно - сосудистая система: При аускультации сердца тоны ясные, ритмичные\nПищеварительная система: Кишечная" +
+                " перистальтика активная\nМочевыделительная система: Мочеиспускание не нарушено.";
             stateApp[3] = new String[6][][];
             stateApp[3][0] = new String[2][];
             stateApp[3][1] = new String[7][];
@@ -68,9 +69,44 @@ namespace InspectionReport
             stateApp[3][5] = new String[1][];
             stateApp[4] = new String[1][][];
             stateApp[4][0] = new String[1][];
-            stateApp[5] = new String[6][][];
+            stateApp[5] = new String[1][][];
+            stateApp[5][0] = new String[1][];
+            stateApp[5][0][0] = new String[1] { "" };
+            stateApp[6] = new String[1][][];
+            stateApp[6][0] = new String[1][];
+            stateApp[6][0][0] = new String[1] { "" };
+            choiceDisease = new String[7] { "", "", "", "", "", "", "" };
+            chDiseaseList = new List<String>();
+            complaints.Background = new SolidColorBrush(Color.FromRgb(190, 190, 190));
+        }
+
+        private void clear_Click(object sender, RoutedEventArgs e)
+        {
+            textBlock.Text = "";
+            stateApp = new String[7][][][];
+            stateApp[0] = new String[1][][];
+            stateApp[0][0] = new String[1][];
+            stateApp[1] = new String[1][][];
+            stateApp[1][0] = new String[1][];
+            stateApp[2] = new String[1][][];
+            stateApp[2][0] = new String[1][];
+            stateApp[3] = new String[6][][];
+            stateApp[3][0] = new String[2][];
+            stateApp[3][1] = new String[7][];
+            stateApp[3][2] = new String[2][];
+            stateApp[3][3] = new String[2][];
+            stateApp[3][4] = new String[7][];
+            stateApp[3][5] = new String[1][];
+            stateApp[4] = new String[1][][];
+            stateApp[4][0] = new String[1][];
+            stateApp[5] = new String[1][][];
+            stateApp[5][0] = new String[1][];
+            stateApp[6] = new String[1][][];
+            stateApp[6][0] = new String[1][];
             choiceDisease = new String[7] { "", "", "", "", "", "", "" };
             chDiseaseList = new List<string>();
+            examList.SelectedItem = null;
+            examList2.SelectedItem = null;
             foreach (GroupBox group in gridEnd.Children)
             {
                 foreach (CheckBox item in ((StackPanel)group.Content).Children)
@@ -82,15 +118,13 @@ namespace InspectionReport
 
         private void complaints_Click(object sender, RoutedEventArgs e)
         {
-            complaints.Background = new SolidColorBrush(Color.FromRgb(190, 190, 190));
-            foreach (Button item in type.Children)
-            {
-                if (!item.Equals(complaints))
-                    item.Background = new SolidColorBrush(Color.FromRgb(238, 238, 238));
-            }
+            changeSelected(1, false);
+            category = 0;
             diseaseStart.Visibility = Visibility.Hidden;
             diseaseEnd.Visibility = Visibility.Hidden;
-            category = 0;
+            groupButtons.Visibility = Visibility.Hidden;
+            examList.Visibility = Visibility.Hidden;
+            examList2.Visibility = Visibility.Hidden;
             categoryLabel.Content = "Жалобы";
             labelText.Content = "Жалобы:";
             btn6.Visibility = Visibility.Hidden;
@@ -101,26 +135,57 @@ namespace InspectionReport
             btn4.Content = "Нарушение\nстула";
             btn4.FontSize = 12;
             btn5.Content = "Общие\nсимптомы";
+            textBlock.Text = stateApp[0][0][0][0];
+        }
+
+        private void anamnesis_Click(object sender, RoutedEventArgs e)
+        {
+            changeSelected(2, false);
+            category = 1;
+            diseaseStart.Visibility = Visibility.Hidden;
+            diseaseEnd.Visibility = Visibility.Hidden;
+            groupButtons.Visibility = Visibility.Visible;
+            examList.Visibility = Visibility.Hidden;
+            examList2.Visibility = Visibility.Hidden;
+            do_btn1();
+            categoryLabel.Content = "Анамнез";
+            labelText.Content = "Анамнез:";
+            btn1.Content = "Анамнез\nзаболевания";
+            btn2.Content = "Анамнез жизни";
+            btn3.Visibility = Visibility.Hidden;
+            btn4.Visibility = Visibility.Hidden;
+            btn5.Visibility = Visibility.Hidden;
+            btn6.Visibility = Visibility.Hidden;
+        }
+
+        private void inspection_Click(object sender, RoutedEventArgs e)
+        {
+            changeSelected(3, false);
+            category = 2;
+            diseaseStart.Visibility = Visibility.Hidden;
+            diseaseEnd.Visibility = Visibility.Hidden;
+            groupButtons.Visibility = Visibility.Hidden;
+            examList.Visibility = Visibility.Hidden;
+            examList2.Visibility = Visibility.Hidden;
+            categoryLabel.Content = "Осмотр";
+            labelText.Content = "Осмотр:";
+            textBlock.Text = stateApp[2][0][0][0];
         }
 
         private void diagnosis_Click(object sender, RoutedEventArgs e)
         {
-            diagnosis.Background = new SolidColorBrush(Color.FromRgb(190, 190, 190));
-            foreach (Button item in type.Children)
-            {
-                if (!item.Equals(diagnosis))
-                    item.Background = new SolidColorBrush(Color.FromRgb(238, 238, 238));
-            }
-            diseaseStart.Visibility = Visibility.Hidden;
-            diseaseEnd.Visibility = Visibility.Hidden;
+            changeSelected(4, false);
             category = 3;
+            groupButtons.Visibility = Visibility.Visible;
             categoryLabel.Content = "Диагноз";
             labelText.Content = "Диагноз:";
-            groupButtons.Visibility = Visibility.Visible;
             examList.Visibility = Visibility.Hidden;
             examList2.Visibility = Visibility.Hidden;
+            btn3.Visibility = Visibility.Visible;
+            btn4.Visibility = Visibility.Visible;
             btn5.Visibility = Visibility.Visible;
             btn6.Visibility = Visibility.Visible;
+            do_btn1();
             btn1.Content = "Патология\nпищевода";
             btn1.FontSize = 12;
             btn2.Content = "Патология\nжелудка";
@@ -152,15 +217,13 @@ namespace InspectionReport
 
         private void therapy_Click(object sender, RoutedEventArgs e)
         {
-            therapy.Background = new SolidColorBrush(Color.FromRgb(190, 190, 190));
-            foreach (Button item in type.Children)
-            {
-                if (!item.Equals(therapy))
-                    item.Background = new SolidColorBrush(Color.FromRgb(238, 238, 238));
-            }
+            changeSelected(6, false);
+            category = 5;
             diseaseStart.Visibility = Visibility.Hidden;
             diseaseEnd.Visibility = Visibility.Hidden;
-            category = 5;
+            groupButtons.Visibility = Visibility.Hidden;
+            examList.Visibility = Visibility.Hidden;
+            examList2.Visibility = Visibility.Hidden;
             categoryLabel.Content = "Терапия";
             labelText.Content = "Терапия:";
             btn6.Visibility = Visibility.Visible;
@@ -172,9 +235,30 @@ namespace InspectionReport
             btn4.FontSize = 11;
             btn5.Content = "Гепатопротекторы";
             btn6.Content = "Другое";
+            textBlock.Text = stateApp[5][0][0][0];
+        }
+
+
+        private void observation_Click(object sender, RoutedEventArgs e)
+        {
+            changeSelected(7, false);
+            category = 6;
+            diseaseStart.Visibility = Visibility.Hidden;
+            diseaseEnd.Visibility = Visibility.Hidden;
+            groupButtons.Visibility = Visibility.Hidden;
+            examList.Visibility = Visibility.Hidden;
+            examList2.Visibility = Visibility.Hidden;
+            categoryLabel.Content = "Наблюдение";
+            labelText.Content = "Наблюдение:";
+            textBlock.Text = stateApp[6][0][0][0];
         }
 
         private void btn1_Click(object sender, RoutedEventArgs e)
+        {
+            do_btn1();
+        }
+
+        private void do_btn1()
         {
             btn1.Background = new SolidColorBrush(Color.FromRgb(190, 190, 190));
             foreach (Button item in groupButtons.Children)
@@ -183,9 +267,13 @@ namespace InspectionReport
                     item.Background = new SolidColorBrush(Color.FromRgb(238, 238, 238));
             }
             area = 0;
-            rad1();
+            if (category != 1)
+                rad1();
             switch (category)
             {
+                case 1:
+                    textBlock.Text = stateApp[1][0][0][0];
+                    break;
                 case 3:
                     diseaseStart.Visibility = Visibility.Visible;
                     diseaseEnd.Visibility = Visibility.Visible;
@@ -210,9 +298,13 @@ namespace InspectionReport
                     item.Background = new SolidColorBrush(Color.FromRgb(238, 238, 238));
             }
             area = 1;
-            rad1();
+            if (category != 1)
+                rad1();
             switch (category)
             {
+                case 1:
+                    textBlock.Text = stateApp[1][1][0][0];
+                    break;
                 case 3:
                     diseaseStart.Visibility = Visibility.Visible;
                     diseaseEnd.Visibility = Visibility.Visible;
@@ -1144,7 +1236,7 @@ namespace InspectionReport
                         if (choiceDisease[1] != "" || choiceDisease[2] != "" || choiceDisease[3] != "" || choiceDisease[4] != "")
                         {
                             str = (choiceDisease[1] != "" ? choiceDisease[1] + ". " : "") + (choiceDisease[2] != "" ? choiceDisease[2] + ". " : "");
-                            if (choiceDisease[3].Substring(0,12) == "с признаками")
+                            if (choiceDisease[3] != "" && choiceDisease[3].Substring(0,12) == "с признаками")
                                 str = str + "Токсическое поражение печени " + (choiceDisease[3] != "" ? choiceDisease[3] + ". " : "") + (choiceDisease[4] != "" ? choiceDisease[4] + ". " : "");
                             else
                                 str = str + (choiceDisease[3] != "" ? choiceDisease[3] + ". " : "") + (choiceDisease[4] != "" ? choiceDisease[4] + ". " : "");
@@ -1336,23 +1428,33 @@ namespace InspectionReport
         private void save_Click(object sender, RoutedEventArgs e)
         {
             var helper = new WordDocument("Pattern.docx", "Pattern2.docx");
+            string amnesis1 = stateApp[1][0][0][0].Replace("\n", ". ");
+            string amnesis2 = stateApp[1][1][0][0].Replace("\n", ". ");
+            string inspection = stateApp[2][0][0][0].Replace("\n", ". ");
             string exam = "";
             string diag = "";
-            foreach (string item in stateApp[4][0][0])
-                exam += "- " + item + "\n";
+            if (stateApp[4][0][0] != null)
+                foreach (string item in stateApp[4][0][0])
+                    exam += "- " + item + "\n";
             for (int i = 0; i < stateApp[3].Length; i++)
                 for (int j = 0; j < stateApp[3][i].Length; j++)
                     if (stateApp[3][i][j] != null)
                         diag += writeResult(stateApp[3][i][j], i, j);
             var items = new Dictionary<string, string>
             {
-                { "<EXAM>", stateApp[4][0][0] != null ? exam : ""},
+                { "<COMPLAINTS>", stateApp[0][0][0] != null ? stateApp[0][0][0][0] : ""},
+                { "<ANAMNESIS1>", stateApp[1][0][0] != null ? amnesis1 : ""},
+                { "<ANAMNESIS2>", stateApp[1][1][0] != null ? amnesis2 : ""},
+                { "<INSPECTION>", stateApp[2][0][0] != null ? inspection : ""},
                 { "<DIAGNOSIS>", stateApp[3][0][0] != null ? diag : ""},
+                { "<EXAM>", stateApp[4][0][0] != null ? exam : ""},
+                { "<THERAPY>", stateApp[5][0][0] != null ? stateApp[5][0][0][0] : ""},
+                { "<OBSERVATION>", stateApp[6][0][0] != null ? stateApp[6][0][0][0] : ""},
                 { "<FIO>", fio.Text != null ? fio.Text : "" },
                 { "<DATE>", date.SelectedDate != null ? date.SelectedDate.Value.ToString("dd.MM.yyyy") : ""},
-                { "<YEAR>", year.Text  != null ? year.Text : ""}
+                { "<AGE>", year.Text  != null ? year.Text : ""}
             };
-            helper.Process(items, filePath);
+            helper.Process(items, FilePath);
             MessageBox.Show("Сохранено");
         }
 
@@ -1362,8 +1464,8 @@ namespace InspectionReport
 
             if (optionsWindow.ShowDialog() == true)
             {
-                filePath = optionsWindow.opt1.Text;
-                Properties.Settings.Default.FilePath = filePath;
+                FilePath = optionsWindow.opt1.Text;
+                Properties.Settings.Default.FilePath = FilePath;
                 Properties.Settings.Default.Save();
             }    
         }
@@ -1373,21 +1475,28 @@ namespace InspectionReport
             var helper = new WordDocument("Pattern.docx", "Pattern2.docx");
             string exam = "";
             string diag = "";
-            foreach (string item in stateApp[4][0][0])
-                exam += "- " + item + "\n";
+            if (stateApp[4][0][0] != null)
+                foreach (string item in stateApp[4][0][0])
+                    exam += "- " + item + "\n";
             for (int i = 0; i < stateApp[3].Length; i++)
                 for (int j = 0; j < stateApp[3][i].Length; j++)
                     if (stateApp[3][i][j] != null)
                         diag += writeResult(stateApp[3][i][j], i, j);
             var items = new Dictionary<string, string>
             {
-                { "<EXAM>", stateApp[4][0][0] != null ? exam : ""},
+                { "<COMPLAINTS>", stateApp[0][0][0] != null ? stateApp[0][0][0][0] : ""},
+                { "<ANAMNESIS1>", stateApp[1][0][0] != null ? stateApp[1][0][0][0] : ""},
+                { "<ANAMNESIS2>", stateApp[1][1][0] != null ? stateApp[1][1][0][0] : ""},
+                { "<INSPECTION>", stateApp[2][0][0] != null ? stateApp[2][0][0][0] : ""},
                 { "<DIAGNOSIS>", stateApp[3][0][0] != null ? diag : ""},
+                { "<EXAM>", stateApp[4][0][0] != null ? exam : ""},
+                { "<THERAPY>", stateApp[5][0][0] != null ? stateApp[5][0][0][0] : ""},
+                { "<OBSERVATION>", stateApp[6][0][0] != null ? stateApp[6][0][0][0] : ""},
                 { "<FIO>", fio.Text != null ? fio.Text : "" },
                 { "<DATE>", date.SelectedDate != null ? date.SelectedDate.Value.ToString("dd.MM.yyyy") : ""},
-                { "<YEAR>", year.Text  != null ? year.Text : ""}
+                { "<AGE>", year.Text  != null ? year.Text : ""}
             };
-            helper.SaveTemp(items, filePath);
+            helper.SaveTemp(items, FilePath);
         }
 
         private void examView()
@@ -1545,6 +1654,116 @@ namespace InspectionReport
             stateApp[4][0][0] = chDiseaseList.ToArray();
             str = str.Replace("\n", " ");
             textBlock.Text = str;
+        }
+
+        private void changeSelected(int num, bool area)
+        {
+            string name = "";
+            if (!area)
+            {
+                switch (num)
+                {
+                    case 1:
+                        complaints.Background = new SolidColorBrush(Color.FromRgb(190, 190, 190));
+                        name = complaints.Name;
+                        break;
+                    case 2:
+                        anamnesis.Background = new SolidColorBrush(Color.FromRgb(190, 190, 190));
+                        name = anamnesis.Name;
+                        break;
+                    case 3:
+                        inspection.Background = new SolidColorBrush(Color.FromRgb(190, 190, 190));
+                        name = inspection.Name;
+                        break;
+                    case 4:
+                        diagnosis.Background = new SolidColorBrush(Color.FromRgb(190, 190, 190));
+                        name = diagnosis.Name;
+                        break;
+                    case 5:
+                        exam.Background = new SolidColorBrush(Color.FromRgb(190, 190, 190));
+                        name = exam.Name;
+                        break;
+                    case 6:
+                        therapy.Background = new SolidColorBrush(Color.FromRgb(190, 190, 190));
+                        name = therapy.Name;
+                        break;
+                    case 7:
+                        observation.Background = new SolidColorBrush(Color.FromRgb(190, 190, 190));
+                        name = observation.Name;
+                        break;
+                    default:
+                        break;
+                }
+                foreach (Button item in type.Children)
+                {
+                    if (!item.Name.Equals(name))
+                        item.Background = new SolidColorBrush(Color.FromRgb(238, 238, 238));
+                }
+            }
+            else
+            {
+                switch (num)
+                {
+                    case 1:
+                        btn1.Background = new SolidColorBrush(Color.FromRgb(190, 190, 190));
+                        name = btn1.Name;
+                        break;
+                    case 2:
+                        btn2.Background = new SolidColorBrush(Color.FromRgb(190, 190, 190));
+                        name = btn2.Name;
+                        break;
+                    case 3:
+                        btn3.Background = new SolidColorBrush(Color.FromRgb(190, 190, 190));
+                        name = btn3.Name;
+                        break;
+                    case 4:
+                        btn4.Background = new SolidColorBrush(Color.FromRgb(190, 190, 190));
+                        name = btn4.Name;
+                        break;
+                    case 5:
+                        btn5.Background = new SolidColorBrush(Color.FromRgb(190, 190, 190));
+                        name = btn5.Name;
+                        break;
+                    case 6:
+                        btn6.Background = new SolidColorBrush(Color.FromRgb(190, 190, 190));
+                        name = btn6.Name;
+                        break;
+                    default:
+                        break;
+                }
+                foreach (Button item in groupButtons.Children)
+                {
+                    if (!item.Name.Equals(name))
+                        item.Background = new SolidColorBrush(Color.FromRgb(238, 238, 238));
+                }
+            }    
+        }
+
+        private void save_textBlock_Click(object sender, RoutedEventArgs e)
+        {
+            switch(category)
+            {
+                case 0:
+                    stateApp[0][0][0] = new String[1] { textBlock.Text };
+                    break;
+                case 1:
+                    if (area == 0)
+                        stateApp[1][0][0] = new String[1] { textBlock.Text };
+                    else
+                        stateApp[1][1][0] = new String[1] { textBlock.Text };
+                    break;
+                case 2:
+                    stateApp[2][0][0] = new String[1] { textBlock.Text };
+                    break;
+                case 5:
+                    stateApp[5][0][0] = new String[1] { textBlock.Text };
+                    break;
+                case 6:
+                    stateApp[6][0][0] = new String[1] { textBlock.Text };
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

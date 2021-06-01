@@ -45,22 +45,10 @@ namespace InspectionReport
                     foreach (var item in items)
                     {
                         Word.Find find = app.Selection.Find;
-                        find.Text = item.Key;
-                        find.Replacement.Text = item.Value;
-
-                        Object wrap = Word.WdFindWrap.wdFindContinue;
-                        Object replace = Word.WdReplace.wdReplaceAll;
-
-                        find.Execute(FindText: Type.Missing,
-                            MatchCase: false,
-                            MatchWholeWord: false,
-                            MatchWildcards: false,
-                            MatchSoundsLike: false,
-                            MatchAllWordForms: false,
-                            Forward: false,
-                            Wrap: wrap,
-                            Format: false,
-                            ReplaceWith: missing, Replace: replace);
+                        find.ClearFormatting();
+                        find.Execute(FindText: item.Key, Wrap: Word.WdFindWrap.wdFindContinue);
+                        if (find.Found)
+                            app.Selection.Text = item.Value;
                     }
 
                     Object newFileName = Path.Combine(filePath, DateTime.Now.ToString("yyyyMMdd_") + _fileInfo.Name);
@@ -93,22 +81,10 @@ namespace InspectionReport
                     foreach (var item in items)
                     {
                         Word.Find find = app.Selection.Find;
-                        find.Text = item.Key;
-                        find.Replacement.Text = item.Value;
-
-                        Object wrap = Word.WdFindWrap.wdFindContinue;
-                        Object replace = Word.WdReplace.wdReplaceAll;
-
-                        find.Execute(FindText: Type.Missing,
-                            MatchCase: false,
-                            MatchWholeWord: false,
-                            MatchWildcards: false,
-                            MatchSoundsLike: false,
-                            MatchAllWordForms: false,
-                            Forward: false,
-                            Wrap: wrap,
-                            Format: false,
-                            ReplaceWith: missing, Replace: replace);
+                        find.ClearFormatting();
+                        find.Execute(FindText: item.Key, Wrap: Word.WdFindWrap.wdFindContinue);
+                        if (find.Found)
+                            app.Selection.Text = item.Value;
                     }
 
                     String fullName = Path.GetTempPath() + Guid.NewGuid().ToString() + ".xps";

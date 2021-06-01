@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InspectionReport"
         mc:Ignorable="d"
-       Title="Inspection Report" Height="900" Width="1100" WindowStartupLocation="CenterScreen">
+       Title="Протокол осмотра" Height="900" Width="1100" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Icon="logo.png">
     <Grid>
         <Rectangle HorizontalAlignment="Left" Height="684" Margin="16,175,0,0" Stroke="Black" VerticalAlignment="Top" Width="1054" d:IsLocked="True"/>
-        <Button x:Name="button" Content="Новый осмотр" HorizontalAlignment="Left" Margin="472,22,0,0" VerticalAlignment="Top" Width="91" Height="68"/>
+        <Button x:Name="button" Content="Новый осмотр" HorizontalAlignment="Left" Margin="472,22,0,0" VerticalAlignment="Top" Width="91" Height="68" Click="clear_Click"/>
         <Label Content="Возраст:" HorizontalAlignment="Left" Margin="35,51,0,0" VerticalAlignment="Top"/>
         <Label Content="ФИО:" HorizontalAlignment="Left" Margin="51,22,0,0" VerticalAlignment="Top" Width="39"/>
         <DatePicker x:Name="date" HorizontalAlignment="Left" Margin="95,82,0,0" VerticalAlignment="Top" Width="167"/>
@@ -16,25 +16,25 @@
         <TextBox x:Name="year" HorizontalAlignment="Left" Height="23" Margin="95,54,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="167"/>
         <Label Content="Дата:" HorizontalAlignment="Left" Margin="52,78,0,0" VerticalAlignment="Top"/>
         <Button x:Name="button_Copy" Content="Шаблоны" HorizontalAlignment="Left" Margin="568,22,0,0" VerticalAlignment="Top" Width="91" Height="68"/>
-        <Button x:Name="save" Content="Сохранить" HorizontalAlignment="Left" Margin="662,22,0,0" VerticalAlignment="Top" Width="89" Height="68" Click="save_Click"/>
-        <Button x:Name="button_Copy2" Content="Просмотр" HorizontalAlignment="Left" Margin="755,22,0,0" VerticalAlignment="Top" Width="90" Height="68"/>
-        <Button x:Name="printBut" Content="Печать" HorizontalAlignment="Left" Margin="850,22,0,0" VerticalAlignment="Top" Width="91" Height="68" Click="printBut_Click"/>
-        <Button x:Name="options" Content="Настройки" HorizontalAlignment="Left" Margin="945,22,0,0" VerticalAlignment="Top" Width="91" Height="68" Click="options_Click"/>
+        <Button x:Name="save" Content="Сохранить" HorizontalAlignment="Left" Margin="664,22,0,0" VerticalAlignment="Top" Width="91" Height="68" Click="save_Click"/>
+        <Button x:Name="button_Copy2" Content="Просмотр" HorizontalAlignment="Left" Margin="760,22,0,0" VerticalAlignment="Top" Width="91" Height="68"/>
+        <Button x:Name="printBut" Content="Печать" HorizontalAlignment="Left" Margin="856,22,0,0" VerticalAlignment="Top" Width="91" Height="68" Click="printBut_Click"/>
+        <Button x:Name="options" Content="Настройки" HorizontalAlignment="Left" Margin="952,22,0,0" VerticalAlignment="Top" Width="91" Height="68" Click="options_Click"/>
         <StackPanel x:Name="type" HorizontalAlignment="Left" Height="49" Margin="35,115,0,0" VerticalAlignment="Top" Width="800" Orientation="Horizontal">
             <Button x:Name="complaints" Content="Жалобы" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="110" Height="50" Margin="0" Click="complaints_Click"/>
-            <Button Content="Анамнез" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="110" Height="50" Margin="5,0,0,0"/>
-            <Button Content="Осмотр" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Height="50" Margin="5,0,0,0"/>
+            <Button x:Name="anamnesis" Content="Анамнез" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="110" Height="50" Margin="5,0,0,0" Click="anamnesis_Click"/>
+            <Button x:Name="inspection" Content="Осмотр" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Height="50" Margin="5,0,0,0" Click="inspection_Click"/>
             <Button x:Name="diagnosis" Content="Диагноз " HorizontalAlignment="Left"  VerticalAlignment="Top" Width="110" Height="50" Margin="5,0,0,0" Click="diagnosis_Click"/>
             <Button x:Name="exam" Content="Обследование" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="110" Height="50" Margin="5,0,0,0" Click="exam_Click"/>
             <Button x:Name="therapy" Content="Терапия" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Height="50" Margin="5,0,0,0" Click="therapy_Click"/>
-            <Button Content="Наблюдение" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Height="50" Margin="5,0,0,-1" Padding="0,0,1,1"/>
+            <Button x:Name="observation" Content="Наблюдение" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Height="50" Margin="5,0,0,-1" Padding="0,0,1,1" Click="observation_Click"/>
         </StackPanel>
-        <Grid Margin="16,175,22,0">
-            <TextBox x:Name="textBlock" Margin="19,460,100,30" TextWrapping="Wrap" Text="" FontSize="14" Height="205" Width="930" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Grid Margin="16,175,22,12" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBox x:Name="textBlock" AcceptsReturn="True" Margin="19,460,100,30" TextWrapping="Wrap" Text="" FontSize="14" Height="205" Width="930" HorizontalAlignment="Left" VerticalAlignment="Top"/>
             <Label x:Name="labelText" Content="Жалобы:" HorizontalAlignment="Left" Margin="21,429,0,0" VerticalAlignment="Top"/>
-            <Button x:Name="clear" Content="Очистить" HorizontalAlignment="Left" Margin="959,642,0,0" VerticalAlignment="Top" Width="75" Click="clear_Click"/>
+            <Button x:Name="clear" Content="Очистить" HorizontalAlignment="Left" Margin="959,620,0,0" VerticalAlignment="Top" Width="75" Click="clear_Click" Height="45"/>
             <Rectangle HorizontalAlignment="Left" Margin="10,65,0,0" Stroke="Black" Width="1034" Height="609" VerticalAlignment="Top" d:IsLocked="True"/>
-            <StackPanel x:Name="groupButtons" HorizontalAlignment="Left" Height="50" Margin="19,39,0,0" VerticalAlignment="Top" Width="695" Orientation="Horizontal">
+            <StackPanel x:Name="groupButtons" HorizontalAlignment="Left" Height="50" Margin="19,39,0,0" VerticalAlignment="Top" Width="695" Orientation="Horizontal" Visibility="Hidden">
                 <Button x:Name="btn1" Content="Симптомы&#xA;патологии&#xA;пищевода" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Height="50" FontSize="11" Click="btn1_Click" HorizontalContentAlignment="Center"/>
                 <Button x:Name="btn2" Content="Диспепсия" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Height="50" Click="btn2_Click" Margin="7,0,0,0" HorizontalContentAlignment="Center"/>
                 <Button x:Name="btn3" Content="Абдоминальная&#xD;&#xA;боль" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Height="50" HorizontalContentAlignment="Center" Click="btn3_Click" Margin="7,0,0,0"/>
@@ -43,7 +43,7 @@
                 <Button x:Name="btn6" Content="Другая&#xD;&#xA;патология" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Height="50" Click="btn6_Click" Margin="7,0,0,0" Visibility="Hidden"/>
             </StackPanel>
             <Label x:Name="categoryLabel" Content="Жалобы" HorizontalAlignment="Left" Margin="10,2,0,0" VerticalAlignment="Top" Width="199" FontSize="20" FontWeight="Bold"/>
-            <GroupBox x:Name="diseaseEnd" Header="" HorizontalAlignment="Left" Height="358" Margin="244,94,0,0" VerticalAlignment="Top" Width="790">
+            <GroupBox x:Name="diseaseEnd" Header="" HorizontalAlignment="Left" Height="358" Margin="244,94,0,0" VerticalAlignment="Top" Width="790" Visibility="Hidden">
                 <Grid x:Name="gridEnd" HorizontalAlignment="Left" VerticalAlignment="Top" Width="780" Margin="0,0,-2,0">
                     <Grid.RowDefinitions>
                         <RowDefinition/>
@@ -128,7 +128,7 @@
                     </GroupBox>
                 </Grid>
             </GroupBox>
-            <ListBox x:Name="diseaseStart" HorizontalAlignment="Left" Height="200" Margin="21,102,0,0" VerticalAlignment="Top" Width="215">
+            <ListBox x:Name="diseaseStart" HorizontalAlignment="Left" Height="200" Margin="21,102,0,0" VerticalAlignment="Top" Width="215" Visibility="Hidden">
                 <TextBlock Text="Хронический гастрит и гастропатии" MouseLeftButtonUp="rad1_Click" Width="205"/>
                 <TextBlock Text="Язвенная болезнь" MouseLeftButtonUp="rad2_Click" Width="205"/>
                 <TextBlock Text="Симптоматическая язва" Width="205" MouseLeftButtonUp="rad3_Click"/>
@@ -215,6 +215,7 @@
                 <TextBlock/>
                 <TextBlock/>
             </ListBox>
+            <Button x:Name="save_textBlock" Content="Сохранить" HorizontalAlignment="Left" Margin="959,555,0,0" VerticalAlignment="Top" Width="75" Click="save_textBlock_Click" Height="45"/>
         </Grid>
     </Grid>
 </Window> 
