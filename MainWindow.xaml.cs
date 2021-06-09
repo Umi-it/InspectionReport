@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace InspectionReport
 {
@@ -28,14 +29,22 @@ namespace InspectionReport
         private int area;
         private int disease;
         private String[] choiceDisease;
-        private List<string> chDiseaseList;
+        private List<String>[] chDiseaseList;
         private String[][][][] stateApp;
+        bool ignoreEvents;
         public string FilePath { get; set; }
 
         public MainWindow()
         {
             InitializeComponent();
-            FilePath = Properties.Settings.Default.FilePath;
+            ignoreEvents = false;
+            if (Properties.Settings.Default.FilePath == "")
+            {
+                FilePath = Properties.Settings.Default.FilePath = Directory.GetCurrentDirectory();
+                Properties.Settings.Default.Save();
+            }
+            else
+                FilePath = Properties.Settings.Default.FilePath;
             category = 0;
             disease = 0;
             stateApp = new String[7][][][];
@@ -65,10 +74,12 @@ namespace InspectionReport
             stateApp[3][1] = new String[7][];
             stateApp[3][2] = new String[2][];
             stateApp[3][3] = new String[2][];
-            stateApp[3][4] = new String[7][];
+            stateApp[3][4] = new String[2][];
             stateApp[3][5] = new String[1][];
-            stateApp[4] = new String[1][][];
+            stateApp[4] = new String[3][][];
             stateApp[4][0] = new String[1][];
+            stateApp[4][1] = new String[1][];
+            stateApp[4][2] = new String[1][];
             stateApp[5] = new String[1][][];
             stateApp[5][0] = new String[1][];
             stateApp[5][0][0] = new String[1] { "" };
@@ -76,7 +87,8 @@ namespace InspectionReport
             stateApp[6][0] = new String[1][];
             stateApp[6][0][0] = new String[1] { "" };
             choiceDisease = new String[7] { "", "", "", "", "", "", "" };
-            chDiseaseList = new List<String>();
+            chDiseaseList = new List<String>[3] { new List<String>(),  new List<String>(),  new List<String>() };
+            date.SelectedDate = DateTime.Today;
             complaints.Background = new SolidColorBrush(Color.FromRgb(190, 190, 190));
         }
 
@@ -86,25 +98,44 @@ namespace InspectionReport
             stateApp = new String[7][][][];
             stateApp[0] = new String[1][][];
             stateApp[0][0] = new String[1][];
-            stateApp[1] = new String[1][][];
+            stateApp[0][0][0] = new String[1] { "" };
+            stateApp[1] = new String[2][][];
             stateApp[1][0] = new String[1][];
+            stateApp[1][0][0] = new String[1];
+            stateApp[1][0][0][0] = "Динамика развития симптомов:\nОбследование:\nОбращение за медицинской помощью: ранее не обращался\n" +
+                        "Применяемая терапия: отсутствует";
+            stateApp[1][1] = new String[1][];
+            stateApp[1][1][0] = new String[1];
+            stateApp[1][1][0][0] = "Перенесённые заболевания:\nАллергические реакции: нет\nПостоянно принимаемые препараты: нет\n" +
+                "Перенесенные хирургические операции: нет\nГемотрансуфзии: не было\nНаследственность по онкопатологии и патологии ЖКТ:" +
+                " нет\nПрофессиональные вредности: не отмечает\nХронические интоксикации: нет";
             stateApp[2] = new String[1][][];
             stateApp[2][0] = new String[1][];
+            stateApp[2][0][0] = new String[1];
+            stateApp[2][0][0][0] = "Общее состояние: удовлетворительное\nКожные покровы: обычной окраски\nВидимые слизистые оболочки:" +
+                " обычной окраски и влажности\nПериферические лимфоузлы: без изменений\nЩитовидная железа: норма\nОтеки: нет\nАД:" +
+                " ____ мм.рт.ст\nЧСС: ____в минуту\nЧДД: ____ в минуту\nДыхательная система: дыхание свободное, хрипов нет\n" +
+                "Сердечно - сосудистая система: При аускультации сердца тоны ясные, ритмичные\nПищеварительная система: Кишечная" +
+                " перистальтика активная\nМочевыделительная система: Мочеиспускание не нарушено.";
             stateApp[3] = new String[6][][];
             stateApp[3][0] = new String[2][];
             stateApp[3][1] = new String[7][];
             stateApp[3][2] = new String[2][];
             stateApp[3][3] = new String[2][];
-            stateApp[3][4] = new String[7][];
+            stateApp[3][4] = new String[2][];
             stateApp[3][5] = new String[1][];
-            stateApp[4] = new String[1][][];
+            stateApp[4] = new String[3][][];
             stateApp[4][0] = new String[1][];
+            stateApp[4][1] = new String[1][];
+            stateApp[4][2] = new String[1][];
             stateApp[5] = new String[1][][];
             stateApp[5][0] = new String[1][];
+            stateApp[5][0][0] = new String[1] { "" };
             stateApp[6] = new String[1][][];
             stateApp[6][0] = new String[1][];
+            stateApp[6][0][0] = new String[1] { "" };
             choiceDisease = new String[7] { "", "", "", "", "", "", "" };
-            chDiseaseList = new List<string>();
+            chDiseaseList = new List<String>[3] { new List<String>(), new List<String>(), new List<String>() };
             examList.SelectedItem = null;
             examList2.SelectedItem = null;
             foreach (GroupBox group in gridEnd.Children)
@@ -209,10 +240,18 @@ namespace InspectionReport
             category = 4;
             categoryLabel.Content = "Обследование";
             labelText.Content = "Обследование:";
-            groupButtons.Visibility = Visibility.Hidden;
+            groupButtons.Visibility = Visibility.Visible;
+            btn3.Visibility = Visibility.Visible;
+            btn4.Visibility = Visibility.Hidden;
+            btn5.Visibility = Visibility.Hidden;
+            btn6.Visibility = Visibility.Hidden;
+            btn1.Content = "Анализы\nкрови";
+            btn1.FontSize = 12;
+            btn2.Content = "Другие\nобследования";
+            btn3.Content = "Консультации";
             examList.Visibility = Visibility.Visible;
             examList2.Visibility = Visibility.Visible;
-            examView();
+            do_btn1();
         }
 
         private void therapy_Click(object sender, RoutedEventArgs e)
@@ -260,14 +299,9 @@ namespace InspectionReport
 
         private void do_btn1()
         {
-            btn1.Background = new SolidColorBrush(Color.FromRgb(190, 190, 190));
-            foreach (Button item in groupButtons.Children)
-            {
-                if (!item.Equals(btn1))
-                    item.Background = new SolidColorBrush(Color.FromRgb(238, 238, 238));
-            }
+            changeSelected(1, true);
             area = 0;
-            if (category != 1)
+            if (category != 1 && category != 4)
                 rad1();
             switch (category)
             {
@@ -284,6 +318,87 @@ namespace InspectionReport
                     ((TextBlock)diseaseStart.Items[1]).Text = "Другое";
                     ((TextBlock)diseaseStart.Items[1]).Visibility = Visibility.Visible;
                     break;
+                case 4:
+                    String str = "";
+                    foreach (string item in chDiseaseList[0])
+                    {
+                        str += item + ". ";
+                    }
+                    str = str.Replace("\n", " ");
+                    textBlock.Text = str;
+                    List<String> strList = new List<String>
+                            {
+                                "Общий анализ крови",
+                                "Биохимический анализ крови (общий белок, АСТ, АЛТ, щелочная фосфотаза, ГГТП, билирубин общий, билирубин" +
+                                " прямой, амилаза панкреатическая, липаза, СРБ, креатинин, мочевина, глюкоза,\nобщий холестерин, " +
+                                "триглицериды, липопротеины высокой плотности (ЛПВП), липопротеины низкой плотности (ЛПНП), липопротеины" +
+                                " низкой плотности (ЛПОНП), коэффициент атерогенности)",
+                                "Анализ крови на электролиты (Na+, К+, Сl-, Ca++)",
+                                "Анализ крови на ПТИ",
+                                "Коагулограмма",
+                                "МНО",
+                                "Анализ крови на ПЦР ДНК гепатита В (качественный метод)",
+                                "Анализ крови на ПЦР РНК гепатита С (качественный метод)",
+                                "Анализ крови на ПЦР ДНК гепатита В (количественный метод)",
+                                "Анализ крови на ПЦР РНК гепатита С (количественный метод)",
+                                "Анализ крови на антитела к гепатиту «С»",
+                                "Анализ крови на HbS-АГ",
+                                "Анализ крови на ферритин",
+                                "Анализ крови на трансферрин",
+                                "Анализ крови на сывороточное железо",
+                                "Анализ крови на общую желесосвязывающую способность сыворотки",
+                                "Анализ крови на витамин В12",
+                                "Анализ крови на антитела к дезаминированным пептидам альфа-глиадина, IgG"
+                            };
+                    List<String> strList2 = new List<String>
+                            {
+                                "Анализ крови на генетическое типирование HLA DQ2/DQ8 при целиакии",
+                                "Анализ крови на антитела к тканевой трансглутаминазе, IgA",
+                                "Анализ крови на антитела к эндомизию, IgA (AЭА)",
+                                "Анализ крови на иммуноглобулин А (IgA)",
+                                "Анализ крови на генетический полиморфизм по синдрому Жильбера (мутация гена UGT1)",
+                                "Анализ крови на ANA, SMA, анти-LKM1, анти-LC, анти-LKM3 атипическиеANCA,SLA/LP АМА-М2",
+                                "Анализ крови на α1-антитрипсин, церулоплазмин",
+                                "Анализ крови на СА-19-9, раковоэмбриональный антиген (РЭА), альфа-фетопротеин (АФП)",
+                                "Анализ крови на ТТГ, свободный Т4, антитела к ТПО",
+                                "Анализ крови на лютеинезирующий гормон (ЛГ), фолликулостимулирующий гормон (ФСГ)",
+                                "Анализ крови на пепсиноген-I, пепсиноген-II, пепсиноген-I/ пепсиноген-II, гастрин-17",
+                                "Анализ крови на антитела к париетальным клеткам желудка",
+                                "Анализ крови на антитела к внутреннему фактору Кастла",
+                                "Анализ крови на антитела к H.pylori (IgG)",
+                                "Анализ крови на антитела к лямблиям (IgG)",
+                                "Анализ крови на антитела к токсокарам (IgG)",
+                                "Анализ крови на антитела к аскаридам (IgG)"
+                            };
+                    ignoreEvents = true;
+                    examList.Items.Clear();
+                    examList2.Items.Clear();
+                    ignoreEvents = false;
+                    for (int i = 0; i < strList.Count; i++)
+                    {
+                        TextBlock text = new TextBlock();
+                        text.Text = strList[i];
+                        examList.Items.Add(text);
+                        if (chDiseaseList[0].Contains(text.Text))
+                        {
+                            ignoreEvents = true;
+                            examList.SelectedItems.Add(text);
+                            ignoreEvents = false;
+                        }
+                    }
+                    for (int i = 0; i < strList2.Count; i++)
+                    {
+                        TextBlock text = new TextBlock();
+                        text.Text = strList2[i];
+                        examList2.Items.Add(text);
+                        if (chDiseaseList[0].Contains(text.Text))
+                        {
+                            ignoreEvents = true;
+                            examList2.SelectedItems.Add(text);
+                            ignoreEvents = false;
+                        }  
+                    }
+                    break;
                 default:
                     break;
             }
@@ -291,14 +406,9 @@ namespace InspectionReport
 
         private void btn2_Click(object sender, RoutedEventArgs e)
         {
-            btn2.Background = new SolidColorBrush(Color.FromRgb(190, 190, 190));
-            foreach (Button item in groupButtons.Children)
-            {
-                if (!item.Equals(btn2))
-                    item.Background = new SolidColorBrush(Color.FromRgb(238, 238, 238));
-            }
+            changeSelected(2, true);
             area = 1;
-            if (category != 1)
+            if (category != 1 && category != 4)
                 rad1();
             switch (category)
             {
@@ -318,6 +428,86 @@ namespace InspectionReport
                     ((TextBlock)diseaseStart.Items[5]).Text = "Новообразования желудка";
                     ((TextBlock)diseaseStart.Items[6]).Text = "Диспепсия";
                     break;
+                case 4:
+                    String str = "";
+                    foreach (string item in chDiseaseList[1])
+                    {
+                        str += item + ". ";
+                    }
+                    str = str.Replace("\n", " ");
+                    textBlock.Text = str;
+                    List<String> strList = new List<String>
+                            {
+                                "Общий анализ мочи",
+                                "Анализ мочи на диастазу",
+                                "Суточный анализ мочи на 5-оксииндолуксусную кислоту",
+                                "Анализ кала на антиген H.pylori",
+                                "Анализ кала на антиген H.pylori через 14 дней после отмены ингибиторов протонной помпы,\nчерез 1 месяц после отмены" +
+                                " антибактериальных препаратов или препаратов висмута",
+                                "Копрограмма",
+                                "Анализ кала на яйца гельминтов и цисты простейших",
+                                "Анализ кала на скрытую кровь (иммунохимический метод)",
+                                "Анализ кала на фекальный кальпротектин",
+                                "Анализ кала на токсин А и токсин В Cl.difficile",
+                                "Анализ кала на эластазу-1",
+                                "УЗИ органов брюшной полости",
+                                "УЗИ малого таза",
+                                "УЗДГ сосудов брюшной полости",
+                                "КТ органов брюшной полости с внутривенным контрастированием",
+                                "КТ органов грудной клетки с внутривенным контрастированием",
+                                "Рентгенография органов грудной клетки",
+                                "МРТ органов брюшной полости с внутривенным контрастированием"
+                            };
+                    List<String> strList2 = new List<String>
+                            {
+                                "Магнитно-резонансная холангиопанкреатография (МРПХГ)",
+                                "Эндосонография",
+                                "Рентгеноскопия пищевода с контрастированием ",
+                                "Ирригоскопия",
+                                "КТ-колография («виртуальная колоноскопия»)",
+                                "ЭКГ",
+                                "Суточная рН-импедансометрия пищевода",
+                                "Манометрия пищевода",
+                                "С13уреазный дыхательный тест ",
+                                "ЭГДС",
+                                "ЭГДС с биопсией слизистой оболочки желудка для стадирования гастрита (по OLGA/OLGIM) и диагностики H. pylori",
+                                "ЭГДС с биопсией слизистой оболочки постбульбарного отдела и луковицы двенадцатиперстной кишки",
+                                "ЭГДС с биопсией слизистой оболочки дистального и проксимального отделов пищевода для диагностики эозинофильного эзофагита",
+                                "ЭГДС с диагностикой H. pylori",
+                                "Колоноскопия",
+                                "Илеоколоноскопия",
+                                "Колоноскопия с биопсией слизистой оболочки правых и левых отделов толстой кишки для исключения микроскопического колита",
+                                "Видеокапсульная эндоскопия"
+                            };
+                    ignoreEvents = true;
+                    examList.Items.Clear();
+                    examList2.Items.Clear();
+                    ignoreEvents = false;
+                    for (int i = 0; i < strList.Count; i++)
+                    {
+                        TextBlock text = new TextBlock();
+                        text.Text = strList[i];
+                        examList.Items.Add(text);
+                        if (chDiseaseList[1].Contains(text.Text))
+                        {
+                            ignoreEvents = true;
+                            examList.SelectedItems.Add(text);
+                            ignoreEvents = false;
+                        }
+                    }
+                    for (int i = 0; i < strList2.Count; i++)
+                    {
+                        TextBlock text = new TextBlock();
+                        text.Text = strList2[i];
+                        examList2.Items.Add(text);
+                        if (chDiseaseList[1].Contains(text.Text))
+                        {
+                            ignoreEvents = true;
+                            examList2.SelectedItems.Add(text);
+                            ignoreEvents = false;
+                        }
+                    }
+                    break;
                 default:
                     break;
             }
@@ -325,14 +515,10 @@ namespace InspectionReport
 
         private void btn3_Click(object sender, RoutedEventArgs e)
         {
-            btn3.Background = new SolidColorBrush(Color.FromRgb(190, 190, 190));
-            foreach (Button item in groupButtons.Children)
-            {
-                if (!item.Equals(btn3))
-                    item.Background = new SolidColorBrush(Color.FromRgb(238, 238, 238));
-            }
+            changeSelected(3, true);
             area = 2;
-            rad1();
+            if (category != 4)
+                rad1();
             switch (category)
             {
                 case 3:
@@ -345,6 +531,42 @@ namespace InspectionReport
                     ((TextBlock)diseaseStart.Items[1]).Text = "Состояние после";
                     ((TextBlock)diseaseStart.Items[1]).Visibility = Visibility.Visible;
                     break;
+                case 4:
+                    String str = "";
+                    foreach (string item in chDiseaseList[2])
+                    {
+                        str += item + ". ";
+                    }
+                    str = str.Replace("\n", " ");
+                    textBlock.Text = str;
+                    List<String> strList = new List<String>
+                            {
+                                "Консультация психотерапевта",
+                                "Консультация невролога",
+                                "Консультация хирурга",
+                                "Консультация сосудистого хирурга",
+                                "Консультация проктолога",
+                                "Консультация эндокринолога",
+                                "Консультация инфекциониста",
+                                "Консультация уролога"
+                            };
+                    ignoreEvents = true;
+                    examList.Items.Clear();
+                    examList2.Items.Clear();
+                    ignoreEvents = false;
+                    for (int i = 0; i < strList.Count; i++)
+                    {
+                        TextBlock text = new TextBlock();
+                        text.Text = strList[i];
+                        examList.Items.Add(text);
+                        if (chDiseaseList[2].Contains(text.Text))
+                        {
+                            ignoreEvents = true;
+                            examList.SelectedItems.Add(text);
+                            ignoreEvents = false;
+                        }
+                    }
+                    break;
                 default:
                     break;
             }
@@ -352,12 +574,7 @@ namespace InspectionReport
 
         private void btn4_Click(object sender, RoutedEventArgs e)
         {
-            btn4.Background = new SolidColorBrush(Color.FromRgb(190, 190, 190));
-            foreach (Button item in groupButtons.Children)
-            {
-                if (!item.Equals(btn4))
-                    item.Background = new SolidColorBrush(Color.FromRgb(238, 238, 238));
-            }
+            changeSelected(4, true);
             area = 3;
             rad1();
             switch (category)
@@ -379,12 +596,7 @@ namespace InspectionReport
 
         private void btn5_Click(object sender, RoutedEventArgs e)
         {
-            btn5.Background = new SolidColorBrush(Color.FromRgb(190, 190, 190));
-            foreach (Button item in groupButtons.Children)
-            {
-                if (!item.Equals(btn5))
-                    item.Background = new SolidColorBrush(Color.FromRgb(238, 238, 238));
-            }
+            changeSelected(5, true);
             area = 4;
             rad1();
             switch (category)
@@ -394,9 +606,9 @@ namespace InspectionReport
                     diseaseEnd.Visibility = Visibility.Visible;
                     foreach (TextBlock item in diseaseStart.Items)
                         item.Visibility = Visibility.Collapsed;
-                    ((TextBlock)diseaseStart.Items[0]).Text = "Хронический панкреатит";
+                    ((TextBlock)diseaseStart.Items[0]).Text = "Другое";
                     ((TextBlock)diseaseStart.Items[0]).Visibility = Visibility.Visible;
-                    ((TextBlock)diseaseStart.Items[1]).Text = "Другое";
+                    ((TextBlock)diseaseStart.Items[1]).Text = "Цирроз печени";
                     ((TextBlock)diseaseStart.Items[1]).Visibility = Visibility.Visible;
                     break;
                 default:
@@ -406,12 +618,7 @@ namespace InspectionReport
 
         private void btn6_Click(object sender, RoutedEventArgs e)
         {
-            btn6.Background = new SolidColorBrush(Color.FromRgb(190, 190, 190));
-            foreach (Button item in groupButtons.Children)
-            {
-                if (!item.Equals(btn6))
-                    item.Background = new SolidColorBrush(Color.FromRgb(238, 238, 238));
-            }
+            changeSelected(6, true);
             area = 5;
             rad1();
             switch (category)
@@ -607,23 +814,34 @@ namespace InspectionReport
                             ((CheckBox)((StackPanel)char5.Content).Children[1]).Content = "стадия обострения";
                             char6.Visibility = Visibility.Hidden;
                             break;
-                        case 5:
-                            ChangeGroup(char1, "", 240, 10);
-                            ((CheckBox)((StackPanel)char1.Content).Children[0]).Content = "Синдром межреберной невралгии? Дорсопатия";
-                            ((CheckBox)((StackPanel)char1.Content).Children[1]).Content = "Патология передней брюшной стенки?";
-                            ((CheckBox)((StackPanel)char1.Content).Children[2]).Content = "Обследование";
-                            ((CheckBox)((StackPanel)char1.Content).Children[3]).Content = "Гематохезия";
-                            ((CheckBox)((StackPanel)char1.Content).Children[4]).Content = "Синдром ускоренного СОЭ";
-                            ((CheckBox)((StackPanel)char1.Content).Children[5]).Content = "Органическое заболевание толстой кишки?";
-                            ((CheckBox)((StackPanel)char1.Content).Children[6]).Content = "Органическое заболевание желудка?";
-                            ((CheckBox)((StackPanel)char1.Content).Children[7]).Content = "Железодефицитная анемия, легкой степени тяжести";
-                            ((CheckBox)((StackPanel)char1.Content).Children[8]).Content = "В12дефицитная анемия, легкой степени тяжести";
-                            ((CheckBox)((StackPanel)char1.Content).Children[9]).Content = "Анемия неясного генеза";
-                            char2.Visibility = Visibility.Hidden;
-                            char3.Visibility = Visibility.Hidden;
-                            char4.Visibility = Visibility.Hidden;
+                        case 4:
+                            ChangeGroup(char1, "Неалкогольная жировая болезнь печени", 110, 4);
+                            ((CheckBox)((StackPanel)char1.Content).Children[0]).Content = "стеатоз печени";
+                            ((CheckBox)((StackPanel)char1.Content).Children[1]).Content = "неалкогольный стеатогепатит, легкой степени тяжести";
+                            ((CheckBox)((StackPanel)char1.Content).Children[2]).Content = "неалкогольный стеатогепатит, средней степени тяжести";
+                            ((CheckBox)((StackPanel)char1.Content).Children[3]).Content = "неалкогольный стеатогепатит, тяжелой степени";
+                            ChangeGroup(char2, "Токсическое поражение печени", 110, 4);
+                            ((CheckBox)((StackPanel)char2.Content).Children[0]).Content = "Токсическое поражение печени";
+                            ((CheckBox)((StackPanel)char2.Content).Children[1]).Content = "с признаками цитолитического синдрома";
+                            ((CheckBox)((StackPanel)char2.Content).Children[2]).Content = "с признаками интралобулярного холестаза";
+                            ((CheckBox)((StackPanel)char2.Content).Children[3]).Content = "с признаками интра- и экстралобулярного холестаза";
+                            ChangeGroup(char3, "Синдром портальной гипертензии", 210, 6, 120);
+                            ((CheckBox)((StackPanel)char3.Content).Children[0]).Content = "варикозно-расширенные вены пищевода (малые по\nBaveno, средние-большие по Baveno)";
+                            ((CheckBox)((StackPanel)char3.Content).Children[1]).Content = "варикозно-расширенные вены желудка (GOV1 по\nSarin-Kumar, GOV2 по Sarin-Kumar,\nIGV1 по Sarin-Kumar, IGV2 по Sarin-Kumar)";
+                            ((CheckBox)((StackPanel)char3.Content).Children[2]).Content = "портальная гипертензионная гастропатия\n(легкой степени, тяжелой степени)";
+                            ((CheckBox)((StackPanel)char3.Content).Children[3]).Content = "расширение геморроидальных вен (степень I,II,III,IV)";
+                            ((CheckBox)((StackPanel)char3.Content).Children[4]).Content = "спленомегалия";
+                            ((CheckBox)((StackPanel)char3.Content).Children[5]).Content = "гиперспленизм";
+                            ChangeGroup(char4, "Осложнения цирроза печени", 110, 4, 120);
+                            ((CheckBox)((StackPanel)char4.Content).Children[0]).Content = "Асцит (степень I,II,III)";
+                            ((CheckBox)((StackPanel)char4.Content).Children[1]).Content = "Печеночная энцефалопатия (степень I,II,III,IV)";
+                            ((CheckBox)((StackPanel)char4.Content).Children[2]).Content = "Гепаторенальный синдром";
+                            ((CheckBox)((StackPanel)char4.Content).Children[3]).Content = "Спонтанный бактериальный перитонит";
                             char5.Visibility = Visibility.Hidden;
-                            char6.Visibility = Visibility.Hidden;
+                            ChangeGroup(char6, "Аутоиммунный гепатит", 90, 3, 240);
+                            ((CheckBox)((StackPanel)char6.Content).Children[0]).Content = "Аутоиммунный гепатит, 1 тип (ANA+ SMA+)";
+                            ((CheckBox)((StackPanel)char6.Content).Children[1]).Content = "Аутоиммунный гепатит, 2 тип (LKM1+LKM3+ LC-1+)";
+                            ((CheckBox)((StackPanel)char6.Content).Children[2]).Content = "Аутоиммунный гепатит, 3 тип (SLA/LP+)";
                             break;
                         default:
                             break;
@@ -761,6 +979,25 @@ namespace InspectionReport
                     ((CheckBox)((StackPanel)char4.Content).Children[0]).Content = "АИГ-1 (ANA и/или SMA-позитивные)";
                     ((CheckBox)((StackPanel)char4.Content).Children[1]).Content = "АИГ-2 (LKM1, LKM3 и/или LC-1 позитивные)";
                     ((CheckBox)((StackPanel)char4.Content).Children[2]).Content = "АИГ-3 (SLA/LP-позитивные)";
+                    char5.Visibility = Visibility.Hidden;
+                    char6.Visibility = Visibility.Hidden;
+                    break;
+                case 4:
+                    ChangeGroup(char1, "Этиология", 130, 5);
+                    ((CheckBox)((StackPanel)char1.Content).Children[0]).Content = "в исходе вирусного гепатита С";
+                    ((CheckBox)((StackPanel)char1.Content).Children[1]).Content = "в исходе вирусного гепатита В";
+                    ((CheckBox)((StackPanel)char1.Content).Children[2]).Content = "в исходе вирусного гепатита В+С";
+                    ((CheckBox)((StackPanel)char1.Content).Children[3]).Content = "алкогольный";
+                    ((CheckBox)((StackPanel)char1.Content).Children[4]).Content = "другая";
+                    ChangeGroup(char2, "Класс по Чайлд-Пью", 90, 3);
+                    ((CheckBox)((StackPanel)char2.Content).Children[0]).Content = "A";
+                    ((CheckBox)((StackPanel)char2.Content).Children[1]).Content = "B";
+                    ((CheckBox)((StackPanel)char2.Content).Children[2]).Content = "C";
+                    ChangeGroup(char3, "Стадия", 90, 3, 160);
+                    ((CheckBox)((StackPanel)char3.Content).Children[0]).Content = "компенсации";
+                    ((CheckBox)((StackPanel)char3.Content).Children[1]).Content = "субкомпенсации";
+                    ((CheckBox)((StackPanel)char3.Content).Children[2]).Content = "декомпенсации";
+                    char4.Visibility = Visibility.Hidden;
                     char5.Visibility = Visibility.Hidden;
                     char6.Visibility = Visibility.Hidden;
                     break;
@@ -1245,6 +1482,25 @@ namespace InspectionReport
                         }
                     }
                     break;
+                case 4:
+                    if (index == 0)
+                    {
+                        if (choiceDisease[1] != "")
+                            str = str + "Неалкогольная жировая болезнь печени: " + choiceDisease[1] + ". ";
+                        if (choiceDisease[2] != "")
+                            str = str + "Токсическое поражение печени " +(choiceDisease[2] != "" ? choiceDisease[2] + ". " : "");
+                        if (choiceDisease[3] != "")
+                            str = str + "Синдром портальной гипертензии, " + choiceDisease[3] + ". ";
+                        str = str + (choiceDisease[4] != "" ? choiceDisease[4] + ". " : "") + (choiceDisease[6] != "" ? choiceDisease[6] + ". " : "");
+                        str = str.Substring(0, str.Length - 2);
+                    }
+                    if (index == 1)
+                    {
+                        choiceDisease[0] = "Цирроз печени";
+                        if (choiceDisease[1] != "" && choiceDisease[2] != "" && choiceDisease[3] != "")
+                            str = str + choiceDisease[0] + " " + choiceDisease[1] + ", класс " + choiceDisease[2] + " по Чайлд-Пью, стадия " + choiceDisease[3];
+                    }
+                    break;
                 case 5:
                     if ((choiceDisease[1] != "" && choiceDisease[2] == "") || (choiceDisease[2] != "" && choiceDisease[1] == ""))
                         str = (choiceDisease[1] != "" ? choiceDisease[1] : "") + (choiceDisease[2] != "" ? choiceDisease[2] : "");
@@ -1427,14 +1683,36 @@ namespace InspectionReport
 
         private void save_Click(object sender, RoutedEventArgs e)
         {
+            string name = "";
+            if (fio.Text != "" && date.SelectedDate != null && age.Text != "")
+            {
+                string[] str = fio.Text.Split(' ');
+                if (str.Length != 3)
+                {
+                    MessageBox.Show("ФИО неверное значение!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                name = str[0] + str[1];
+            }
+            else
+            {
+                MessageBox.Show("Не заполнены данные пациента!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
             var helper = new WordDocument("Pattern.docx", "Pattern2.docx");
-            string amnesis1 = stateApp[1][0][0][0].Replace("\n", ". ");
-            string amnesis2 = stateApp[1][1][0][0].Replace("\n", ". ");
+            string anamnesis1 = stateApp[1][0][0][0].Replace("\n", ". ");
+            string anamnesis2 = stateApp[1][1][0][0].Replace("\n", ". ");
             string inspection = stateApp[2][0][0][0].Replace("\n", ". ");
             string exam = "";
             string diag = "";
             if (stateApp[4][0][0] != null)
                 foreach (string item in stateApp[4][0][0])
+                    exam += "- " + item + "\n";
+            if (stateApp[4][1][0] != null)
+                foreach (string item in stateApp[4][1][0])
+                    exam += "- " + item + "\n";
+            if (stateApp[4][2][0] != null)
+                foreach (string item in stateApp[4][2][0])
                     exam += "- " + item + "\n";
             for (int i = 0; i < stateApp[3].Length; i++)
                 for (int j = 0; j < stateApp[3][i].Length; j++)
@@ -1443,8 +1721,8 @@ namespace InspectionReport
             var items = new Dictionary<string, string>
             {
                 { "<COMPLAINTS>", stateApp[0][0][0] != null ? stateApp[0][0][0][0] : ""},
-                { "<ANAMNESIS1>", stateApp[1][0][0] != null ? amnesis1 : ""},
-                { "<ANAMNESIS2>", stateApp[1][1][0] != null ? amnesis2 : ""},
+                { "<ANAMNESIS1>", stateApp[1][0][0] != null ? anamnesis1 : ""},
+                { "<ANAMNESIS2>", stateApp[1][1][0] != null ? anamnesis2 : ""},
                 { "<INSPECTION>", stateApp[2][0][0] != null ? inspection : ""},
                 { "<DIAGNOSIS>", stateApp[3][0][0] != null ? diag : ""},
                 { "<EXAM>", stateApp[4][0][0] != null ? exam : ""},
@@ -1452,10 +1730,22 @@ namespace InspectionReport
                 { "<OBSERVATION>", stateApp[6][0][0] != null ? stateApp[6][0][0][0] : ""},
                 { "<FIO>", fio.Text != null ? fio.Text : "" },
                 { "<DATE>", date.SelectedDate != null ? date.SelectedDate.Value.ToString("dd.MM.yyyy") : ""},
-                { "<AGE>", year.Text  != null ? year.Text : ""}
+                { "<AGE>", age.Text  != null ? age.Text : ""}
             };
-            helper.Process(items, FilePath);
-            MessageBox.Show("Сохранено");
+            if (helper.Process(items, FilePath, fio.Text != "" ? name : "FamilyName"))
+            {
+                statusInfo.Visibility = Visibility.Visible;
+                var timer = new System.Timers.Timer(5000);
+                timer.Elapsed += OnTimeout;
+                timer.Enabled = true;
+            }
+            else
+                MessageBox.Show("Ошибка сохранения!");
+        }
+
+        private void OnTimeout(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => statusInfo.Visibility = Visibility.Hidden));
         }
 
         private void options_Click(object sender, RoutedEventArgs e)
@@ -1472,11 +1762,25 @@ namespace InspectionReport
 
         private void printBut_Click(object sender, RoutedEventArgs e)
         {
+            if (fio.Text == "" || date.SelectedDate == null || age.Text == "")
+            {
+                MessageBox.Show("Не заполнены данные пациента!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
             var helper = new WordDocument("Pattern.docx", "Pattern2.docx");
+            string anamnesis1 = stateApp[1][0][0][0].Replace("\n", ". ");
+            string anamnesis2 = stateApp[1][1][0][0].Replace("\n", ". ");
+            string inspection = stateApp[2][0][0][0].Replace("\n", ". ");
             string exam = "";
             string diag = "";
             if (stateApp[4][0][0] != null)
                 foreach (string item in stateApp[4][0][0])
+                    exam += "- " + item + "\n";
+            if (stateApp[4][1][0] != null)
+                foreach (string item in stateApp[4][1][0])
+                    exam += "- " + item + "\n";
+            if (stateApp[4][2][0] != null)
+                foreach (string item in stateApp[4][2][0])
                     exam += "- " + item + "\n";
             for (int i = 0; i < stateApp[3].Length; i++)
                 for (int j = 0; j < stateApp[3][i].Length; j++)
@@ -1485,173 +1789,166 @@ namespace InspectionReport
             var items = new Dictionary<string, string>
             {
                 { "<COMPLAINTS>", stateApp[0][0][0] != null ? stateApp[0][0][0][0] : ""},
-                { "<ANAMNESIS1>", stateApp[1][0][0] != null ? stateApp[1][0][0][0] : ""},
-                { "<ANAMNESIS2>", stateApp[1][1][0] != null ? stateApp[1][1][0][0] : ""},
-                { "<INSPECTION>", stateApp[2][0][0] != null ? stateApp[2][0][0][0] : ""},
+                { "<ANAMNESIS1>", stateApp[1][0][0] != null ? anamnesis1 : ""},
+                { "<ANAMNESIS2>", stateApp[1][1][0] != null ? anamnesis2 : ""},
+                { "<INSPECTION>", stateApp[2][0][0] != null ? inspection : ""},
                 { "<DIAGNOSIS>", stateApp[3][0][0] != null ? diag : ""},
                 { "<EXAM>", stateApp[4][0][0] != null ? exam : ""},
                 { "<THERAPY>", stateApp[5][0][0] != null ? stateApp[5][0][0][0] : ""},
                 { "<OBSERVATION>", stateApp[6][0][0] != null ? stateApp[6][0][0][0] : ""},
                 { "<FIO>", fio.Text != null ? fio.Text : "" },
                 { "<DATE>", date.SelectedDate != null ? date.SelectedDate.Value.ToString("dd.MM.yyyy") : ""},
-                { "<AGE>", year.Text  != null ? year.Text : ""}
+                { "<AGE>", age.Text  != null ? age.Text : ""}
             };
             helper.SaveTemp(items, FilePath);
         }
 
-        private void examView()
-        {
-            String str = "";
-            foreach (string item in chDiseaseList)
-            {
-                str += item + ". ";
-            }
-            str = str.Replace("\n", " ");
-            textBlock.Text = str;
-            List<String> strList = new List<String>
-                            {
-                                "Общий анализ крови",
-                                "Биохимический анализ крови (общий белок, АСТ, АЛТ, щелочная фосфотаза, ГГТП, билирубин общий, билирубин" +
-                                " прямой, амилаза панкреатическая, липаза, СРБ, креатинин, мочевина, глюкоза,\nобщий холестерин, " +
-                                "триглицериды, липопротеины высокой плотности (ЛПВП), липопротеины низкой плотности (ЛПНП), липопротеины" +
-                                " низкой плотности (ЛПОНП), коэффициент атерогенности)",
-                                "Анализ крови на электролиты (Na+, К+, Сl-, Ca++)",
-                                "Анализ крови на ПТИ",
-                                "Коагулограмма",
-                                "МНО",
-                                "Анализ крови на ферритин, трансферрин, сывороточное железо, общую желесосвязывающую способность сыворотки, витамин В12",
-                                "Анализ крови на генетический полиморфизм по синдрому Жильбера (мутация гена UGT1)",
-                                "Анализ крови на ANA, SMA, анти-LKM1, анти-LC, анти-LKM3 атипическиеANCA,SLA/LP АМА-М2",
-                                "Анализ крови на α1-антитрипсин, церулоплазмин",
-                                "Анализ крови на СА-19-9, раковоэмбриональный антиген (РЭА), альфа-фетопротеин (АФП)",
-                                "Анализ крови на ТТГ, свободный Т4, антитела к ТПО",
-                                "Анализ крови на лютеинезирующий гормон (ЛГ), фолликулостимулирующий гормон (ФСГ)",
-                                "Анализ крови на пепсиноген-I, пепсиноген-II, пепсиноген-I/ пепсиноген-II, гастрин-17",
-                                "Анализ крови на антитела к париетальным клеткам желудка",
-                                "Анализ крови на антитела к внутреннему фактору Кастла",
-                                "Анализ крови на антитела к H.pylori (IgG)",
-                                "Анализ крови на антитела к лямблиям, токсокарам, аскаридам (IgG)"
-                            };
-            List<String> strList2 = new List<String>
-                            {
-                                "Анализ крови на ПЦР ДНК гепатита В (качественный метод)",
-                                "Анализ крови на ПЦР РНК гепатита С (качественный метод)",
-                                "Анализ крови на ПЦР ДНК гепатита В (количественный метод)",
-                                "Анализ крови на ПЦР РНК гепатита С (количественный метод)",
-                                "Анализ крови на антитела к гепатиту «С»",
-                                "Анализ крови на HbS-АГ",
-                                "Анализ крови на антитела к дезаминированным пептидам альфа-глиадина, IgG",
-                                "Анализ крови на генетическое типирование HLA DQ2/DQ8 при целиакии",
-                                "Анализ крови на антитела к тканевой трансглутаминазе, IgA",
-                                "Анализ крови на антитела к эндомизию, IgA (AЭА)",
-                                "Анализ крови на иммуноглобулин А (IgA)",
-                                "Общий анализ мочи",
-                                "Анализ мочи на диастазу",
-                                "Суточный анализ мочи на 5-оксииндолуксусную кислоту",
-                                "Анализ кала на антиген H.pylori",
-                                "Анализ кала на антиген H.pylori через 14 дней после отмены ингибиторов протонной помпы, через 1 месяц после отмены" +
-                                " антибактериальных препаратов или препаратов висмута",
-                                "Копрограмма",
-                                "Анализ кала на яйца гельминтов и цисты простейших",
-                                "Анализ кала на скрытую кровь (иммунохимический метод)",
-                                "Анализ кала на фекальный кальпротектин",
-                                "Анализ кала на токсин А и токсин В Cl.difficile",
-                                "Анализ кала на эластазу-1",
-                                "УЗИ органов брюшной полости",
-                                "УЗИ малого таза",
-                                "УЗДГ сосудов брюшной полости",
-                                "КТ органов брюшной полости с внутривенным контрастированием",
-                                "КТ органов грудной клетки с внутривенным контрастированием",
-                                "Рентгенография органов грудной клетки",
-                                "МРТ органов брюшной полости с внутривенным контрастированием",
-                                "Магнитно-резонансная холангиопанкреатография (МРПХГ)",
-                                "Эндосонография",
-                                "Рентгеноскопия пищевода с контрастированием ",
-                                "Ирригоскопия",
-                                "КТ-колография («виртуальная колоноскопия»)",
-                                "ЭКГ",
-                                "Суточная рН-импедансометрия пищевода",
-                                "Манометрия пищевода",
-                                "С13уреазный дыхательный тест ",
-                                "ЭГДС",
-                                "ЭГДС с биопсией слизистой оболочки желудка для стадирования гастрита (по OLGA/OLGIM) и диагностики H. pylori",
-                                "ЭГДС с биопсией слизистой оболочки постбульбарного отдела и луковицы двенадцатиперстной кишки",
-                                "ЭГДС с биопсией слизистой оболочки дистального и проксимального отделов пищевода для диагностики эозинофильного эзофагита",
-                                "ЭГДС с диагностикой H. pylori",
-                                "Колоноскопия",
-                                "Илеоколоноскопия",
-                                "Колоноскопия с биопсией слизистой оболочки правых и левых отделов толстой кишки для исключения микроскопического колита",
-                                "Видеокапсульная эндоскопия",
-                                "Консультация психотерапевта",
-                                "Консультация невролога",
-                                "Консультация хирурга",
-                                "Консультация сосудистого хирурга",
-                                "Консультация проктолога",
-                                "Консультация эндокринолога",
-                                "Консультация инфекциониста",
-                                "Консультация уролога"
-                            };
-            for (int i = 0; i < strList.Count; i++)
-            {
-                ((TextBlock)examList.Items[i]).Text = strList[i];
-            }
-            for (int i = 0; i < strList2.Count; i++)
-            {
-                ((TextBlock)examList2.Items[i]).Text = strList2[i];
-            }
-            return;
-        }
-
         private void examList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (ignoreEvents == true) return;
             textBlock.Text = "";
             string str = "";
             List<string> listStr = new List<string>();
-            foreach (TextBlock item in examList.SelectedItems)
-            {
-                listStr.Add(item.Text);
-                if (!chDiseaseList.Contains(item.Text))
-                    chDiseaseList.Add(item.Text);
+            switch (area) {
+                case 0:
+                    foreach (TextBlock item in examList.SelectedItems)
+                    {
+                        listStr.Add(item.Text);
+                        if (!chDiseaseList[0].Contains(item.Text))
+                            chDiseaseList[0].Add(item.Text);
+                    }
+                    foreach (TextBlock item in examList2.SelectedItems)
+                        listStr.Add(item.Text);
+                    for (int i = 0; i < chDiseaseList[0].Count; i++)
+                    {
+                        if (!listStr.Contains(chDiseaseList[0][i]))
+                            chDiseaseList[0].RemoveAt(i);
+                    }
+                    foreach (string item in chDiseaseList[0])
+                    {
+                        str += item + ". ";
+                    }
+                    stateApp[4][0][0] = chDiseaseList[0].ToArray();
+                    break;
+                case 1:
+                    foreach (TextBlock item in examList.SelectedItems)
+                    {
+                        listStr.Add(item.Text);
+                        if (!chDiseaseList[1].Contains(item.Text))
+                            chDiseaseList[1].Add(item.Text);
+                    }
+                    foreach (TextBlock item in examList2.SelectedItems)
+                        listStr.Add(item.Text);
+                    for (int i = 0; i < chDiseaseList[1].Count; i++)
+                    {
+                        if (!listStr.Contains(chDiseaseList[1][i]))
+                            chDiseaseList[1].RemoveAt(i);
+                    }
+                    foreach (string item in chDiseaseList[1])
+                    {
+                        str += item + ". ";
+                    }
+                    stateApp[4][1][0] = chDiseaseList[1].ToArray();
+                    break;
+                case 2:
+                    foreach (TextBlock item in examList.SelectedItems)
+                    {
+                        listStr.Add(item.Text);
+                        if (!chDiseaseList[2].Contains(item.Text))
+                            chDiseaseList[2].Add(item.Text);
+                    }
+                    foreach (TextBlock item in examList2.SelectedItems)
+                        listStr.Add(item.Text);
+                    for (int i = 0; i < chDiseaseList[2].Count; i++)
+                    {
+                        if (!listStr.Contains(chDiseaseList[2][i]))
+                            chDiseaseList[2].RemoveAt(i);
+                    }
+                    foreach (string item in chDiseaseList[2])
+                    {
+                        str += item + ". ";
+                    }
+                    stateApp[4][2][0] = chDiseaseList[2].ToArray();
+                    break;
+                default:
+                    break;
             }
-            foreach (TextBlock item in examList2.SelectedItems)
-                listStr.Add(item.Text);
-            for (int i = 0; i < chDiseaseList.Count; i++)
-            {
-                if (!listStr.Contains(chDiseaseList[i]))
-                    chDiseaseList.RemoveAt(i);
-            }
-            foreach (string item in chDiseaseList)
-            {
-                str += item + ". ";
-            }
-            stateApp[4][0][0] = chDiseaseList.ToArray();
             str = str.Replace("\n", " ");
             textBlock.Text = str;
         }
 
         private void examList2_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (ignoreEvents == true) return;
             textBlock.Text = "";
             string str = "";
             List<string> listStr = new List<string>();
-            foreach (TextBlock item in examList2.SelectedItems)
+            switch (area)
             {
-                listStr.Add(item.Text);
-                if (!chDiseaseList.Contains(item.Text))
-                    chDiseaseList.Add(item.Text);
+                case 0:
+                    foreach (TextBlock item in examList2.SelectedItems)
+                    {
+                        listStr.Add(item.Text);
+                        if (!chDiseaseList[0].Contains(item.Text))
+                            chDiseaseList[0].Add(item.Text);
+                    }
+                    foreach (TextBlock item in examList.SelectedItems)
+                        listStr.Add(item.Text);
+                    for (int i = 0; i < chDiseaseList[0].Count; i++)
+                    {
+                        if (!listStr.Contains(chDiseaseList[0][i]))
+                            chDiseaseList[0].RemoveAt(i);
+                    }
+                    foreach (string item in chDiseaseList[0])
+                    {
+                        str += item + ". ";
+                    }
+                    stateApp[4][0][0] = chDiseaseList[0].ToArray();
+                    break;
+                case 1:
+                    foreach (TextBlock item in examList2.SelectedItems)
+                    {
+                        listStr.Add(item.Text);
+                        if (!chDiseaseList[1].Contains(item.Text))
+                            chDiseaseList[1].Add(item.Text);
+                    }
+                    foreach (TextBlock item in examList.SelectedItems)
+                        listStr.Add(item.Text);
+                    for (int i = 0; i < chDiseaseList[1].Count; i++)
+                    {
+                        if (!listStr.Contains(chDiseaseList[1][i]))
+                            chDiseaseList[1].RemoveAt(i);
+                    }
+                    foreach (string item in chDiseaseList[1])
+                    {
+                        str += item + ". ";
+                    }
+                    stateApp[4][1][0] = chDiseaseList[1].ToArray();
+                    break;
+                case 2:
+                    foreach (TextBlock item in examList2.SelectedItems)
+                    {
+                        listStr.Add(item.Text);
+                        if (!chDiseaseList[2].Contains(item.Text))
+                            chDiseaseList[2].Add(item.Text);
+                    }
+                    foreach (TextBlock item in examList.SelectedItems)
+                        listStr.Add(item.Text);
+                    for (int i = 0; i < chDiseaseList[2].Count; i++)
+                    {
+                        if (!listStr.Contains(chDiseaseList[2][i]))
+                            chDiseaseList[2].RemoveAt(i);
+                    }
+                    foreach (string item in chDiseaseList[2])
+                    {
+                        str += item + ". ";
+                    }
+                    stateApp[4][2][0] = chDiseaseList[0].ToArray();
+                    break;
+                default:
+                    break;
             }
-            foreach (TextBlock item in examList.SelectedItems)
-                listStr.Add(item.Text);
-            for (int i = 0; i < chDiseaseList.Count; i++)
-            {
-                if (!listStr.Contains(chDiseaseList[i]))
-                    chDiseaseList.RemoveAt(i);
-            }
-            foreach (string item in chDiseaseList)
-            {
-                str += item + ". ";
-            }
-            stateApp[4][0][0] = chDiseaseList.ToArray();
+            
             str = str.Replace("\n", " ");
             textBlock.Text = str;
         }
@@ -1764,6 +2061,31 @@ namespace InspectionReport
                 default:
                     break;
             }
+        }
+
+        private void watchButton_Click(object sender, RoutedEventArgs e)
+        {
+            string anamnesis1 = stateApp[1][0][0][0].Replace("\n", ". ");
+            string anamnesis2 = stateApp[1][1][0][0].Replace("\n", ". ");
+            string inspection = stateApp[2][0][0][0].Replace("\n", ". ");
+            string exam = "";
+            string diag = "";
+            if (stateApp[4][0][0] != null)
+                foreach (string item in stateApp[4][0][0])
+                    exam += "\n- " + item;
+            if (stateApp[4][1][0] != null)
+                foreach (string item in stateApp[4][1][0])
+                    exam += "\n- " + item;
+            if (stateApp[4][2][0] != null)
+                foreach (string item in stateApp[4][2][0])
+                    exam += "\n- " + item;
+            for (int i = 0; i < stateApp[3].Length; i++)
+                for (int j = 0; j < stateApp[3][i].Length; j++)
+                    if (stateApp[3][i][j] != null)
+                        diag += writeResult(stateApp[3][i][j], i, j);
+            String[] str = new String[8] { stateApp[0][0][0][0], anamnesis1, anamnesis2, inspection, diag, exam, stateApp[5][0][0][0], stateApp[6][0][0][0] };
+            Watch window = new Watch(str);
+            window.Show();
         }
     }
 }

@@ -59,7 +59,7 @@ namespace InspectionReport
 
         private bool isFileNameValid(string fileName)
         {
-            if ((fileName == null) || (fileName.IndexOfAny(System.IO.Path.GetInvalidPathChars()) != -1))
+            if (fileName == null || fileName == "" || (fileName.IndexOfAny(System.IO.Path.GetInvalidPathChars()) != -1))
                 return false;
             try
             {

@@ -29,7 +29,7 @@ namespace InspectionReport
             }
         }
 
-        internal bool Process(Dictionary<string, string> items, string filePath)
+        internal bool Process(Dictionary<string, string> items, string filePath, string fio)
         {
             Word.Application app = null;
           try
@@ -51,7 +51,7 @@ namespace InspectionReport
                             app.Selection.Text = item.Value;
                     }
 
-                    Object newFileName = Path.Combine(filePath, DateTime.Now.ToString("yyyyMMdd_") + _fileInfo.Name);
+                    Object newFileName = Path.Combine(filePath, DateTime.Now.ToString("ddMMyyyy_") + fio + (_fileInfo.Equals(_fileInfo2) ? "_2" : "_1"));
                     app.ActiveDocument.SaveAs(newFileName);
                     app.ActiveDocument.Close();
                     app.Quit();
