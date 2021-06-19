@@ -13,6 +13,7 @@ namespace InspectionReport
 {
     class WordDocument
     {
+        private Word.Application app;
         private FileInfo _fileInfo1;
         private FileInfo _fileInfo2;
 
@@ -31,7 +32,7 @@ namespace InspectionReport
 
         internal bool Process(Dictionary<string, string> items, string filePath, string fio)
         {
-            Word.Application app = null;
+            app = null;
           try
             {
                 List<Object> listFile = new List<Object>() { _fileInfo1, _fileInfo2 };
@@ -44,11 +45,7 @@ namespace InspectionReport
 
                     foreach (var item in items)
                     {
-                        Word.Find find = app.Selection.Find;
-                        find.ClearFormatting();
-                        find.Execute(FindText: item.Key, Wrap: Word.WdFindWrap.wdFindContinue);
-                        if (find.Found)
-                            app.Selection.Text = item.Value;
+                        FindAndReplace(missing, item.Key, item.Value);
                     }
 
                     Object newFileName = Path.Combine(filePath, DateTime.Now.ToString("ddMMyyyy_") + fio + (_fileInfo.Equals(_fileInfo2) ? "_2" : "_1"));
@@ -63,9 +60,36 @@ namespace InspectionReport
             return false;
         }
 
+        private void FindAndReplace(Object missing, String findText, String replaceText)
+        {
+            if (replaceText.Length > 255)
+            {
+                FindAndReplace(missing, findText, findText + replaceText.Substring(255));
+                replaceText = replaceText.Substring(0, 255);
+            }
+
+            Word.Find find = app.Selection.Find;
+            find.Text = findText;
+            find.Replacement.Text = replaceText;
+
+            Object wrap = Word.WdFindWrap.wdFindContinue;
+            Object replace = Word.WdReplace.wdReplaceAll;
+
+            find.Execute(FindText: Type.Missing,
+                MatchCase: false,
+                MatchWholeWord: false,
+                MatchWildcards: false,
+                MatchSoundsLike: false,
+                MatchAllWordForms: false,
+                Forward: false,
+                Wrap: wrap,
+                Format: false,
+                ReplaceWith: missing, Replace: replace);
+        }
+
         internal bool SaveTemp(Dictionary<string, string> items, string filePath)
         {
-            Word.Application app = null;
+            app = null;
             try
             {
                 List<Object> listFile = new List<Object>() { _fileInfo1, _fileInfo2 };
@@ -80,11 +104,7 @@ namespace InspectionReport
 
                     foreach (var item in items)
                     {
-                        Word.Find find = app.Selection.Find;
-                        find.ClearFormatting();
-                        find.Execute(FindText: item.Key, Wrap: Word.WdFindWrap.wdFindContinue);
-                        if (find.Found)
-                            app.Selection.Text = item.Value;
+                        FindAndReplace(missing, item.Key, item.Value);
                     }
 
                     String fullName = Path.GetTempPath() + Guid.NewGuid().ToString() + ".xps";

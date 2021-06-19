@@ -8,19 +8,19 @@
        Title="Протокол осмотра" Height="900" Width="1100" WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip" Icon="logo.png">
     <Grid>
         <Rectangle Margin="16,175,10,5" Stroke="Black" d:IsLocked="True"/>
-        <Button x:Name="button" Content="Новый осмотр" HorizontalAlignment="Left" Margin="472,22,0,0" VerticalAlignment="Top" Width="91" Height="68" Click="clear_Click"/>
+        <Button x:Name="newBtn" Content="Новый осмотр" HorizontalAlignment="Left" Margin="472,22,0,0" VerticalAlignment="Top" Width="91" Height="68" Click="newBtn_Click"/>
         <Label Content="Возраст:" HorizontalAlignment="Left" Margin="35,51,0,0" VerticalAlignment="Top"/>
         <Label Content="ФИО:" HorizontalAlignment="Left" Margin="51,22,0,0" VerticalAlignment="Top" Width="39"/>
         <DatePicker x:Name="date" HorizontalAlignment="Left" Margin="95,82,0,0" VerticalAlignment="Top" Width="167" IsTodayHighlighted="True"/>
         <TextBox x:Name="fio" HorizontalAlignment="Left" Height="23" Margin="95,23,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="167"/>
         <TextBox x:Name="age" HorizontalAlignment="Left" Height="23" Margin="95,54,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="167"/>
         <Label Content="Дата:" HorizontalAlignment="Left" Margin="52,78,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="button_Copy" Content="Шаблоны" HorizontalAlignment="Left" Margin="568,22,0,0" VerticalAlignment="Top" Width="91" Height="68"/>
+        <Button x:Name="templateBtn" Content="Шаблоны" HorizontalAlignment="Left" Margin="568,22,0,0" VerticalAlignment="Top" Width="91" Height="68" Click="templateBtn_Click"/>
         <Button x:Name="save" Content="Сохранить" HorizontalAlignment="Left" Margin="664,22,0,0" VerticalAlignment="Top" Width="91" Height="68" Click="save_Click"/>
         <Button x:Name="watchButton" Content="Просмотр" HorizontalAlignment="Left" Margin="760,22,0,0" VerticalAlignment="Top" Width="91" Height="68" Click="watchButton_Click"/>
         <Button x:Name="printBut" Content="Печать" HorizontalAlignment="Left" Margin="856,22,0,0" VerticalAlignment="Top" Width="91" Height="68" Click="printBut_Click"/>
         <Button x:Name="options" Content="Настройки" HorizontalAlignment="Left" Margin="952,22,0,0" VerticalAlignment="Top" Width="91" Height="68" Click="options_Click"/>
-        <StackPanel x:Name="type" HorizontalAlignment="Left" Height="49" Margin="35,115,0,0" VerticalAlignment="Top" Width="800" Orientation="Horizontal">
+        <StackPanel x:Name="type" HorizontalAlignment="Left" Height="55" Margin="35,115,0,0" VerticalAlignment="Top" Width="800" Orientation="Horizontal">
             <Button x:Name="complaints" Content="Жалобы" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="110" Height="50" Margin="0" Click="complaints_Click"/>
             <Button x:Name="anamnesis" Content="Анамнез" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="110" Height="50" Margin="5,0,0,0" Click="anamnesis_Click"/>
             <Button x:Name="inspection" Content="Осмотр" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Height="50" Margin="5,0,0,0" Click="inspection_Click"/>
@@ -78,6 +78,7 @@
                             <CheckBox Content="осложненная стенозом" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1" Margin="3,5,0,0" Click="CheckBox_Checked_2" Visibility="Collapsed"/>
                             <CheckBox Content="осложненная пенетрацией" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1" Margin="3,5,0,0" Click="CheckBox_Checked_2" Visibility="Collapsed"/>
                             <CheckBox Content="неосложненная форма" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1" Margin="3,5,0,0" Click="CheckBox_Checked_2" Visibility="Collapsed"/>
+                            <CheckBox Content="ассоциированная с …" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1" Margin="3,5,0,0" Click="CheckBox_Checked_2" Visibility="Collapsed"/>
                             <CheckBox Content="ассоциированная с …" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1" Margin="3,5,0,0" Click="CheckBox_Checked_2" Visibility="Collapsed"/>
                             <CheckBox Content="ассоциированная с …" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1" Margin="3,5,0,0" Click="CheckBox_Checked_2" Visibility="Collapsed"/>
                             <CheckBox Content="ассоциированная с …" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1" Margin="3,5,0,0" Click="CheckBox_Checked_2" Visibility="Collapsed"/>
